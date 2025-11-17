@@ -1,148 +1,181 @@
-// Authentication Context Provider
-import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useState, useEffect, useCallback } from "react";
+import type { ReactNode } from "react";
 import { authService } from "@/features/auth/services";
-import type { User, AuthState, OAuthProvider, AuthError } from "@/features/auth/types";
+import type { AuthContextType, User } from "@/features/auth/types";
 
-interface AuthContextType extends AuthState {
-  login: (provider: OAuthProvider) => void;
-  logout: () => Promise<void>;
-  refreshAuth: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
+/**
+ * AuthProvider component that manages authentication state
+ * - Initializes state from localStorage on mount
+ * - Provides login, logout, refreshUser functions
+ * - Handles token refresh logic
+ * - Persists auth state to localStorage
+ * - Handles errors and loading states
+ */
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [state, setState] = useState<AuthState>({
-    user: null,
-    token: null,
-    isAuthenticated: false,
-    isLoading: true,
-    error: null,
+  const [user, setUser] = useState<User | null>(() => {
+    return authService.getStoredUser();
   });
 
-  // Initialize auth state from storage
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const isAuthenticated = !!user;
+
+  /**
+   * Initialize auth state on mount
+   * Validates existing token and loads user data
+   */
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const token = authService.getToken();
-        const user = authService.getUser();
+        setIsLoading(true);
+        setError(null);
 
-        if (token && user) {
-          // Verify token is still valid by fetching current user
-          try {
+        const token = authService.getAuthToken();
+        if (token) {
+          const isValid = await authService.validateToken();
+          if (isValid) {
             const currentUser = await authService.getCurrentUser();
-            setState({
-              user: currentUser,
-              token,
-              isAuthenticated: true,
-              isLoading: false,
-              error: null,
-            });
-          } catch (error) {
-            // Token might be expired, try to refresh
-            try {
-              await refreshAuth();
-            } catch {
-              // Refresh failed, clear auth
-              authService.clearAuth();
-              setState({
-                user: null,
-                token: null,
-                isAuthenticated: false,
-                isLoading: false,
-                error: null,
-              });
-            }
+            setUser(currentUser);
+          } else {
+            setUser(null);
           }
         } else {
-          setState((prev) => ({ ...prev, isLoading: false }));
+          setUser(null);
         }
-      } catch (error) {
-        setState({
-          user: null,
-          token: null,
-          isAuthenticated: false,
-          isLoading: false,
-          error: error instanceof Error ? error.message : "Failed to initialize auth",
-        });
+      } catch (err) {
+        setUser(null);
+        setError(
+          err instanceof Error ? err.message : "Failed to initialize auth"
+        );
+      } finally {
+        setIsLoading(false);
       }
     };
 
     initializeAuth();
   }, []);
 
-  const login = useCallback((provider: OAuthProvider) => {
+  /**
+   * Login function - handles Google OAuth token
+   * Sends token to backend and updates state
+   */
+  const login = useCallback(async (token: string) => {
     try {
-      setState((prev) => ({ ...prev, error: null }));
-      authService.initiateOAuth(provider);
-    } catch (error) {
-      setState((prev) => ({
-        ...prev,
-        error: error instanceof Error ? error.message : "Failed to initiate login",
-      }));
+      setIsLoading(true);
+      setError(null);
+
+      const userData = await authService.loginWithGoogle(token);
+
+      setUser(userData);
+    } catch (err) {
+      setUser(null);
+      const errorMessage = err instanceof Error ? err.message : "Login failed";
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
+  /**
+   * Logout function - clears auth state and tokens
+   */
   const logout = useCallback(async () => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setIsLoading(true);
+      setError(null);
+
       await authService.logout();
-      setState({
-        user: null,
-        token: null,
-        isAuthenticated: false,
-        isLoading: false,
-        error: null,
-      });
-    } catch (error) {
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        error: error instanceof Error ? error.message : "Failed to logout",
-      }));
+
+      setUser(null);
+    } catch (err) {
+      setUser(null);
+      const errorMessage = err instanceof Error ? err.message : "Logout failed";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
-  const refreshAuth = useCallback(async () => {
+  /**
+   * Refresh user data from API
+   * Useful when user data might have changed on the backend
+   */
+  const refreshUser = useCallback(async () => {
     try {
-      const token = await authService.refreshToken();
-      const user = await authService.getCurrentUser();
-      setState({
-        user,
-        token,
-        isAuthenticated: true,
-        isLoading: false,
-        error: null,
-      });
-    } catch (error) {
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        error: error instanceof Error ? error.message : "Failed to refresh auth",
-      }));
-      throw error;
+      setIsLoading(true);
+      setError(null);
+
+      const userData = await authService.getCurrentUser();
+
+      setUser(userData);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to refresh user";
+      setError(errorMessage);
+
+      try {
+        await authService.refreshToken();
+        const userData = await authService.getCurrentUser();
+        setUser(userData);
+      } catch (refreshError) {
+        setUser(null);
+        throw refreshError;
+      }
+    } finally {
+      setIsLoading(false);
     }
   }, []);
+
+  /**
+   * Auto-refresh token logic
+   * Periodically checks and refreshes token before expiration
+   */
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    const tokenCheckInterval = setInterval(async () => {
+      try {
+        const isValid = await authService.validateToken();
+        if (!isValid) {
+          try {
+            await authService.refreshToken();
+            await refreshUser();
+          } catch {
+            await logout();
+          }
+        }
+      } catch {
+        await logout();
+      }
+    }, 5 * 60 * 1000);
+
+    return () => {
+      clearInterval(tokenCheckInterval);
+    };
+  }, [isAuthenticated, refreshUser, logout]);
 
   const value: AuthContextType = {
-    ...state,
+    user,
+    isAuthenticated,
+    isLoading,
+    error,
     login,
     logout,
-    refreshAuth,
+    refreshUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-export function useAuthContext(): AuthContextType {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuthContext must be used within an AuthProvider");
-  }
-  return context;
-}
-

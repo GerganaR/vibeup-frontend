@@ -19,6 +19,10 @@ export default defineConfig({
       "@/context": path.resolve(__dirname, "./src/context"),
       "@/assets": path.resolve(__dirname, "./src/assets"),
       "@/styles": path.resolve(__dirname, "./src/styles"),
+      // Force all packages to use the same React version
+      react: path.resolve(__dirname, "./node_modules/react"),
+      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
+    dedupe: ["react", "react-dom"],
   },
 });

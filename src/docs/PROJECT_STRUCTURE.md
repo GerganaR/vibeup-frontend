@@ -39,27 +39,32 @@ vibeup-frontend/
 ## 🎯 SOLID Principles Applied
 
 ### 1. **Single Responsibility Principle (SRP)**
+
 - Each feature folder contains only code for that feature
 - Components have one clear purpose
 - Services handle only API/data operations
 - Hooks encapsulate single pieces of logic
 
 ### 2. **Open/Closed Principle (OCP)**
+
 - Components extendable via props composition
 - Hooks can be composed together
 - Services can be extended without modification
 
 ### 3. **Liskov Substitution Principle (LSP)**
+
 - Consistent component interfaces
 - Type-safe prop contracts
 - Interchangeable implementations
 
 ### 4. **Interface Segregation Principle (ISP)**
+
 - Components receive only needed props
 - Focused, single-purpose hooks
 - Domain-specific services
 
 ### 5. **Dependency Inversion Principle (DIP)**
+
 - Components depend on abstractions (types/props)
 - Services depend on interfaces
 - Context provides dependency injection
@@ -73,7 +78,7 @@ vibeup-frontend/
 ✅ **Separation of Concerns**: UI, logic, and data separated  
 ✅ **Scalable**: Easy to add new features  
 ✅ **Testable**: Structure supports unit testing  
-✅ **Maintainable**: Clear organization and conventions  
+✅ **Maintainable**: Clear organization and conventions
 
 ## 📚 Documentation
 
@@ -84,6 +89,7 @@ vibeup-frontend/
 ## 🔧 Configuration
 
 ### Path Aliases (Configured in `vite.config.ts` & `tsconfig.app.json`)
+
 - `@/` → `src/`
 - `@/components` → `src/components`
 - `@/features` → `src/features`

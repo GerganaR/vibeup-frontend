@@ -3,7 +3,6 @@ import { ProtectedRoute, AuthCallback } from "@/features/auth";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
-import "./App.css";
 
 function App() {
   return (

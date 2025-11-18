@@ -1,27 +1,28 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { AuthCallback, PublicRoute } from "@/features/auth";
+import { AuthCallback, ProtectedRoute, PublicRoute } from "@/features/auth";
 import { ROUTES } from "@/constants";
 import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
 
 /**
  * Router component that defines all application routes
  * Route Structure:
- * - Public Routes: Accessible to all users
- *   - "/" - Redirects based on auth status
- *   - "/login" - Login page (redirects if already authenticated)
- *   - "/auth/callback" - OAuth callback handler
- *
- * - Protected Routes: Require authentication
- *   - "/dashboard" - Main dashboard (example)
- *   - Add more protected routes as needed
+ * - "/" - Home (Dashboard if logged in, redirects to login if not)
+ * - "/login" - Login page (redirects to home if already authenticated)
+ * - "/auth/callback" - OAuth callback handler
+ * - "/dashboard" - Alternative dashboard route
  */
 export function Router() {
   return (
     <Routes>
-      {/* Root route - redirects to login for now */}
+      {/* Home route - Shows dashboard when logged in */}
       <Route
         path={ROUTES.HOME}
-        element={<Navigate to={ROUTES.LOGIN} replace />}
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
       />
 
       {/* Public Routes */}
@@ -36,15 +37,14 @@ export function Router() {
       <Route path={ROUTES.AUTH_CALLBACK} element={<AuthCallback />} />
 
       {/* Protected Routes */}
-      {/* Uncomment when DashboardPage is created */}
-      {/* <Route
+      <Route
         path={ROUTES.DASHBOARD}
         element={
           <ProtectedRoute>
             <DashboardPage />
           </ProtectedRoute>
         }
-      /> */}
+      />
 
       {/* Catch-all route - 404 handler */}
       <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />

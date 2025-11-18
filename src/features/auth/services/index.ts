@@ -1,4 +1,8 @@
-// Authentication services
-// Export all auth service functions and the service instance
-
-export { authService } from "./authService";
+// Export all authentication functions
+export { 
+  loginWithGoogle, 
+  getCurrentUser, 
+  logout,
+  getAuthToken,
+  getStoredUser
+} from "./authService";

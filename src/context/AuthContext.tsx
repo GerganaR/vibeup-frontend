@@ -1,8 +1,23 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useState, useEffect, useCallback } from "react";
+/**
+ * Simple AuthContext - manages authentication state
+ * No complex auto-refresh or nested error handling
+ */
+import { createContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import { authService } from "@/features/auth/services";
-import type { AuthContextType, User } from "@/features/auth/types";
+import * as authService from "@/features/auth/services";
+import type { User } from "@/features/auth/types";
+
+// Define what the auth context provides
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+  login: (googleToken: string) => Promise<void>;
+  logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
+}
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
@@ -13,155 +28,87 @@ interface AuthProviderProps {
 }
 
 /**
- * AuthProvider component that manages authentication state
- * and provides login, logout, refreshUser functions
+ * AuthProvider - wraps your app to provide auth state
  */
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(() => {
-    return authService.getStoredUser();
-  });
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const isAuthenticated = !!user;
+  const isAuthenticated = user !== null;
 
-  /**
-   * Initialize auth state on mount
-   * Validates existing token and loads user data
-   */
+  // On startup, check if user is already logged in
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
+    async function checkAuth() {
+      const storedUser = authService.getStoredUser();
+      const token = authService.getAuthToken();
 
-        const token = authService.getAuthToken();
-        if (token) {
-          const isValid = await authService.validateToken();
-          if (isValid) {
-            const currentUser = await authService.getCurrentUser();
-            setUser(currentUser);
-          } else {
-            setUser(null);
-          }
-        } else {
+      // If we have both stored user and token, verify with backend
+      if (storedUser && token) {
+        try {
+          const currentUser = await authService.getCurrentUser();
+          setUser(currentUser);
+        } catch {
+          // Token invalid, clear everything
           setUser(null);
         }
-      } catch (err) {
-        setUser(null);
-        setError(
-          err instanceof Error ? err.message : "Failed to initialize auth"
-        );
-      } finally {
-        setIsLoading(false);
       }
-    };
 
-    initializeAuth();
+      setIsLoading(false);
+    }
+
+    checkAuth();
   }, []);
 
-  /**
-   * Login function - handles Google OAuth token
-   * Sends token to backend and updates state
-   */
-  const login = useCallback(async (token: string) => {
+  // Login with Google token
+  async function login(googleToken: string) {
     try {
       setIsLoading(true);
       setError(null);
 
-      const userData = await authService.loginWithGoogle(token);
-
+      const userData = await authService.loginWithGoogle(googleToken);
       setUser(userData);
     } catch (err) {
-      setUser(null);
-      const errorMessage = err instanceof Error ? err.message : "Login failed";
-      setError(errorMessage);
+      const message = err instanceof Error ? err.message : "Login failed";
+      setError(message);
       throw err;
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }
 
-  /**
-   * Logout function - clears auth state and tokens
-   */
-  const logout = useCallback(async () => {
+  // Logout
+  async function logout() {
     try {
       setIsLoading(true);
-      setError(null);
-
       await authService.logout();
-
-      setUser(null);
     } catch (err) {
-      setUser(null);
-      const errorMessage = err instanceof Error ? err.message : "Logout failed";
-      setError(errorMessage);
+      const message = err instanceof Error ? err.message : "Logout failed";
+      setError(message);
     } finally {
+      setUser(null);
       setIsLoading(false);
     }
-  }, []);
+  }
 
-  /**
-   * Refresh user data from API
-   * Useful when user data might have changed on the backend
-   */
-  const refreshUser = useCallback(async () => {
+  // Refresh user data from server
+  async function refreshUser() {
     try {
       setIsLoading(true);
       setError(null);
 
       const userData = await authService.getCurrentUser();
-
       setUser(userData);
     } catch (err) {
-      const errorMessage =
+      const message =
         err instanceof Error ? err.message : "Failed to refresh user";
-      setError(errorMessage);
-
-      try {
-        await authService.refreshToken();
-        const userData = await authService.getCurrentUser();
-        setUser(userData);
-      } catch (refreshError) {
-        setUser(null);
-        throw refreshError;
-      }
+      setError(message);
+      setUser(null);
+      throw err;
     } finally {
       setIsLoading(false);
     }
-  }, []);
-
-  /**
-   * Auto-refresh token logic
-   * Periodically checks and refreshes token before expiration
-   */
-  useEffect(() => {
-    if (!isAuthenticated) {
-      return;
-    }
-
-    const tokenCheckInterval = setInterval(async () => {
-      try {
-        const isValid = await authService.validateToken();
-        if (!isValid) {
-          try {
-            await authService.refreshToken();
-            await refreshUser();
-          } catch {
-            await logout();
-          }
-        }
-      } catch {
-        await logout();
-      }
-    }, 5 * 60 * 1000);
-
-    return () => {
-      clearInterval(tokenCheckInterval);
-    };
-  }, [isAuthenticated, refreshUser, logout]);
+  }
 
   const value: AuthContextType = {
     user,

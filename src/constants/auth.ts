@@ -1,5 +1,3 @@
-// Authentication constants and configuration
-
 export const OAUTH_PROVIDERS = {
   GOOGLE: "google",
 } as const;

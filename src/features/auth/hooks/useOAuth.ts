@@ -33,11 +33,9 @@ export function useOAuth() {
   const handleGoogleSuccess = useCallback(
     async (tokenResponse: { access_token: string }) => {
       try {
-        setOAuthError(null); // Clear any previous errors
-        // Send Google token to our backend via auth context
+        setOAuthError(null);
         await login(tokenResponse.access_token);
       } catch (err) {
-        // Error is already handled by auth context
         console.error("Failed to complete Google login:", err);
       }
     },
@@ -88,8 +86,6 @@ export function useOAuth() {
   const loginWithGoogle = useGoogleLogin({
     onSuccess: handleGoogleSuccess,
     onError: handleGoogleError,
-    // Implicit flow: provides access_token directly
-    // Alternative: use flow: "auth-code" if backend expects authorization code
   });
 
   return {

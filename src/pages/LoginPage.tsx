@@ -1,4 +1,3 @@
-// Modern Login page component
 import { LoginButton } from "@/features/auth";
 import { useAuth } from "@/features/auth";
 import { Card, Typography, Alert } from "@material-tailwind/react";

@@ -26,7 +26,6 @@ export function ProtectedRoute({ children, redirectTo }: ProtectedRouteProps) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
         <div className="text-center space-y-4">
-          {/* Material Design Spinner */}
           <div className="flex justify-center">
             <Spinner className="h-12 w-12" color="blue" />
           </div>

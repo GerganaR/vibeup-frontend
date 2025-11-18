@@ -14,11 +14,7 @@ interface AuthProviderProps {
 
 /**
  * AuthProvider component that manages authentication state
- * - Initializes state from localStorage on mount
- * - Provides login, logout, refreshUser functions
- * - Handles token refresh logic
- * - Persists auth state to localStorage
- * - Handles errors and loading states
+ * and provides login, logout, refreshUser functions
  */
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(() => {

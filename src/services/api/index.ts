@@ -1,2 +1,2 @@
-// Export the simplified API client
-export { api } from "./apiClient";
+export { apiClient } from "./apiClient";
+export type { ApiResponse, ApiError } from "./apiClient";

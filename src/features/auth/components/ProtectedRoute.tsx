@@ -1,4 +1,3 @@
-// Protected Route Component with Material Tailwind
 import { Navigate, useLocation } from "react-router-dom";
 import { Spinner, Typography } from "@material-tailwind/react";
 import { useAuth } from "@/features/auth/hooks";
@@ -16,12 +15,12 @@ interface ProtectedRouteProps {
 
 /**
  * Protected Route Component
+ * Checks if the user is authenticated and redirects to the login page if not
  */
 export function ProtectedRoute({ children, redirectTo }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
 
-  // Show Material Design loading state while checking authentication
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
@@ -43,7 +42,6 @@ export function ProtectedRoute({ children, redirectTo }: ProtectedRouteProps) {
   }
 
   // Redirect to login if not authenticated
-  // Include return URL so user can be redirected back after login
   if (!isAuthenticated) {
     const returnUrl = getReturnUrl(location.pathname + location.search);
     const loginPath = redirectTo || ROUTES.LOGIN;

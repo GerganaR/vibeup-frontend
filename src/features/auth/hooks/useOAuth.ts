@@ -8,19 +8,6 @@ import { useAuth } from "./useAuth";
  * Integrates @react-oauth/google with the auth context
  *
  * @returns Object with login function and loading state
- *
- * @example
- * ```tsx
- * function LoginButton() {
- *   const { loginWithGoogle, isLoading } = useOAuth();
- *
- *   return (
- *     <button onClick={loginWithGoogle} disabled={isLoading}>
- *       {isLoading ? "Loading..." : "Login with Google"}
- *     </button>
- *   );
- * }
- * ```
  */
 export function useOAuth() {
   const { login, isLoading, error } = useAuth();

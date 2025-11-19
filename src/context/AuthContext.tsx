@@ -1,14 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
-/**
- * Simple AuthContext - manages authentication state
- * No complex auto-refresh or nested error handling
- */
 import { createContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import * as authService from "@/features/auth/services";
 import type { User } from "@/features/auth/types";
 
-// Define what the auth context provides
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
@@ -27,9 +22,6 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-/**
- * AuthProvider - wraps your app to provide auth state
- */
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,13 +35,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const storedUser = authService.getStoredUser();
       const token = authService.getAuthToken();
 
-      // If we have both stored user and token, verify with backend
       if (storedUser && token) {
         try {
           const currentUser = await authService.getCurrentUser();
           setUser(currentUser);
         } catch {
-          // Token invalid, clear everything
           setUser(null);
         }
       }

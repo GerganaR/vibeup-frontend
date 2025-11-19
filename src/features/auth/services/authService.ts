@@ -1,14 +1,7 @@
-/**
- * Simple authentication service with plain functions
- * Handles user login, logout, and token management
- */
 import { API_ENDPOINTS, STORAGE_KEYS } from "@/constants/auth";
 import type { User } from "@/features/auth/types";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
-
-// ============= Storage Helper Functions =============
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export function getAuthToken(): string | null {
   return localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
@@ -40,8 +33,6 @@ function clearAuthData() {
   localStorage.removeItem(STORAGE_KEYS.OAUTH_STATE);
 }
 
-// ============= API Helper Function =============
-
 async function apiRequest<T>(
   endpoint: string,
   options?: RequestInit
@@ -67,8 +58,6 @@ async function apiRequest<T>(
 
   return response.json();
 }
-
-// ============= Main Auth Functions =============
 
 /**
  * Login with Google OAuth token

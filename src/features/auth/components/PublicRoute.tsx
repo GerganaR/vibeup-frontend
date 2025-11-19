@@ -18,23 +18,6 @@ interface PublicRouteProps {
  *
  * Best Practice: Use this for routes that should only be accessible
  * when the user is NOT authenticated (e.g., login, register pages)
- *
- * Features:
- * - Redirects authenticated users to a default route (e.g., dashboard)
- * - Allows unauthenticated users to access the route
- * - Prevents authenticated users from accessing public-only pages
- *
- * @example
- * ```tsx
- * <Route
- *   path="/login"
- *   element={
- *     <PublicRoute>
- *       <LoginPage />
- *     </PublicRoute>
- *   }
- * />
- * ```
  */
 export function PublicRoute({ children, redirectTo }: PublicRouteProps) {
   const { isAuthenticated, isLoading } = useAuth();

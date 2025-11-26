@@ -13,8 +13,8 @@ const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Provider store={store}>
-      <ThemeProvider>
+    <ThemeProvider>
+      <Provider store={store}>
         <BrowserRouter>
           <GoogleOAuthProvider clientId={googleClientId}>
             <AuthProvider>
@@ -22,7 +22,7 @@ createRoot(document.getElementById("root")!).render(
             </AuthProvider>
           </GoogleOAuthProvider>
         </BrowserRouter>
-      </ThemeProvider>
-    </Provider>
+      </Provider>
+    </ThemeProvider>
   </StrictMode>
 );

@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { HomePage } from "@/pages";
 import { ProtectedRoute, ROUTES } from "@/routes";
 import { AuthErrorPage, LoginPage } from "@/features/auth";
+import UserLayout from "@/features/layout/pages/UserLayout";
 export function Router() {
   return (
     <Routes>
@@ -14,7 +14,7 @@ export function Router() {
         path={ROUTES.HOME}
         element={
           <ProtectedRoute>
-            <HomePage />
+            <UserLayout />
           </ProtectedRoute>
         }
       />

@@ -3,9 +3,9 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ThemeProvider } from "@material-tailwind/react";
-import { AuthProvider } from "@/context";
 import "./index.css";
-import App from "./App.tsx";
+import App from "./app/App.tsx";
+import { AuthProvider } from "./features/auth/context/AuthProvider.tsx";
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 

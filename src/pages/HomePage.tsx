@@ -1,8 +1,13 @@
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useAppSelector } from "@/store/hooks";
+import { Spinner } from "@material-tailwind/react";
 
 export default function HomePage() {
-  const { user, logout, token } = useAuth();
-
+  const { logout, token } = useAuth();
+  const { user, loading, error } = useAppSelector((state) => state.user);
+  if (loading) return <Spinner className="w-10 h-10" />;
+  if (error) return <div>Error: {error}</div>;
+  
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6">
       <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md text-center">

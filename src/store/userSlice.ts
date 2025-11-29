@@ -23,7 +23,7 @@ const initialState: UserState = {
 export const fetchCurrentUser = createAsyncThunk<User, void>(
   "user/fetchCurrentUser",
   async () => {
-    const { data } = await api.get<User>("/auth/me");
+    const { data } = await api.get<User>("/users/me");
     return data;
   }
 );

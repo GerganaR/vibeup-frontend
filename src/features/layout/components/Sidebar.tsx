@@ -2,13 +2,18 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useAppSelector } from "@/store/hooks";
 import { Button, Typography } from "@material-tailwind/react";
-import { HomeIcon, CalendarIcon, Cog6ToothIcon } from "@heroicons/react/24/solid";
+import {
+  HomeIcon,
+  CalendarIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/solid";
 import { RiArrowLeftSLine, RiLogoutBoxLine } from "react-icons/ri";
 import Avatar from "@/components/Avatar";
 import { useSidebar } from "../hooks/useSidebar";
 import { SideNavItem, type MenuItem } from "./SidebarItem";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { twMerge } from "tailwind-merge";
+import { ROUTES } from "@/routes";
 
 const Sidenav: React.FC = () => {
   const { collapsed, toggleSidebar } = useSidebar();
@@ -18,9 +23,9 @@ const Sidenav: React.FC = () => {
   const { logout } = useAuth();
 
   const menus: MenuItem[] = [
-    { title: "Home", icon: HomeIcon, to: "/" },
-    { title: "Events", icon: CalendarIcon, to: "/events" },
-    { title: "Settings", icon: Cog6ToothIcon, to: "/settings" },
+    { title: "Home", icon: HomeIcon, to: ROUTES.HOME },
+    { title: "Events", icon: CalendarIcon, to: ROUTES.EVENTS },
+    { title: "Settings", icon: Cog6ToothIcon, to: ROUTES.SETTINGS },
   ];
 
   const initials =
@@ -100,7 +105,10 @@ const Sidenav: React.FC = () => {
                   <Typography variant="h6" className="text-slate-800 truncate">
                     {user?.name || "User"}
                   </Typography>
-                  <Typography variant="small" className="text-slate-600 truncate">
+                  <Typography
+                    variant="small"
+                    className="text-slate-600 truncate"
+                  >
                     {user?.email || "user@example.com"}
                   </Typography>
                 </>

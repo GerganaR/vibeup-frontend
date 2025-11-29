@@ -33,7 +33,7 @@ const Avatar: React.FC<AvatarProps> = ({ name, src, size = 40, className }) => {
     />
   ) : (
     <div
-      className={`rounded-full bg-white/20 text-white font-semibold flex items-center justify-center ${className}`}
+      className={`rounded-full bg-green-700 text-white font-semibold flex items-center justify-center text-2xl ${className}`}
       style={{ width: size, height: size }}
     >
       {getInitials(name)}

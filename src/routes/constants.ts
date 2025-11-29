@@ -3,5 +3,7 @@ export const ROUTES = {
     AUTH_ERROR: "/login/error",
     HOME: "/",
     DASHBOARD: "/dashboard",
+    EVENTS: "/events",
+    SETTINGS: "/settings",
   };
   

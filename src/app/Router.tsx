@@ -2,6 +2,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute, ROUTES } from "@/routes";
 import { AuthErrorPage, LoginPage } from "@/features/auth";
 import UserLayout from "@/features/layout/pages/UserLayout";
+import HomePage from "@/pages/HomePage";
+import EventsPage from "@/pages/EventsPage";
+import SettingsPage from "@/pages/SettingsPage";
+
 export function Router() {
   return (
     <Routes>
@@ -9,15 +13,19 @@ export function Router() {
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path={ROUTES.AUTH_ERROR} element={<AuthErrorPage />} />
 
-      {/* Protected Routes */}
+      {/* Protected Routes with UserLayout */}
       <Route
-        path={ROUTES.HOME}
         element={
           <ProtectedRoute>
             <UserLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path={ROUTES.EVENTS} element={<EventsPage />} />
+        <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
+      </Route>
+
       <Route path="*" element={<Navigate to={ROUTES.LOGIN} replace />} />
     </Routes>
   );

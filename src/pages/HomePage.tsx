@@ -109,13 +109,13 @@ export default function HomePage() {
       <Card className="shadow-sm">
         <CardBody className="p-6">
           <div className="flex items-center gap-4">
-            <Avatar name={user.name} src={user.avatarUrl} size={60} className="text-xl" />
+            <Avatar name={user.profile.name} src={user.profile.avatarUrl} size={60} className="text-xl" />
             <div>
               <Typography variant="h4" className="text-gray-900">
-                Welcome back, {user.name}!
+                Welcome back, {user.profile.name}!
               </Typography>
               <Typography variant="small" className="text-gray-500">
-                {user.email}
+                {user.profile.email}
               </Typography>
             </div>
           </div>

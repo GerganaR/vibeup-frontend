@@ -29,7 +29,7 @@ const Sidenav: React.FC = () => {
   ];
 
   const initials =
-    user?.name
+    user?.profile.name
       ?.split(" ")
       .map((w) => w[0]?.toUpperCase())
       .join("") || "U";
@@ -90,8 +90,8 @@ const Sidenav: React.FC = () => {
             {/* USER SECTION — moved higher */}
             <div className="flex flex-col items-center mt-[100px] mb-8">
               <Avatar
-                name={user?.name || "User"}
-                src={user?.avatarUrl}
+                name={user?.profile.name || "User"}
+                src={user?.profile.avatarUrl}
                 size={open ? 90 : 32}
                 className="mb-2"
               />
@@ -103,13 +103,13 @@ const Sidenav: React.FC = () => {
               ) : (
                 <>
                   <Typography variant="h6" className="text-slate-800 truncate">
-                    {user?.name || "User"}
+                    {user?.profile.name || "User"}
                   </Typography>
                   <Typography
                     variant="small"
                     className="text-slate-600 truncate"
                   >
-                    {user?.email || "user@example.com"}
+                    {user?.profile.email || "user@example.com"}
                   </Typography>
                 </>
               )}

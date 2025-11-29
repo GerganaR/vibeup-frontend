@@ -1,11 +1,16 @@
 import api from "@/api/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export interface User {
+export interface UserProfile {
   id: string;
   name: string;
   email: string;
   avatarUrl?: string;
+}
+
+export interface User {
+  id: string;
+  profile: UserProfile;
 }
 
 interface UserState {

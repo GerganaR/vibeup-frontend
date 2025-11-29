@@ -76,10 +76,10 @@ export default function SettingsPage() {
       >
         <div className="space-y-6">
           <div className="flex items-center gap-6 pb-6 border-b border-gray-100">
-            {user.avatarUrl && (
+            {user.profile.avatarUrl && (
               <img
-                src={user.avatarUrl}
-                alt={user.name}
+                src={user.profile.avatarUrl}
+                alt={user.profile.name}
                 className="w-24 h-24 rounded-full ring-4 ring-gray-100"
               />
             )}
@@ -103,7 +103,7 @@ export default function SettingsPage() {
             <div>
               <Input
                 label="Name"
-                value={user.name}
+                value={user.profile.name}
                 disabled
                 icon={<FaLock className="w-4 h-4" />}
                 className="!bg-gray-50"
@@ -122,7 +122,7 @@ export default function SettingsPage() {
               <Input
                 label="Email"
                 type="email"
-                value={user.email}
+                value={user.profile.email}
                 disabled
                 icon={<FaLock className="w-4 h-4" />}
                 className="!bg-gray-50"

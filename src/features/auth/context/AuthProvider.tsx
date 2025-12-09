@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useAppDispatch } from "@/store/hooks";
-import { fetchCurrentUser } from "@/store/userSlice";
+import { fetchCurrentUser } from "@/features/user/store/userThunk";
 import { AuthContext } from "./AuthContext";
 
 type GooglePayload = {

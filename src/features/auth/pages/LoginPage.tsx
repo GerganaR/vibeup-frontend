@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ROUTES } from "@/routes";
 import { useAppDispatch } from "@/store/hooks";
-import { fetchCurrentUser } from "@/store/userSlice";
+import { fetchCurrentUser } from "@/features/user/store/userThunk";
 import { FiLogIn } from "react-icons/fi";
 
 const LoginPage: React.FC = () => {

@@ -3,7 +3,7 @@ import { ProtectedRoute, ROUTES } from "@/routes";
 import { AuthErrorPage, LoginPage } from "@/features/auth";
 import UserLayout from "@/features/layout/pages/UserLayout";
 import HomePage from "@/pages/HomePage";
-import EventsPage from "@/pages/EventsPage";
+import EventsPage from "@/features/event/pages/EventsPage";
 import SettingsPage from "@/pages/SettingsPage";
 
 export function Router() {

@@ -1,16 +1,9 @@
 import { useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import {
-  Card,
-  CardBody,
-  Typography,
-  Button,
-  Input,
-  Select,
-  Option,
-  Switch,
-} from "@material-tailwind/react";
+import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
+import { Input, Select, Switch } from "@/components/forms";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import {
   FaUser,
   FaShieldAlt,
@@ -32,6 +25,8 @@ export default function SettingsPage() {
     defaultTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     dateFormat: "MM/DD/YYYY",
   });
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showDeactivateDialog, setShowDeactivateDialog] = useState(false);
 
   if (!user) {
     return (
@@ -42,19 +37,14 @@ export default function SettingsPage() {
   }
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to log out?")) {
-      logout();
-    }
+    setShowLogoutDialog(false);
+    logout();
   };
 
   const handleDeactivateProfile = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to deactivate your profile? Your account will be hidden but can be reactivated later."
-    );
-    if (confirmed) {
-      // TODO: Implement profile deactivation
-      console.log("Deactivate profile");
-    }
+    setShowDeactivateDialog(false);
+    // TODO: Implement profile deactivation
+    console.log("Deactivate profile");
   };
 
   return (
@@ -100,42 +90,24 @@ export default function SettingsPage() {
           </div>
 
           <div className="space-y-5">
-            <div>
-              <Input
-                label="Name"
-                value={user.profile.name}
-                disabled
-                icon={<FaLock className="w-4 h-4" />}
-                className="!bg-gray-50"
-                crossOrigin={undefined}
-              />
-              <Typography
-                variant="small"
-                className="text-gray-400 mt-2 flex items-center gap-1"
-              >
-                <FaGoogle className="w-3 h-3" />
-                Synced from Google Account
-              </Typography>
-            </div>
+            <Input
+              label="Name"
+              value={user.profile.name}
+              disabled
+              icon={<FaLock className="w-4 h-4" />}
+              className="!bg-gray-50"
+              helper="Synced from Google Account"
+            />
 
-            <div>
-              <Input
-                label="Email"
-                type="email"
-                value={user.profile.email}
-                disabled
-                icon={<FaLock className="w-4 h-4" />}
-                className="!bg-gray-50"
-                crossOrigin={undefined}
-              />
-              <Typography
-                variant="small"
-                className="text-gray-400 mt-2 flex items-center gap-1"
-              >
-                <FaGoogle className="w-3 h-3" />
-                Synced from Google Account
-              </Typography>
-            </div>
+            <Input
+              label="Email"
+              type="email"
+              value={user.profile.email}
+              disabled
+              icon={<FaLock className="w-4 h-4" />}
+              className="!bg-gray-50"
+              helper="Synced from Google Account"
+            />
           </div>
         </div>
       </SettingsSection>
@@ -157,16 +129,18 @@ export default function SettingsPage() {
                 defaultTimezone: val,
               })
             }
-          >
-            <Option value={Intl.DateTimeFormat().resolvedOptions().timeZone}>
-              {Intl.DateTimeFormat().resolvedOptions().timeZone}
-            </Option>
-            <Option value="America/New_York">America/New_York</Option>
-            <Option value="America/Los_Angeles">America/Los_Angeles</Option>
-            <Option value="Europe/London">Europe/London</Option>
-            <Option value="Europe/Paris">Europe/Paris</Option>
-            <Option value="Asia/Tokyo">Asia/Tokyo</Option>
-          </Select>
+            options={[
+              {
+                value: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                label: Intl.DateTimeFormat().resolvedOptions().timeZone,
+              },
+              { value: "America/New_York", label: "America/New_York" },
+              { value: "America/Los_Angeles", label: "America/Los_Angeles" },
+              { value: "Europe/London", label: "Europe/London" },
+              { value: "Europe/Paris", label: "Europe/Paris" },
+              { value: "Asia/Tokyo", label: "Asia/Tokyo" },
+            ]}
+          />
 
           <Select
             label="Date Format"
@@ -174,11 +148,12 @@ export default function SettingsPage() {
             onChange={(val) =>
               val && setPreferences({ ...preferences, dateFormat: val })
             }
-          >
-            <Option value="MM/DD/YYYY">MM/DD/YYYY</Option>
-            <Option value="DD/MM/YYYY">DD/MM/YYYY</Option>
-            <Option value="YYYY-MM-DD">YYYY-MM-DD</Option>
-          </Select>
+            options={[
+              { value: "MM/DD/YYYY", label: "MM/DD/YYYY" },
+              { value: "DD/MM/YYYY", label: "DD/MM/YYYY" },
+              { value: "YYYY-MM-DD", label: "YYYY-MM-DD" },
+            ]}
+          />
         </div>
       </SettingsSection>
 
@@ -189,47 +164,29 @@ export default function SettingsPage() {
         description="Control your privacy and visibility settings"
       >
         <div className="space-y-6">
-          <div>
-            <Select
-              label="Profile Visibility"
-              value={privacy.profileVisibility}
-              onChange={(val) =>
-                val && setPrivacy({ ...privacy, profileVisibility: val })
-              }
-            >
-              <Option value="public">Public</Option>
-              <Option value="friends">Friends Only</Option>
-              <Option value="private">Private</Option>
-            </Select>
-            <Typography variant="small" className="text-gray-400 mt-2">
-              Control who can see your profile information
-            </Typography>
-          </div>
+          <Select
+            label="Profile Visibility"
+            value={privacy.profileVisibility}
+            onChange={(val) =>
+              val && setPrivacy({ ...privacy, profileVisibility: val })
+            }
+            helper="Control who can see your profile information"
+            options={[
+              { value: "public", label: "Public" },
+              { value: "friends", label: "Friends Only" },
+              { value: "private", label: "Private" },
+            ]}
+          />
 
           <div className="pt-4 border-t border-gray-100">
-            <div className="flex items-center justify-between">
-              <div className="flex-1 pr-4">
-                <Typography
-                  variant="small"
-                  className="font-semibold text-gray-900"
-                >
-                  Show Attendance Status
-                </Typography>
-                <Typography
-                  variant="small"
-                  className="text-gray-500 mt-1.5 leading-relaxed"
-                >
-                  Allow others to see which events you're attending
-                </Typography>
-              </div>
-              <Switch
-                checked={privacy.showAttendance}
-                onChange={(e) =>
-                  setPrivacy({ ...privacy, showAttendance: e.target.checked })
-                }
-                crossOrigin={undefined}
-              />
-            </div>
+            <Switch
+              label="Show Attendance Status"
+              description="Allow others to see which events you're attending"
+              checked={privacy.showAttendance}
+              onChange={(e) =>
+                setPrivacy({ ...privacy, showAttendance: e.target.checked })
+              }
+            />
           </div>
         </div>
       </SettingsSection>
@@ -242,7 +199,7 @@ export default function SettingsPage() {
       >
         <div className="space-y-4">
           <Button
-            onClick={handleLogout}
+            onClick={() => setShowLogoutDialog(true)}
             variant="outlined"
             className="w-full flex items-center justify-center gap-3"
           >
@@ -266,7 +223,7 @@ export default function SettingsPage() {
               </CardBody>
             </Card>
             <Button
-              onClick={handleDeactivateProfile}
+              onClick={() => setShowDeactivateDialog(true)}
               variant="text"
               className="flex items-center gap-2 text-amber-700 hover:text-amber-800 mt-4"
             >
@@ -276,6 +233,28 @@ export default function SettingsPage() {
           </div>
         </div>
       </SettingsSection>
+
+      {/* Confirmation Dialogs */}
+      <ConfirmDialog
+        open={showLogoutDialog}
+        onClose={() => setShowLogoutDialog(false)}
+        onConfirm={handleLogout}
+        title="Confirm Logout"
+        description="Are you sure you want to log out? You'll need to sign in again to access your account."
+        confirmText="Logout"
+        cancelText="Cancel"
+      />
+
+      <ConfirmDialog
+        open={showDeactivateDialog}
+        onClose={() => setShowDeactivateDialog(false)}
+        onConfirm={handleDeactivateProfile}
+        title="Deactivate Profile"
+        description="Are you sure you want to deactivate your profile? Your account will be hidden but can be reactivated later by logging back in."
+        confirmText="Deactivate"
+        cancelText="Cancel"
+        danger
+      />
     </div>
   );
 }

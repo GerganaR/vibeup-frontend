@@ -4,6 +4,7 @@ import { AuthErrorPage, LoginPage } from "@/features/auth";
 import UserLayout from "@/features/layout/pages/UserLayout";
 import HomePage from "@/pages/HomePage";
 import EventsPage from "@/features/event/pages/EventsPage";
+import EventDetailPage from "@/features/event/pages/EventDetailPage";
 import SettingsPage from "@/pages/SettingsPage";
 
 export function Router() {
@@ -23,6 +24,7 @@ export function Router() {
       >
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.EVENTS} element={<EventsPage />} />
+        <Route path="/events/:id" element={<EventDetailPage />} />
         <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
       </Route>
 

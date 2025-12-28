@@ -2,8 +2,9 @@ export interface CreateEventDTO {
     title: string;
     description?: string;
     categories?: string[];
-    startDateTime: Date;
-    endDateTime: Date;
+    startDateTime: string;
+    endDateTime: string;
+    address: string;
     latitude?: number;
     longitude?: number;
     capacity?: number;

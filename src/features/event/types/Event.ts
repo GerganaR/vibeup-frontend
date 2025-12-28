@@ -5,6 +5,7 @@ export interface EventModel {
     categories?: string[];
     startDateTime: Date;
     endDateTime: Date;
+    address: string;
     latitude?: number;
     longitude?: number;
     capacity?: number;

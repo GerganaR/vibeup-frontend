@@ -30,9 +30,17 @@ api.interceptors.response.use(
       return Promise.reject(err);
     }
 
+    // Network error (status 0)
+    if (err.status === 0) {
+      toast.error(err.message);
+      return Promise.reject(err);
+    }
+
+    // Client errors (4xx)
     if (err.status >= 400 && err.status < 500) {
       toast.error(err.message);
     } else {
+      // Server errors (5xx) or other errors
       toast.error("Something went wrong. Try again later.");
     }
 

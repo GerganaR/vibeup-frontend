@@ -20,7 +20,7 @@ import { EventFormModal } from "../components/EventFormModal";
 import { EventLocationMap } from "../components/EventLocationMap";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import type { CreateEventDTO } from "../types";
+import type { CreateEventDTO, UpdateEventDTO } from "../types";
 
 export default function EventDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -78,10 +78,10 @@ export default function EventDetailPage() {
     }
   };
 
-  const handleUpdate = async (data: CreateEventDTO) => {
+  const handleUpdate = async (data: CreateEventDTO | UpdateEventDTO) => {
     if (!id) return;
     try {
-      await updateEvent(id, data);
+      await updateEvent(id, data as UpdateEventDTO);
       setShowEditModal(false);
       // Refresh event data
       getEvent(id);

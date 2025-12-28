@@ -1,3 +1,8 @@
-import type { CreateEventDTO } from "./CreateEventDTO";
-
-export type UpdateEventDTO = Partial<CreateEventDTO>;
+export interface UpdateEventDTO {
+  title?: string;
+  description?: string;
+  categories?: string[];
+  address?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+}

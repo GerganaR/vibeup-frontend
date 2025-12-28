@@ -15,7 +15,8 @@ import { EventCardSkeleton } from "../components/EventCardSkeleton";
 import { EventFormModal } from "../components/EventFormModal";
 import { useGetEvents } from "../hooks/useGetEvents";
 import { useCreateEvent } from "../hooks/useCreateEvent";
-import type { CreateEventDTO } from "../types";
+import type { CreateEventDTO, UpdateEventDTO } from "../types";
+import { useUpdateEvent } from "../hooks/useUpdateEvent";
 
 type FilterTab = "all" | "my" | "attending";
 
@@ -27,6 +28,7 @@ export default function EventsPage() {
   const user = useAppSelector((state) => state.user.user);
   const { getEvents, events, loading } = useGetEvents();
   const { createEvent, loading: createLoading } = useCreateEvent();
+  const { updateEvent } = useUpdateEvent();
 
   useEffect(() => {
     getEvents();
@@ -50,9 +52,13 @@ export default function EventsPage() {
     }
   }, [events, filterTab, user]);
 
-  const handleCreateEvent = async (data: CreateEventDTO) => {
+  const handleCreateOrUpdateEvent = async (data: CreateEventDTO | UpdateEventDTO) => {
     try {
-      await createEvent(data);
+      if ("id" in data) {
+        await updateEvent(data.id as string, data as UpdateEventDTO);
+      } else {
+        await createEvent(data as CreateEventDTO);
+      }
       setShowCreateModal(false);
       // Refresh events list
       getEvents();
@@ -157,7 +163,7 @@ export default function EventsPage() {
       <EventFormModal
         open={showCreateModal}
         onClose={() => setShowCreateModal(false)}
-        onSubmit={handleCreateEvent}
+        onSubmit={handleCreateOrUpdateEvent}
         loading={createLoading}
       />
     </div>

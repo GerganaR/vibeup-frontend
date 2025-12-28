@@ -13,12 +13,12 @@ import { Textarea } from "@/components/forms/Textarea";
 import { DatePicker } from "@/components/forms/DatePicker";
 import { AddressInput } from "@/components/forms/AddressInput";
 import { formatDateForInput } from "@/utils/dateFormat";
-import type { CreateEventDTO, EventModel } from "../types";
+import type { CreateEventDTO, EventModel, UpdateEventDTO } from "../types";
 
 interface EventFormModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: CreateEventDTO) => Promise<void>;
+  onSubmit: (data: CreateEventDTO | UpdateEventDTO) => Promise<void>;
   initialData?: EventModel;
   loading?: boolean;
 }
@@ -77,6 +77,8 @@ export function EventFormModal({
   const [formData, setFormData] = useState<CreateEventDTO>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const isEditMode = !!initialData;
+
   const handleChange = (field: keyof CreateEventDTO, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     // Clear error for this field
@@ -115,27 +117,30 @@ export function EventFormModal({
         "Address is required and must be at least 5 characters";
     }
 
-    if (!formData.startDateTime) {
-      newErrors.startDateTime = "Start date/time is required";
-    } else {
-      const startDate = new Date(formData.startDateTime);
-      if (startDate < new Date()) {
-        newErrors.startDateTime = "Start date must be in the future";
+    // Only validate dates and capacity if not in edit mode
+    if (!isEditMode) {
+      if (!formData.startDateTime) {
+        newErrors.startDateTime = "Start date/time is required";
+      } else {
+        const startDate = new Date(formData.startDateTime);
+        if (startDate < new Date()) {
+          newErrors.startDateTime = "Start date must be in the future";
+        }
       }
-    }
 
-    if (!formData.endDateTime) {
-      newErrors.endDateTime = "End date/time is required";
-    } else if (formData.startDateTime) {
-      const startDate = new Date(formData.startDateTime);
-      const endDate = new Date(formData.endDateTime);
-      if (endDate <= startDate) {
-        newErrors.endDateTime = "End date must be after start date";
+      if (!formData.endDateTime) {
+        newErrors.endDateTime = "End date/time is required";
+      } else if (formData.startDateTime) {
+        const startDate = new Date(formData.startDateTime);
+        const endDate = new Date(formData.endDateTime);
+        if (endDate <= startDate) {
+          newErrors.endDateTime = "End date must be after start date";
+        }
       }
-    }
 
-    if (formData.capacity !== undefined && formData.capacity <= 0) {
-      newErrors.capacity = "Capacity must be a positive number";
+      if (formData.capacity !== undefined && formData.capacity <= 0) {
+        newErrors.capacity = "Capacity must be a positive number";
+      }
     }
 
     setErrors(newErrors);
@@ -146,14 +151,26 @@ export function EventFormModal({
     console.log(formData);
     if (!validate()) return;
 
-    // Convert datetime-local string to ISO string
-    const submitData: CreateEventDTO = {
-      ...formData,
-      startDateTime: new Date(formData.startDateTime).toISOString(),
-      endDateTime: new Date(formData.endDateTime).toISOString(),
-    };
-
-    await onSubmit(submitData);
+    if (isEditMode) {
+      // When editing, only send the editable fields
+      const submitData: UpdateEventDTO = {
+        title: formData.title,
+        description: formData.description,
+        categories: formData.categories,
+        address: formData.address,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
+      };
+      await onSubmit(submitData);
+    } else {
+      // When creating, send all fields with proper date conversion
+      const submitData: CreateEventDTO = {
+        ...formData,
+        startDateTime: new Date(formData.startDateTime).toISOString(),
+        endDateTime: new Date(formData.endDateTime).toISOString(),
+      };
+      await onSubmit(submitData);
+    }
   };
 
   return (
@@ -200,33 +217,35 @@ export function EventFormModal({
           />
         </div>
 
-        {/* Schedule */}
-        <div className="space-y-4">
-          <Typography
-            variant="h6"
-            className="text-gray-800 text-base sm:text-lg"
-          >
-            Schedule
-          </Typography>
+        {/* Schedule - only shown when creating */}
+        {!isEditMode && (
+          <div className="space-y-4">
+            <Typography
+              variant="h6"
+              className="text-gray-800 text-base sm:text-lg"
+            >
+              Schedule
+            </Typography>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <DatePicker
-              label="Start Date & Time *"
-              value={formData.startDateTime}
-              onChange={(e) => handleChange("startDateTime", e.target.value)}
-              error={errors.startDateTime}
-              required
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <DatePicker
+                label="Start Date & Time *"
+                value={formData.startDateTime}
+                onChange={(e) => handleChange("startDateTime", e.target.value)}
+                error={errors.startDateTime}
+                required
+              />
 
-            <DatePicker
-              label="End Date & Time *"
-              value={formData.endDateTime}
-              onChange={(e) => handleChange("endDateTime", e.target.value)}
-              error={errors.endDateTime}
-              required
-            />
+              <DatePicker
+                label="End Date & Time *"
+                value={formData.endDateTime}
+                onChange={(e) => handleChange("endDateTime", e.target.value)}
+                error={errors.endDateTime}
+                required
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Location */}
         <div className="space-y-4">
@@ -311,29 +330,31 @@ export function EventFormModal({
           </div>
         </div>
 
-        {/* Optional Details */}
-        <div className="space-y-4">
-          <Typography
-            variant="h6"
-            className="text-gray-800 text-base sm:text-lg"
-          >
-            Optional Details
-          </Typography>
+        {/* Optional Details - only shown when creating */}
+        {!isEditMode && (
+          <div className="space-y-4">
+            <Typography
+              variant="h6"
+              className="text-gray-800 text-base sm:text-lg"
+            >
+              Optional Details
+            </Typography>
 
-          <Input
-            label="Capacity"
-            type="number"
-            value={formData.capacity?.toString() || ""}
-            onChange={(e) =>
-              handleChange(
-                "capacity",
-                e.target.value ? parseInt(e.target.value) : undefined
-              )
-            }
-            error={errors.capacity}
-            placeholder="Maximum number of attendees"
-          />
-        </div>
+            <Input
+              label="Capacity"
+              type="number"
+              value={formData.capacity?.toString() || ""}
+              onChange={(e) =>
+                handleChange(
+                  "capacity",
+                  e.target.value ? parseInt(e.target.value) : undefined
+                )
+              }
+              error={errors.capacity}
+              placeholder="Maximum number of attendees"
+            />
+          </div>
+        )}
       </DialogBody>
 
       <DialogFooter className="gap-2 flex-col sm:flex-row px-4 sm:px-6">

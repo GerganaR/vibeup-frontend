@@ -158,7 +158,7 @@ export default function EventDetailPage() {
           <Card className="shadow-md">
             <CardBody className="p-4 sm:p-6">
               <AttendeesList
-                attendeeIds={event.attendees || []}
+                attendees={event.attendees || []}
                 cohostIds={event.cohosts || []}
               />
             </CardBody>

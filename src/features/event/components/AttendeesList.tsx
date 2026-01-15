@@ -1,16 +1,18 @@
 import { Typography } from "@material-tailwind/react";
 import Avatar from "@/components/Avatar";
 
+import type { EventAttendee } from "../types";
+
 interface AttendeesListProps {
-  attendeeIds: string[];
+  attendees: EventAttendee[];
   cohostIds?: string[];
 }
 
 export function AttendeesList({
-  attendeeIds,
+  attendees,
   cohostIds = [],
 }: AttendeesListProps) {
-  const totalAttendees = attendeeIds.length;
+  const totalAttendees = attendees.length;
 
   if (totalAttendees === 0 && cohostIds.length === 0) {
     return (
@@ -27,12 +29,23 @@ export function AttendeesList({
       </Typography>
 
       <div className="flex flex-wrap gap-3">
-        {attendeeIds.slice(0, 20).map((id, index) => (
-          <div key={id} className="flex flex-col items-center">
-            <Avatar name={`User ${index + 1}`} size={48} />
-            <Typography variant="small" className="text-gray-600 mt-1">
-              {cohostIds.includes(id) && "Co-host"}
+        {attendees.slice(0, 20).map((attendee) => (
+          <div key={attendee.id} className="flex flex-col items-center">
+            <Avatar name={attendee.name} src={attendee.avatarUrl} size={48} />
+            <Typography
+              variant="small"
+              className="text-gray-600 mt-1 max-w-[64px] truncate"
+            >
+              {attendee.name}
             </Typography>
+            {cohostIds.includes(attendee.id) && (
+              <Typography
+                variant="small"
+                className="text-xs text-primary font-medium"
+              >
+                Co-host
+              </Typography>
+            )}
           </div>
         ))}
         {totalAttendees > 20 && (

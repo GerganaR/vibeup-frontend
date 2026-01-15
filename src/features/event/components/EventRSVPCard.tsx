@@ -22,7 +22,7 @@ export function EventRSVPCard({
   loading = false,
 }: EventRSVPCardProps) {
   const isAttending = currentUserId
-    ? event.attendees?.includes(currentUserId)
+    ? event.attendees?.some((a) => a.id === currentUserId)
     : false;
   const isFull =
     event.capacity && event.attendees

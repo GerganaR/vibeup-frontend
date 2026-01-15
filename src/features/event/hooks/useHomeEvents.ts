@@ -86,7 +86,7 @@ export function useHomeEvents(
   const incomingEventsRaw = upcomingEvents.filter(
     (event) =>
       event.hostId !== userId &&
-      event.attendees?.some((attendeeId) => attendeeId === userId)
+      event.attendees?.some((attendee) => attendee.id === userId)
   );
 
   // Extract categories from all upcoming events

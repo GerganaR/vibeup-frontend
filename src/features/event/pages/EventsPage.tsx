@@ -44,7 +44,8 @@ export default function EventsPage() {
       case "attending":
         return events.filter(
           (event) =>
-            event.attendees?.includes(user.id) && event.hostId !== user.id
+            event.attendees?.some((a) => a.id === user.id) &&
+            event.hostId !== user.id
         );
       case "all":
       default:
@@ -52,7 +53,9 @@ export default function EventsPage() {
     }
   }, [events, filterTab, user]);
 
-  const handleCreateOrUpdateEvent = async (data: CreateEventDTO | UpdateEventDTO) => {
+  const handleCreateOrUpdateEvent = async (
+    data: CreateEventDTO | UpdateEventDTO
+  ) => {
     try {
       if ("id" in data) {
         await updateEvent(data.id as string, data as UpdateEventDTO);

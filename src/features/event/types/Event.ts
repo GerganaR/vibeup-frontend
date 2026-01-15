@@ -1,5 +1,11 @@
 import type { Category } from "./Category";
 
+export interface EventAttendee {
+  id: string;
+  name: string;
+  avatarUrl?: string;
+}
+
 export interface EventModel {
   id: string;
   title: string;
@@ -12,7 +18,7 @@ export interface EventModel {
   longitude?: number;
   capacity?: number;
   hostId: string;
-  attendees: string[];
+  attendees: EventAttendee[];
   cohosts: string[];
   createdAt: Date;
   updatedAt: Date;

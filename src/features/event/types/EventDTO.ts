@@ -12,7 +12,7 @@ export interface EventDTO {
   longitude?: number;
   capacity?: number;
   hostId: string;
-  attendees: string[];
+  attendees: { id: string; name: string; avatarUrl?: string }[];
   cohosts: string[];
   createdAt: string;
   updatedAt: string;

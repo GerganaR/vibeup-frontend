@@ -7,6 +7,7 @@ import {
   isEventEnded,
 } from "@/utils/dateFormat";
 import type { EventModel } from "../types";
+import { CategoryPill } from "./CategoryPill";
 
 interface EventCardCompactProps {
   event: EventModel;
@@ -92,12 +93,11 @@ export function EventCardCompact({
         {event.categories && event.categories.length > 0 && (
           <div className="flex gap-2 mt-3 flex-wrap">
             {event.categories.slice(0, 2).map((category) => (
-              <span
-                key={category}
-                className="px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium"
-              >
-                {category}
-              </span>
+              <CategoryPill
+                key={category.id}
+                category={category.name}
+                size="sm"
+              />
             ))}
             {event.categories.length > 2 && (
               <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">

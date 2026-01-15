@@ -1,7 +1,7 @@
 export interface CreateEventDTO {
     title: string;
     description?: string;
-    categories?: string[];
+    categoryIds?: string[];
     startDateTime: string;
     endDateTime: string;
     address: string;

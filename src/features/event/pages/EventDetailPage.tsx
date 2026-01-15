@@ -125,8 +125,8 @@ export default function EventDetailPage() {
         <EventDetailHero
           title={event.title}
           description={event.description}
-          categories={event.categories}
-          coverCategory={event.categories?.[0]}
+          categories={event.categories?.map((c) => c.name)}
+          coverCategory={event.categories?.[0]?.name}
           latitude={event.latitude}
           longitude={event.longitude}
           address={event.address}

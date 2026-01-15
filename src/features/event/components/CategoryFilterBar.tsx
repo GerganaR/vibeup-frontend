@@ -18,16 +18,19 @@ export function CategoryFilterBar({
   return (
     <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
       {categories.map((category) => (
-        <Chip
+        <div
           key={category}
-          value={category}
           onClick={() => onSelectCategory(category)}
-          variant={selectedCategory === category ? "filled" : "outlined"}
-          color={selectedCategory === category ? "green" : "gray"}
-          className="cursor-pointer whitespace-nowrap transition-all hover:shadow-md"
-        />
+          className="cursor-pointer"
+        >
+          <Chip
+            value={category}
+            variant={selectedCategory === category ? "filled" : "outlined"}
+            color={selectedCategory === category ? "green" : "gray"}
+            className="whitespace-nowrap transition-all hover:shadow-md"
+          />
+        </div>
       ))}
     </div>
   );
 }
-

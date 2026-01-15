@@ -9,6 +9,7 @@ import { Card, Typography, Button } from "@material-tailwind/react";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import type { EventModel } from "../types";
 import { formatEventDateTime } from "@/utils/dateFormat";
+import { CategoryPill } from "./CategoryPill";
 
 interface EventMapProps {
   events: EventModel[];
@@ -158,12 +159,12 @@ export function EventMap({ events }: EventMapProps) {
                 {event.categories && event.categories.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">
                     {event.categories.slice(0, 2).map((category) => (
-                      <span
-                        key={category}
-                        className="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full"
-                      >
-                        {category}
-                      </span>
+                      <CategoryPill
+                        key={category.id}
+                        category={category.name}
+                        size="sm"
+                        showIcon={false}
+                      />
                     ))}
                     {event.categories.length > 2 && (
                       <span className="px-2 py-0.5 bg-gray-50 text-gray-700 text-xs rounded-full">

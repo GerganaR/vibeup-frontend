@@ -5,6 +5,7 @@ import type { EventModel } from "../types";
 import { EventCoverPlaceholder } from "./EventCover";
 import { isEventEnded } from "@/utils/dateFormat";
 import { EventCapacityBar } from "./EventCapacityBar";
+import { CategoryPill } from "./CategoryPill";
 
 interface Props {
   event: EventModel;
@@ -25,7 +26,7 @@ export function EventCard({ event }: Props) {
     minute: "2-digit",
   });
 
-  const mainCategory = event.categories?.[0] || undefined;
+  const mainCategory = event.categories?.[0]?.name || undefined;
   const hasCoordinates =
     event.latitude !== undefined && event.longitude !== undefined;
 
@@ -147,13 +148,13 @@ export function EventCard({ event }: Props) {
         {event.categories && event.categories.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {event.categories.slice(0, 3).map((c) => (
-              <span
-                key={c}
-                className="px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs"
-              >
-                {c}
-              </span>
+              <CategoryPill key={c.id} category={c.name} size="sm" />
             ))}
+            {event.categories.length > 3 && (
+              <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
+                +{event.categories.length - 3}
+              </span>
+            )}
           </div>
         )}
       </CardBody>

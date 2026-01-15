@@ -1,4 +1,4 @@
-import { CategoryChip } from "./CategoryChip";
+import { CategoryPill } from "./CategoryPill";
 import { Chip } from "@material-tailwind/react";
 import { isEventEnded } from "@/utils/dateFormat";
 
@@ -55,7 +55,6 @@ export function EventDetailHero({
       {/* Cover with Google Street View or gradient */}
       {hasCoordinates && mapUrl ? (
         <div className="w-full flex gap-4 relative ">
-          
           {/* Title Below Street View */}
           <div className="w-2/3 px-4 sm:px-6 py-6 sm:py-8 bg-white border-b border-gray-200">
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">
@@ -64,7 +63,7 @@ export function EventDetailHero({
             {categories && categories.length > 0 && (
               <div className="flex flex-wrap gap-2 my-4">
                 {categories.map((category) => (
-                  <CategoryChip key={category} category={category} size="md" />
+                  <CategoryPill key={category} category={category} size="md" />
                 ))}
               </div>
             )}
@@ -136,18 +135,18 @@ export function EventDetailHero({
             )}
           </div>
           {categories && categories.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {categories.map((category) => (
-                  <CategoryChip key={category} category={category} size="md" />
-                ))}
-              </div>
-            )}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {categories.map((category) => (
+                <CategoryPill key={category} category={category} size="md" />
+              ))}
+            </div>
+          )}
 
-            {description && (
-              <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-                {description}
-              </p>
-            )}
+          {description && (
+            <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
+              {description}
+            </p>
+          )}
         </div>
       )}
     </div>

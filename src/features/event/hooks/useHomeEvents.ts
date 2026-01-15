@@ -16,15 +16,20 @@ interface UseHomeEventsReturn {
 function extractCategories(events: EventModel[]): string[] {
   const categorySet = new Set<string>();
   events.forEach((event) => {
-    event.categories?.forEach((cat) => categorySet.add(cat));
+    event.categories?.forEach((cat) => categorySet.add(cat.name));
   });
   return Array.from(categorySet).sort();
 }
 
 // Helper: Filter by category
-function filterByCategory(events: EventModel[], category: string): EventModel[] {
+function filterByCategory(
+  events: EventModel[],
+  category: string
+): EventModel[] {
   if (category === "All") return events;
-  return events.filter((e) => e.categories?.includes(category));
+  return events.filter((e) =>
+    e.categories?.some((cat) => cat.name === category)
+  );
 }
 
 // Helper: Filter upcoming events
@@ -36,7 +41,8 @@ function filterUpcoming(events: EventModel[]): EventModel[] {
 // Helper: Sort by start date
 function sortByStartDate(events: EventModel[]): EventModel[] {
   return [...events].sort(
-    (a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime()
+    (a, b) =>
+      new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime()
   );
 }
 
@@ -88,7 +94,10 @@ export function useHomeEvents(
 
   // Apply category filter
   const myEventsFiltered = filterByCategory(myEventsRaw, selectedCategory);
-  const incomingEventsFiltered = filterByCategory(incomingEventsRaw, selectedCategory);
+  const incomingEventsFiltered = filterByCategory(
+    incomingEventsRaw,
+    selectedCategory
+  );
 
   // Sort and limit to 5
   const myEvents = sortByStartDate(myEventsFiltered).slice(0, 5);
@@ -103,4 +112,3 @@ export function useHomeEvents(
     refetch: fetchEvents,
   };
 }
-

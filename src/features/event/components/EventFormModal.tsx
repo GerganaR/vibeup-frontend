@@ -13,7 +13,12 @@ import { Textarea } from "@/components/forms/Textarea";
 import { DatePicker } from "@/components/forms/DatePicker";
 import { AddressInput } from "@/components/forms/AddressInput";
 import { formatDateForInput } from "@/utils/dateFormat";
-import type { CreateEventDTO, EventModel, UpdateEventDTO } from "../types";
+import type {
+  CategoryDTO,
+  CreateEventDTO,
+  EventModel,
+  UpdateEventDTO,
+} from "../types";
 
 interface EventFormModalProps {
   open: boolean;
@@ -23,25 +28,14 @@ interface EventFormModalProps {
   loading?: boolean;
 }
 
-const CATEGORY_OPTIONS = [
-  "Music",
-  "Sports",
-  "Food",
-  "Tech",
-  "Art",
-  "Culture",
-  "Business",
-  "Education",
-  "Health",
-  "Social",
-];
+import { useAppSelector } from "@/store/hooks";
 
 function getInitialFormData(initialData?: EventModel): CreateEventDTO {
   if (initialData) {
     return {
       title: initialData.title,
       description: initialData.description || "",
-      categories: initialData.categories || [],
+      categoryIds: initialData.categories?.map((c) => c.id) || [],
       startDateTime: formatDateForInput(new Date(initialData.startDateTime)),
       endDateTime: formatDateForInput(new Date(initialData.endDateTime)),
       address: initialData.address,
@@ -53,7 +47,7 @@ function getInitialFormData(initialData?: EventModel): CreateEventDTO {
   return {
     title: "",
     description: "",
-    categories: [],
+    categoryIds: [],
     startDateTime: "",
     endDateTime: "",
     address: "",
@@ -70,6 +64,8 @@ export function EventFormModal({
   initialData,
   loading = false,
 }: EventFormModalProps) {
+  const categories = useAppSelector((state) => state.category.items);
+
   const initialFormData = useMemo(
     () => getInitialFormData(initialData),
     [initialData]
@@ -91,16 +87,16 @@ export function EventFormModal({
     }
   };
 
-  const toggleCategory = (category: string) => {
+  const toggleCategory = (category: CategoryDTO) => {
     setFormData((prev) => {
-      const categories = prev.categories || [];
-      if (categories.includes(category)) {
+      const categoryIds = prev.categoryIds || [];
+      if (categoryIds.includes(category.id)) {
         return {
           ...prev,
-          categories: categories.filter((c) => c !== category),
+          categoryIds: categoryIds.filter((c) => c !== category.id),
         };
       } else {
-        return { ...prev, categories: [...categories, category] };
+        return { ...prev, categoryIds: [...categoryIds, category.id] };
       }
     });
   };
@@ -156,7 +152,7 @@ export function EventFormModal({
       const submitData: UpdateEventDTO = {
         title: formData.title,
         description: formData.description,
-        categories: formData.categories,
+        categoryIds: formData.categoryIds,
         address: formData.address,
         latitude: formData.latitude,
         longitude: formData.longitude,
@@ -311,17 +307,19 @@ export function EventFormModal({
             Categories
           </Typography>
           <div className="flex flex-wrap gap-2">
-            {CATEGORY_OPTIONS.map((category) => (
-              <div key={category} onClick={() => toggleCategory(category)}>
+            {categories.map((category: CategoryDTO) => (
+              <div key={category.id} onClick={() => toggleCategory(category)}>
                 <Chip
-                  value={category}
+                  value={category.name}
                   variant={
-                    formData.categories?.includes(category)
+                    formData.categoryIds?.includes(category.id)
                       ? "filled"
                       : "outlined"
                   }
                   color={
-                    formData.categories?.includes(category) ? "green" : "gray"
+                    formData.categoryIds?.includes(category.id)
+                      ? "green"
+                      : "gray"
                   }
                   className="cursor-pointer text-xs sm:text-sm"
                 />

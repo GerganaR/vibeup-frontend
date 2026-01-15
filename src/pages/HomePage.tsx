@@ -12,7 +12,9 @@ import { EmptyState } from "@/features/event/components/EmptyState";
 import { EventFormModal } from "@/features/event/components/EventFormModal";
 import { useHomeEvents } from "@/features/event/hooks/useHomeEvents";
 import { useCreateEvent } from "@/features/event/hooks/useCreateEvent";
-import type { CreateEventDTO, EventModel } from "@/features/event/types";
+import type { CreateEventDTO, EventModel, UpdateEventDTO } from "@/features/event/types";
+import { useUpdateEvent } from "@/features/event/hooks/useUpdateEvent";
+import { useGetEvents } from "@/features/event/hooks/useGetEvents";
 
 // Helper: Calculate events happening this week
 function calculateThisWeek(
@@ -227,7 +229,10 @@ export default function HomePage() {
   const { incomingEvents, myEvents, categories, loading, error, refetch } =
     useHomeEvents(user?.id, selectedCategory);
 
-  const { createEvent, loading: createLoading } = useCreateEvent();
+    const { createEvent, loading: createLoading } = useCreateEvent();
+    const { updateEvent } = useUpdateEvent();
+    const { getEvents } = useGetEvents();
+    
 
   // Calculate stats
   const stats = useMemo(
@@ -239,15 +244,20 @@ export default function HomePage() {
     [incomingEvents, myEvents]
   );
 
-  const handleCreateEvent = async (data: CreateEventDTO) => {
-    try {
-      await createEvent(data);
-      setShowCreateModal(false);
-      refetch(); // Refresh events
-    } catch (error) {
-      console.error("Create event failed:", error);
-    }
-  };
+   const handleCreateOrUpdateEvent = async (data: CreateEventDTO | UpdateEventDTO) => {
+      try {
+        if ("id" in data) {
+          await updateEvent(data.id as string, data as UpdateEventDTO);
+        } else {
+          await createEvent(data as CreateEventDTO);
+        }
+        setShowCreateModal(false);
+        // Refresh events list
+        getEvents();
+      } catch (error) {
+        console.error("Create event failed:", error);
+      }
+    };
 
   // Auth states
   if (!user) return <LoggedOutState />;
@@ -294,7 +304,7 @@ export default function HomePage() {
       <EventFormModal
         open={showCreateModal}
         onClose={() => setShowCreateModal(false)}
-        onSubmit={handleCreateEvent}
+        onSubmit={handleCreateOrUpdateEvent}
         loading={createLoading}
       />
     </div>

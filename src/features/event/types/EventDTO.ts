@@ -1,10 +1,13 @@
+import type { Category } from "./Category";
+
 export interface EventDTO {
   id: string;
   title: string;
   description?: string;
-  categories?: string[];
+  categories: Category[];
   startDateTime: string;
   endDateTime: string;
+  address: string;
   latitude?: number;
   longitude?: number;
   capacity?: number;

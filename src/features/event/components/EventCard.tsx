@@ -1,5 +1,10 @@
 import { Card, CardBody, Typography, Chip } from "@material-tailwind/react";
-import { FaCalendarAlt, FaClock, FaUsers } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaUsers,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import type { EventModel } from "../types";
 import { EventCoverPlaceholder } from "./EventCover";
@@ -30,7 +35,6 @@ export function EventCard({ event }: Props) {
   const hasCoordinates =
     event.latitude !== undefined && event.longitude !== undefined;
 
-  // Google Street View for card thumbnails
   const GOOGLE_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const mapThumbnailUrl =
     hasCoordinates && GOOGLE_MAPS_KEY
@@ -46,22 +50,21 @@ export function EventCard({ event }: Props) {
 
   return (
     <Card
-      className={`shadow-md hover:shadow-xl transition-all rounded-2xl border border-gray-100 overflow-hidden cursor-pointer ${
-        isPast ? "opacity-60" : ""
+      className={`group overflow-hidden cursor-pointer transition-all duration-300 rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-slate-300/50 hover:border-slate-300 hover:-translate-y-1 ${
+        isPast ? "opacity-60 grayscale-[30%]" : ""
       }`}
       onClick={handleClick}
     >
-      {/* Google Street View or Placeholder Cover */}
+      {/* Cover Image */}
       {hasCoordinates && mapThumbnailUrl ? (
-        <div className="w-full h-48 relative">
+        <div className="w-full h-48 relative overflow-hidden">
           <img
             src={mapThumbnailUrl}
             alt={event.address || "Event Location"}
-            className={`w-full h-full object-cover ${
+            className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
               isPast ? "grayscale" : ""
             }`}
             onError={(e) => {
-              // If Street View fails, show placeholder
               e.currentTarget.style.display = "none";
               const fallback = e.currentTarget.nextElementSibling;
               if (fallback) {
@@ -72,64 +75,88 @@ export function EventCard({ event }: Props) {
           <div className="hidden w-full h-full">
             <EventCoverPlaceholder category={mainCategory} />
           </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent" />
           {isPast && (
-            <div className="absolute top-2 right-2">
+            <div className="absolute top-3 right-3">
               <Chip
                 value="Past Event"
                 size="sm"
-                className="bg-gray-700 text-white font-medium"
+                className="bg-slate-800/90 backdrop-blur-sm text-white font-medium"
               />
             </div>
           )}
         </div>
       ) : (
-        <div className="relative">
-          <div className={isPast ? "grayscale" : ""}>
+        <div className="relative overflow-hidden">
+          <div
+            className={`transition-transform duration-500 group-hover:scale-105 ${
+              isPast ? "grayscale" : ""
+            }`}
+          >
             <EventCoverPlaceholder category={mainCategory} />
           </div>
           {isPast && (
-            <div className="absolute top-2 right-2">
+            <div className="absolute top-3 right-3">
               <Chip
                 value="Past Event"
                 size="sm"
-                className="bg-gray-700 text-white font-medium"
+                className="bg-slate-800/90 backdrop-blur-sm text-white font-medium"
               />
             </div>
           )}
         </div>
       )}
 
-      <CardBody className="p-4 space-y-4">
-        <Typography variant="h5" className="text-gray-900 font-semibold">
+      <CardBody className="p-5 space-y-4">
+        {/* Title */}
+        <Typography
+          variant="h5"
+          className="text-slate-800 font-bold line-clamp-1 group-hover:text-green-600 transition-colors"
+        >
           {event.title}
         </Typography>
 
+        {/* Description */}
         {event.description && (
-          <Typography variant="small" className="text-gray-600 line-clamp-2">
+          <Typography
+            variant="small"
+            className="text-slate-500 line-clamp-2 leading-relaxed"
+          >
             {event.description}
           </Typography>
         )}
 
-        {/* Date + Time */}
-        <div className="flex items-center gap-4 text-gray-500 text-sm">
-          <div className="flex items-center gap-1">
-            <FaCalendarAlt className="w-3 h-3" />
-            {formattedDate}
+        {/* Meta Info */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-600">
+            <FaCalendarAlt className="w-3 h-3 text-green-500" />
+            <span className="text-xs font-medium">{formattedDate}</span>
           </div>
 
-          <div className="flex items-center gap-1">
-            <FaClock className="w-3 h-3" />
-            {formattedTime}
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-600">
+            <FaClock className="w-3 h-3 text-green-500" />
+            <span className="text-xs font-medium">{formattedTime}</span>
           </div>
 
           {event.capacity && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-green-50 text-green-700">
               <FaUsers className="w-3 h-3" />
-              {(event.attendees?.length || 0) + "/" + event.capacity}
+              <span className="text-xs font-semibold">
+                {attendeesCount}/{event.capacity}
+              </span>
             </div>
           )}
         </div>
-        {/* Capacity progress bar (NEW) */}
+
+        {/* Address */}
+        {event.address && (
+          <div className="flex items-center gap-1.5 text-slate-500">
+            <FaMapMarkerAlt className="w-3 h-3 text-rose-400 flex-shrink-0" />
+            <span className="text-xs truncate">{event.address}</span>
+          </div>
+        )}
+
+        {/* Capacity Bar */}
         {hasCapacity && (
           <div
             className={isPast ? "pointer-events-none opacity-80" : ""}
@@ -146,12 +173,12 @@ export function EventCard({ event }: Props) {
 
         {/* Categories */}
         {event.categories && event.categories.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 pt-3 border-t border-slate-100">
             {event.categories.slice(0, 3).map((c) => (
               <CategoryPill key={c.id} category={c.name} size="sm" />
             ))}
             {event.categories.length > 3 && (
-              <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
+              <span className="px-2.5 py-1 bg-slate-100 text-slate-500 rounded-full text-xs font-medium">
                 +{event.categories.length - 3}
               </span>
             )}

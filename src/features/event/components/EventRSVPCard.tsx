@@ -1,5 +1,9 @@
 import { Card, CardBody, Button, Typography } from "@material-tailwind/react";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import {
+  CheckCircleIcon,
+  UserGroupIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/solid";
 import { isEventEnded } from "@/utils/dateFormat";
 import type { EventModel } from "../types";
 import { EventCapacityBar } from "./EventCapacityBar";
@@ -31,42 +35,61 @@ export function EventRSVPCard({
   const isPast = isEventEnded(new Date(event.endDateTime));
 
   return (
-    <Card className="shadow-lg">
-      <CardBody className="space-y-4">
-        <Typography variant="h5" className="text-gray-900">
-          RSVP Status
-        </Typography>
+    <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
+      {/* Header */}
+      <div className="p-5 bg-gradient-to-r from-green-50/50 to-white border-b border-slate-100">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg shadow-slate-300/30">
+            <UserGroupIcon className="w-5 h-5" />
+          </div>
+          <Typography variant="h5" className="text-slate-800 font-bold">
+            RSVP Status
+          </Typography>
+        </div>
+      </div>
 
+      <CardBody className="p-5 space-y-4">
         {isHost ? (
-          <div className="text-center py-4">
-            <Typography
-              variant="paragraph"
-              className="text-blue-600 font-semibold"
-            >
+          <div className="text-center py-6 px-4 rounded-xl bg-blue-50 border border-blue-200/50">
+            <div className="p-3 rounded-full bg-blue-100 text-blue-600 w-fit mx-auto mb-3">
+              <CheckCircleIcon className="w-6 h-6" />
+            </div>
+            <Typography variant="paragraph" className="text-blue-700 font-bold">
               You're hosting this event
             </Typography>
-            <Typography variant="small" className="text-gray-500 mt-2">
+            <Typography variant="small" className="text-slate-500 mt-1">
               Hosts cannot RSVP to their own events
             </Typography>
           </div>
         ) : isPast ? (
-          <div className="text-center py-4">
+          <div className="text-center py-6 px-4 rounded-xl bg-slate-50 border border-slate-200">
+            <div className="p-3 rounded-full bg-slate-200 text-slate-500 w-fit mx-auto mb-3">
+              <XCircleIcon className="w-6 h-6" />
+            </div>
             <Typography
               variant="paragraph"
-              className="text-gray-500 font-semibold"
+              className="text-slate-600 font-bold"
             >
               This event has ended
             </Typography>
-            <Typography variant="small" className="text-gray-400 mt-2">
+            <Typography variant="small" className="text-slate-400 mt-1">
               RSVP is no longer available
             </Typography>
           </div>
         ) : isAttending ? (
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-green-600">
-              <CheckCircleIcon className="w-6 h-6" />
-              <Typography variant="paragraph" className="font-semibold">
+            <div className="text-center py-6 px-4 rounded-xl bg-green-50 border border-green-200/50">
+              <div className="p-3 rounded-full bg-green-100 text-green-600 w-fit mx-auto mb-3">
+                <CheckCircleIcon className="w-6 h-6" />
+              </div>
+              <Typography
+                variant="paragraph"
+                className="text-green-700 font-bold"
+              >
                 You're attending!
+              </Typography>
+              <Typography variant="small" className="text-slate-500 mt-1">
+                We'll see you there
               </Typography>
             </div>
             <Button
@@ -76,6 +99,7 @@ export function EventRSVPCard({
               onClick={onCancelRSVP}
               disabled={loading}
               loading={loading}
+              className="rounded-xl font-semibold"
             >
               Cancel RSVP
             </Button>
@@ -83,14 +107,17 @@ export function EventRSVPCard({
         ) : (
           <div className="space-y-4">
             {isFull ? (
-              <div className="text-center py-4">
+              <div className="text-center py-6 px-4 rounded-xl bg-red-50 border border-red-200/50">
+                <div className="p-3 rounded-full bg-red-100 text-red-500 w-fit mx-auto mb-3">
+                  <XCircleIcon className="w-6 h-6" />
+                </div>
                 <Typography
                   variant="paragraph"
-                  className="text-red-500 font-semibold"
+                  className="text-red-600 font-bold"
                 >
                   Event is full
                 </Typography>
-                <Typography variant="small" className="text-gray-500 mt-2">
+                <Typography variant="small" className="text-slate-500 mt-1">
                   No more spots available
                 </Typography>
               </div>
@@ -103,6 +130,7 @@ export function EventRSVPCard({
                 onClick={onRSVP}
                 disabled={loading}
                 loading={loading}
+                className="rounded-xl font-bold shadow-lg shadow-slate-300/30 hover:shadow-xl transition-all"
               >
                 RSVP Now
               </Button>
@@ -111,7 +139,7 @@ export function EventRSVPCard({
         )}
 
         {/* Event Stats */}
-        <div className="pt-4 border-t border-gray-200 space-y-3">
+        <div className="pt-4 border-t border-slate-100 space-y-3">
           {typeof event.capacity === "number" ? (
             <EventCapacityBar
               attendeesCount={event.attendees?.length ?? 0}
@@ -119,8 +147,8 @@ export function EventRSVPCard({
             />
           ) : (
             <div className="flex justify-between text-sm">
-              <Typography className="text-gray-600">Attendees</Typography>
-              <Typography className="font-semibold">
+              <Typography className="text-slate-500">Attendees</Typography>
+              <Typography className="font-bold text-slate-800">
                 {event.attendees?.length ?? 0}
               </Typography>
             </div>

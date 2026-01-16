@@ -1,13 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import {
-  Typography,
-  Card,
-  CardBody,
-  Button,
-  Chip,
-} from "@material-tailwind/react";
+import { Typography, Card, CardBody, Button } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/24/solid";
-import { useAppSelector } from "@/store/hooks";
 import { EventsTabs } from "../components/EventTabs";
 import { EventsGrid } from "../components/EventGrid";
 import { EventMap } from "../components/EventMap";
@@ -15,43 +8,66 @@ import { EventCardSkeleton } from "../components/EventCardSkeleton";
 import { EventFormModal } from "../components/EventFormModal";
 import { useGetEvents } from "../hooks/useGetEvents";
 import { useCreateEvent } from "../hooks/useCreateEvent";
+import { useDashboard } from "../hooks/useDashboard";
+import { CategoryFilterBar } from "../components/CategoryFilterBar";
+import { EventFilterTabs, type FilterTab } from "../components/EventFilterTabs";
+import { PageHeader } from "@/features/layout/components/PageHeader";
 import type { CreateEventDTO, UpdateEventDTO } from "../types";
 import { useUpdateEvent } from "../hooks/useUpdateEvent";
-
-type FilterTab = "all" | "my" | "attending";
 
 export default function EventsPage() {
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const [filterTab, setFilterTab] = useState<FilterTab>("all");
+  const [selectedCategoryId, setSelectedCategoryId] = useState("All");
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const user = useAppSelector((state) => state.user.user);
-  const { getEvents, events, loading } = useGetEvents();
+  const { getEvents, events, loading: allEventsLoading } = useGetEvents();
   const { createEvent, loading: createLoading } = useCreateEvent();
   const { updateEvent } = useUpdateEvent();
+
+  // Dashboard Data
+  const {
+    attendingEvents,
+    hostedEvents,
+    loading: dashboardLoading,
+    refetch: refetchDashboard,
+  } = useDashboard(selectedCategoryId);
 
   useEffect(() => {
     getEvents();
   }, []);
 
-  // Filter events based on active tab
-  const filteredEvents = useMemo(() => {
-    if (!events || !user) return events;
+  // Extract categories from all events (discovery) to populate filter
+  const categories = useMemo(() => {
+    if (!events) return [];
+    const categoryMap = new Map<string, string>();
+    events.forEach((event) => {
+      event.categories?.forEach((cat) => categoryMap.set(cat.id, cat.name));
+    });
+    return Array.from(categoryMap.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [events]);
 
+  // Determine displayed events based on tab
+  const displayedEvents = useMemo(() => {
     switch (filterTab) {
       case "my":
-        return events.filter((event) => event.hostId === user.id);
+        return hostedEvents;
       case "attending":
-        return events.filter(
-          (event) =>
-            event.attendees?.some((a) => a.id === user.id) &&
-            event.hostId !== user.id
-        );
+        return attendingEvents;
       case "all":
       default:
-        return events;
+        // Local filtering for "All" tab (since we fetch all)
+        if (!events) return [];
+        if (selectedCategoryId === "All") return events;
+        return events.filter((e) =>
+          e.categories?.some((cat) => cat.id === selectedCategoryId)
+        );
     }
-  }, [events, filterTab, user]);
+  }, [filterTab, events, hostedEvents, attendingEvents, selectedCategoryId]);
+
+  const loading = filterTab === "all" ? allEventsLoading : dashboardLoading;
 
   const handleCreateOrUpdateEvent = async (
     data: CreateEventDTO | UpdateEventDTO
@@ -63,60 +79,43 @@ export default function EventsPage() {
         await createEvent(data as CreateEventDTO);
       }
       setShowCreateModal(false);
-      // Refresh events list
+      // Refresh both lists
       getEvents();
+      refetchDashboard();
     } catch (error) {
       console.error("Create event failed:", error);
     }
   };
 
   return (
-    <div className=" flex flex-col gap-6 h-full">
+    <div className="flex flex-col gap-4 h-full">
       {/* Header with Tabs */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <Typography variant="h3" className="text-gray-900">
-          Events
-        </Typography>
+      <PageHeader
+        title="Events"
+        actions={
+          <>
+            <EventsTabs mode={viewMode} onChange={setViewMode} />
+            <Button
+              color="green"
+              className="flex items-center gap-2"
+              onClick={() => setShowCreateModal(true)}
+            >
+              <PlusIcon className="w-5 h-5" />
+              <span className="hidden sm:inline">Create Event</span>
+            </Button>
+          </>
+        }
+      />
 
-        <div className="flex items-center gap-3">
-          <EventsTabs mode={viewMode} onChange={setViewMode} />
-          <Button
-            color="green"
-            className="flex items-center gap-2"
-            onClick={() => setShowCreateModal(true)}
-          >
-            <PlusIcon className="w-5 h-5" />
-            <span className="hidden sm:inline">Create Event</span>
-          </Button>
-        </div>
-      </div>
+      {/* Filter Tabs & Category Filter */}
+      <div className="flex flex-col gap-4">
+        <EventFilterTabs selectedTab={filterTab} onSelectTab={setFilterTab} />
 
-      {/* Filter Tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        <div onClick={() => setFilterTab("all")}>
-          <Chip
-            value="All Events"
-            variant={filterTab === "all" ? "filled" : "outlined"}
-            color={filterTab === "all" ? "green" : "gray"}
-            className="cursor-pointer whitespace-nowrap"
-          />
-        </div>
-        <div onClick={() => setFilterTab("my")}>
-          <Chip
-            value="My Events"
-            variant={filterTab === "my" ? "filled" : "outlined"}
-            color={filterTab === "my" ? "green" : "gray"}
-            className="cursor-pointer whitespace-nowrap"
-          />
-        </div>
-        <div onClick={() => setFilterTab("attending")}>
-          <Chip
-            value="Attending"
-            variant={filterTab === "attending" ? "filled" : "outlined"}
-            color={filterTab === "attending" ? "green" : "gray"}
-            className="cursor-pointer whitespace-nowrap"
-          />
-        </div>
+        <CategoryFilterBar
+          categories={categories}
+          selectedCategoryId={selectedCategoryId}
+          onSelectCategory={setSelectedCategoryId}
+        />
       </div>
 
       {/* Main Content */}
@@ -128,35 +127,37 @@ export default function EventsPage() {
                 <EventCardSkeleton key={i} />
               ))}
             </div>
-          ) : filteredEvents && filteredEvents.length > 0 ? (
+          ) : displayedEvents && displayedEvents.length > 0 ? (
             viewMode === "grid" ? (
-              <EventsGrid events={filteredEvents} />
+              <EventsGrid events={displayedEvents} />
             ) : (
-              <EventMap events={filteredEvents} />
+              <EventMap events={displayedEvents} />
             )
           ) : (
             <div className="text-center py-12">
               <Typography variant="h6" className="text-gray-500">
                 {filterTab === "my"
-                  ? "No hosted events"
+                  ? "No hosted events found"
                   : filterTab === "attending"
                   ? "Not attending any events"
                   : "No events found"}
               </Typography>
               <Typography variant="small" className="text-gray-400 mt-2">
                 {filterTab === "my"
-                  ? "You haven't created any events yet. Start by creating one!"
+                  ? "You haven't created any events yet."
                   : filterTab === "attending"
-                  ? "You're not attending any events. Browse and RSVP to join!"
-                  : "When events are available, you'll see them here."}
+                  ? "You're not attending any events matching filter."
+                  : "Try adjusting filters."}
               </Typography>
-              <Button
-                color="green"
-                className="mt-6"
-                onClick={() => setShowCreateModal(true)}
-              >
-                Create Your First Event
-              </Button>
+              {filterTab === "my" && (
+                <Button
+                  color="green"
+                  className="mt-6"
+                  onClick={() => setShowCreateModal(true)}
+                >
+                  Create Your First Event
+                </Button>
+              )}
             </div>
           )}
         </CardBody>

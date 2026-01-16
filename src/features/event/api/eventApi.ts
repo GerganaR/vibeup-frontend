@@ -4,6 +4,8 @@ import type { EventDTO, CreateEventDTO, UpdateEventDTO } from "../types";
 export const eventApi = {
   getAll: () => api.get<EventDTO[]>("/events"),
 
+  getCategories: () => api.get<string[]>("/categories"),
+
   getById: (id: string) => api.get<EventDTO>(`/events/${id}`),
 
   create: (data: CreateEventDTO) => api.post<EventDTO>("/events", data),

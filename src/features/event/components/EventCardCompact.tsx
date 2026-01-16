@@ -1,5 +1,10 @@
 import { Card, CardBody, Typography, Chip } from "@material-tailwind/react";
-import { FaCalendarAlt, FaClock, FaUsers } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaUsers,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import {
   formatEventDate,
@@ -27,81 +32,98 @@ export function EventCardCompact({
 
   return (
     <Card
-      className={`shadow-none border border-gray-200 hover:border-green-400 hover:shadow-md transition-all cursor-pointer ${
-        isPast ? "opacity-60 bg-gray-50" : ""
+      className={`group overflow-hidden cursor-pointer transition-all duration-300 rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md hover:shadow-slate-200/50 hover:border-slate-300 ${
+        isPast ? "opacity-60 bg-slate-50/50" : ""
       }`}
       onClick={handleClick}
     >
       <CardBody className="p-4">
-        <div className="flex items-start justify-between mb-2">
+        {/* Header Row */}
+        <div className="flex items-start justify-between gap-3 mb-3">
           <Typography
             variant="h6"
-            className={`font-semibold line-clamp-1 flex-1 ${
-              isPast ? "text-gray-500" : "text-gray-900"
+            className={`font-bold line-clamp-1 flex-1 group-hover:text-green-600 transition-colors ${
+              isPast ? "text-slate-500" : "text-slate-800"
             }`}
           >
             {event.title}
           </Typography>
-          <div className="flex gap-2 ml-2">
+          <div className="flex gap-1.5 flex-shrink-0">
             {isPast && (
               <Chip
                 value="Past"
                 size="sm"
-                className="bg-gray-600 text-white font-medium"
+                className="bg-slate-200 text-slate-600 font-medium text-xs px-2 py-0.5"
               />
             )}
             {showHostBadge && (
               <Chip
                 value="Host"
                 size="sm"
-                className="bg-green-100 text-green-700 font-medium"
+                className="bg-gradient-to-r from-green-500 to-green-600 text-white font-medium text-xs px-2 py-0.5"
               />
             )}
           </div>
         </div>
 
+        {/* Description */}
         {event.description && (
           <Typography
             variant="small"
-            className="text-gray-600 line-clamp-2 mb-3"
+            className="text-slate-500 line-clamp-2 mb-4 leading-relaxed"
           >
             {event.description}
           </Typography>
         )}
 
-        <div className="flex items-center gap-4 text-sm flex-wrap">
-          <div className="flex items-center gap-1.5 text-gray-600">
-            <FaCalendarAlt className="w-3.5 h-3.5" />
-            <span>{formatEventDate(new Date(event.startDateTime))}</span>
+        {/* Meta Info Row */}
+        <div className="flex items-center gap-2 flex-wrap mb-3">
+          <div className="flex items-center gap-1.5 text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">
+            <FaCalendarAlt className="w-3 h-3 text-green-500" />
+            <span className="text-xs font-medium">
+              {formatEventDate(new Date(event.startDateTime))}
+            </span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-gray-600">
-            <FaClock className="w-3.5 h-3.5" />
-            <span>{formatEventTime(new Date(event.startDateTime))}</span>
+          <div className="flex items-center gap-1.5 text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">
+            <FaClock className="w-3 h-3 text-green-500" />
+            <span className="text-xs font-medium">
+              {formatEventTime(new Date(event.startDateTime))}
+            </span>
           </div>
 
           {event.capacity && (
-            <div className="flex items-center gap-1.5 text-gray-600">
-              <FaUsers className="w-3.5 h-3.5" />
-              <span>
+            <div className="flex items-center gap-1.5 text-green-700 bg-green-50 px-2.5 py-1 rounded-lg">
+              <FaUsers className="w-3 h-3" />
+              <span className="text-xs font-semibold">
                 {event.attendees?.length || 0}/{event.capacity}
+              </span>
+            </div>
+          )}
+
+          {event.address && (
+            <div className="flex items-center gap-1.5 text-slate-500 bg-slate-50 px-2.5 py-1 rounded-lg max-w-[140px]">
+              <FaMapMarkerAlt className="w-3 h-3 text-rose-400 flex-shrink-0" />
+              <span className="text-xs font-medium truncate">
+                {event.address}
               </span>
             </div>
           )}
         </div>
 
+        {/* Categories */}
         {event.categories && event.categories.length > 0 && (
-          <div className="flex gap-2 mt-3 flex-wrap">
-            {event.categories.slice(0, 2).map((category) => (
+          <div className="flex gap-1.5 flex-wrap pt-3 border-t border-slate-100">
+            {event.categories.slice(0, 3).map((category) => (
               <CategoryPill
                 key={category.id}
                 category={category.name}
                 size="sm"
               />
             ))}
-            {event.categories.length > 2 && (
-              <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
-                +{event.categories.length - 2}
+            {event.categories.length > 3 && (
+              <span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full text-xs font-medium">
+                +{event.categories.length - 3}
               </span>
             )}
           </div>

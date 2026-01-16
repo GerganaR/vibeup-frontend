@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { Input } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
+import { MapPinIcon } from "@heroicons/react/24/outline";
+
+type AccentColor = "green" | "blue" | "purple" | "orange" | "teal";
 
 interface AddressSuggestion {
   display_name: string;
@@ -17,7 +19,16 @@ interface AddressInputProps {
   error?: string;
   required?: boolean;
   placeholder?: string;
+  accentColor?: AccentColor;
 }
+
+const focusColorClasses: Record<AccentColor, string> = {
+  green: "focus:border-green-500 focus:ring-green-500",
+  blue: "focus:border-blue-500 focus:ring-blue-500",
+  purple: "focus:border-purple-500 focus:ring-purple-500",
+  orange: "focus:border-orange-500 focus:ring-orange-500",
+  teal: "focus:border-teal-500 focus:ring-teal-500",
+};
 
 export function AddressInput({
   label = "Address",
@@ -27,6 +38,7 @@ export function AddressInput({
   error,
   required = false,
   placeholder = "Enter an address...",
+  accentColor = "green",
 }: AddressInputProps) {
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -34,6 +46,8 @@ export function AddressInput({
   const [isEvaluating, setIsEvaluating] = useState(false);
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const focusClass = focusColorClasses[accentColor];
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -134,55 +148,78 @@ export function AddressInput({
   };
 
   return (
-    <div ref={wrapperRef} className="relative">
+    <div ref={wrapperRef} className="relative w-full">
+      {label && (
+        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+      )}
+
       <div className="flex gap-2">
-        <div className="flex-1">
-          <Input
-            label={label}
+        <div className="flex-1 relative">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+            <MapPinIcon className="w-5 h-5" />
+          </div>
+          <input
+            type="text"
             value={value}
             onChange={(e) => handleInputChange(e.target.value)}
-            error={!!error}
-            required={required}
             placeholder={placeholder}
-            crossOrigin={undefined}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
+            className={`
+              w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm font-medium transition-all
+              ${
+                error
+                  ? "border-red-300 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500"
+                  : `border-slate-200 bg-slate-50 text-slate-800 ${focusClass} focus:bg-white`
+              }
+              focus:outline-none focus:ring-2 focus:ring-opacity-20
+            `}
           />
         </div>
         <Button
           size="sm"
-          color="blue"
+          color={accentColor === "purple" ? "purple" : "green"}
           onClick={handleEvaluateCoordinates}
           disabled={!value || isEvaluating}
           loading={isEvaluating}
-          className="shrink-0"
-          placeholder={undefined}
-          onPointerEnterCapture={undefined}
-          onPointerLeaveCapture={undefined}
+          className="shrink-0 rounded-xl"
         >
           Get Coords
         </Button>
       </div>
 
-      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
+      {error && (
+        <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+          {error}
+        </p>
+      )}
 
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
+        <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-auto">
           {suggestions.map((suggestion) => (
             <div
               key={suggestion.place_id}
               onClick={() => handleSuggestionClick(suggestion)}
-              className="px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-gray-100 last:border-b-0"
+              className="px-4 py-3 cursor-pointer hover:bg-slate-50 border-b border-slate-100 last:border-b-0 transition-colors"
             >
-              <p className="text-sm text-gray-900">{suggestion.display_name}</p>
+              <p className="text-sm text-slate-800">
+                {suggestion.display_name}
+              </p>
             </div>
           ))}
         </div>
       )}
 
       {isLoading && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-3">
-          <p className="text-sm text-gray-500">Loading suggestions...</p>
+        <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg p-3">
+          <p className="text-sm text-slate-500">Loading suggestions...</p>
         </div>
       )}
     </div>

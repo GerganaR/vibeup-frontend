@@ -1,73 +1,61 @@
-import {
-  Input as MTInput,
-  type InputProps as MTInputProps,
-} from "@material-tailwind/react";
 import { forwardRef } from "react";
 
-interface InputProps extends Omit<MTInputProps, "error" | "inputRef" | "ref"> {
+interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "className"> {
   label?: string;
   error?: string;
   helper?: string;
   required?: boolean;
-  type?: string;
-  placeholder?: string;
-  value?: string | number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  disabled?: boolean;
-  className?: string;
-  step?: string;
-  min?: string;
-  max?: string;
   icon?: React.ReactNode;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      label,
-      error,
-      helper,
-      required,
-      icon,
-      className,
-      type,
-      placeholder,
-      value,
-      onChange,
-      onBlur,
-      disabled,
-      step,
-      min,
-      max,
-      ...restProps
-    },
-    ref
-  ) => {
+  ({ label, error, helper, required, icon, disabled, ...props }, ref) => {
     return (
       <div className="w-full">
-        <MTInput
-          label={label}
-          error={!!error}
-          required={required}
-          inputRef={ref}
-          icon={icon}
-          className={className}
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          disabled={disabled}
-          step={step}
-          min={min}
-          max={max}
-          crossOrigin={undefined}
-          {...restProps}
-        />
-        {error && <p className="text-red-500 text-xs mt-1 ml-1">{error}</p>}
+        {label && (
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+            {label} {required && <span className="text-red-500">*</span>}
+          </label>
+        )}
+        <div className="relative">
+          {icon && (
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+              {icon}
+            </div>
+          )}
+          <input
+            ref={ref}
+            disabled={disabled}
+            className={`
+              w-full px-4 py-2.5 rounded-xl border text-sm font-medium transition-all
+              ${icon ? "pl-10" : ""}
+              ${
+                disabled
+                  ? "border-slate-100 bg-slate-50 text-slate-400 cursor-not-allowed"
+                  : error
+                  ? "border-red-300 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500"
+                  : "border-slate-200 bg-slate-50 text-slate-800 focus:border-green-500 focus:ring-green-500 focus:bg-white"
+              }
+              focus:outline-none focus:ring-2 focus:ring-opacity-20
+            `}
+            {...props}
+          />
+        </div>
+        {error && (
+          <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+            {error}
+          </p>
+        )}
         {!error && helper && (
-          <p className="text-gray-500 text-xs mt-1 ml-1">{helper}</p>
+          <p className="text-slate-500 text-xs mt-1">{helper}</p>
         )}
       </div>
     );

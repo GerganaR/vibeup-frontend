@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, createContext, useContext } from "react";
 import {
   Dialog,
   DialogHeader,
@@ -6,19 +6,19 @@ import {
   DialogFooter,
   Button,
   Typography,
-  Chip,
 } from "@material-tailwind/react";
-import { Input } from "@/components/forms/Input";
-import { Textarea } from "@/components/forms/Textarea";
-import { DatePicker } from "@/components/forms/DatePicker";
+import { CheckIcon } from "@heroicons/react/24/solid";
+import { DateTimePicker } from "@/components/forms/DateTimePicker";
 import { AddressInput } from "@/components/forms/AddressInput";
 import { formatDateForInput } from "@/utils/dateFormat";
+import { categoryStyles, defaultStyle } from "./CategoryPill";
 import type {
   CategoryDTO,
   CreateEventDTO,
   EventModel,
   UpdateEventDTO,
 } from "../types";
+import { useAppSelector } from "@/store/hooks";
 
 interface EventFormModalProps {
   open: boolean;
@@ -27,8 +27,6 @@ interface EventFormModalProps {
   initialData?: EventModel;
   loading?: boolean;
 }
-
-import { useAppSelector } from "@/store/hooks";
 
 function getInitialFormData(initialData?: EventModel): CreateEventDTO {
   if (initialData) {
@@ -57,6 +55,158 @@ function getInitialFormData(initialData?: EventModel): CreateEventDTO {
   };
 }
 
+// Color context for section-aware styling
+type SectionColor = "green" | "blue" | "purple" | "orange" | "teal";
+const SectionColorContext = createContext<SectionColor>("green");
+
+// Reusable Section Wrapper Component
+interface FormSectionProps {
+  title: string;
+  color: SectionColor;
+  children: React.ReactNode;
+}
+
+const colorStyles = {
+  green: {
+    bg: "bg-green-50",
+    accent: "bg-green-500",
+    border: "border-green-100",
+  },
+  blue: { bg: "bg-blue-50", accent: "bg-blue-500", border: "border-blue-100" },
+  purple: {
+    bg: "bg-purple-50",
+    accent: "bg-purple-500",
+    border: "border-purple-100",
+  },
+  orange: {
+    bg: "bg-orange-50",
+    accent: "bg-orange-500",
+    border: "border-orange-100",
+  },
+  teal: { bg: "bg-teal-50", accent: "bg-teal-500", border: "border-teal-100" },
+};
+
+function FormSection({ title, color, children }: FormSectionProps) {
+  const styles = colorStyles[color];
+  return (
+    <SectionColorContext.Provider value={color}>
+      <div className={`rounded-2xl border ${styles.border} overflow-hidden`}>
+        <div className={`flex items-center gap-2 ${styles.bg} px-4 py-3`}>
+          <div className={`w-1 h-5 ${styles.accent} rounded-full`}></div>
+          <Typography
+            variant="h6"
+            className="text-slate-800 font-semibold text-sm"
+          >
+            {title}
+          </Typography>
+        </div>
+        <div className="p-4 bg-white space-y-4">{children}</div>
+      </div>
+    </SectionColorContext.Provider>
+  );
+}
+
+// Focus color classes for each section
+const focusColorClasses = {
+  green: "focus:border-green-500 focus:ring-green-500",
+  blue: "focus:border-blue-500 focus:ring-blue-500",
+  purple: "focus:border-purple-500 focus:ring-purple-500",
+  orange: "focus:border-orange-500 focus:ring-orange-500",
+  teal: "focus:border-teal-500 focus:ring-teal-500",
+};
+
+// Styled Input that uses section color
+interface StyledInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+  hasLabel?: boolean;
+}
+
+function StyledInput({
+  label,
+  error,
+  className,
+  disabled,
+  ...props
+}: StyledInputProps) {
+  const sectionColor = useContext(SectionColorContext);
+  const focusClass = focusColorClasses[sectionColor];
+
+  return (
+    <div className="w-full">
+      {label && (
+        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          {label}
+        </label>
+      )}
+      <input
+        disabled={disabled}
+        className={`
+          w-full px-4 py-2.5 rounded-xl border text-sm font-medium transition-all
+          ${
+            disabled
+              ? "border-slate-100 bg-slate-50 text-slate-400 cursor-not-allowed"
+              : error
+              ? "border-red-300 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500"
+              : `border-slate-200 bg-slate-50 text-slate-800 ${focusClass} focus:bg-white`
+          }
+          focus:outline-none focus:ring-2 focus:ring-opacity-20
+          ${className || ""}
+        `}
+        {...props}
+      />
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+    </div>
+  );
+}
+
+// Styled Textarea that uses section color
+interface StyledTextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string;
+  error?: string;
+}
+
+function StyledTextarea({
+  label,
+  error,
+  className,
+  disabled,
+  rows = 3,
+  ...props
+}: StyledTextareaProps) {
+  const sectionColor = useContext(SectionColorContext);
+  const focusClass = focusColorClasses[sectionColor];
+
+  return (
+    <div className="w-full">
+      {label && (
+        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          {label}
+        </label>
+      )}
+      <textarea
+        rows={rows}
+        disabled={disabled}
+        className={`
+          w-full px-4 py-2.5 rounded-xl border text-sm font-medium transition-all resize-none
+          ${
+            disabled
+              ? "border-slate-100 bg-slate-50 text-slate-400 cursor-not-allowed"
+              : error
+              ? "border-red-300 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500"
+              : `border-slate-200 bg-slate-50 text-slate-800 ${focusClass} focus:bg-white`
+          }
+          focus:outline-none focus:ring-2 focus:ring-opacity-20
+          ${className || ""}
+        `}
+        {...props}
+      />
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+    </div>
+  );
+}
+
 export function EventFormModal({
   open,
   onClose,
@@ -77,7 +227,6 @@ export function EventFormModal({
 
   const handleChange = (field: keyof CreateEventDTO, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error for this field
     if (errors[field]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -113,7 +262,6 @@ export function EventFormModal({
         "Address is required and must be at least 5 characters";
     }
 
-    // Only validate dates and capacity if not in edit mode
     if (!isEditMode) {
       if (!formData.startDateTime) {
         newErrors.startDateTime = "Start date/time is required";
@@ -144,11 +292,9 @@ export function EventFormModal({
   };
 
   const handleSubmit = async () => {
-    console.log(formData);
     if (!validate()) return;
 
     if (isEditMode) {
-      // When editing, only send the editable fields
       const submitData: UpdateEventDTO = {
         title: formData.title,
         description: formData.description,
@@ -159,7 +305,6 @@ export function EventFormModal({
       };
       await onSubmit(submitData);
     } else {
-      // When creating, send all fields with proper date conversion
       const submitData: CreateEventDTO = {
         ...formData,
         startDateTime: new Date(formData.startDateTime).toISOString(),
@@ -175,85 +320,67 @@ export function EventFormModal({
       open={open}
       handler={onClose}
       size="lg"
-      className="max-h-[90vh] overflow-y-auto"
+      className="max-h-[90vh] overflow-y-auto rounded-2xl"
       dismiss={{ outsidePress: false }}
     >
-      <DialogHeader className="flex-col items-start sm:flex-row sm:items-center">
-        <Typography variant="h4" className="text-xl sm:text-2xl">
+      <DialogHeader className="border-b border-slate-100 px-6 py-4">
+        <Typography variant="h4" className="text-slate-800 font-bold">
           {initialData ? "Edit Event" : "Create New Event"}
         </Typography>
       </DialogHeader>
 
-      <DialogBody className="space-y-6 overflow-y-auto max-h-[60vh] px-4 sm:px-6">
-        {/* Basic Info */}
-        <div className="space-y-4">
-          <Typography
-            variant="h6"
-            className="text-gray-800 text-base sm:text-lg"
-          >
-            Basic Information
-          </Typography>
-
-          <Input
-            label="Event Title *"
+      <DialogBody className="space-y-4 overflow-y-auto max-h-[60vh] px-6 py-5">
+        {/* Basic Info Section */}
+        <FormSection title="Basic Information" color="green">
+          <StyledInput
+            label="Event Title"
             value={formData.title}
             onChange={(e) => handleChange("title", e.target.value)}
-            error={errors.title}
-            required
             placeholder="e.g., Summer Music Festival"
+            error={errors.title}
           />
-
-          <Textarea
+          <StyledTextarea
             label="Description"
             value={formData.description}
             onChange={(e) => handleChange("description", e.target.value)}
-            error={errors.description}
             placeholder="Tell us more about your event..."
-            rows={4}
           />
-        </div>
+        </FormSection>
 
-        {/* Schedule - only shown when creating */}
+        {/* Schedule Section */}
         {!isEditMode && (
-          <div className="space-y-4">
-            <Typography
-              variant="h6"
-              className="text-gray-800 text-base sm:text-lg"
-            >
-              Schedule
-            </Typography>
-
+          <FormSection title="Schedule" color="blue">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <DatePicker
-                label="Start Date & Time *"
+              <DateTimePicker
+                label="Start Date & Time"
                 value={formData.startDateTime}
-                onChange={(e) => handleChange("startDateTime", e.target.value)}
+                onChange={(val) => handleChange("startDateTime", val)}
                 error={errors.startDateTime}
                 required
+                minDate={new Date()}
+                accentColor="blue"
               />
-
-              <DatePicker
-                label="End Date & Time *"
+              <DateTimePicker
+                label="End Date & Time"
                 value={formData.endDateTime}
-                onChange={(e) => handleChange("endDateTime", e.target.value)}
+                onChange={(val) => handleChange("endDateTime", val)}
                 error={errors.endDateTime}
                 required
+                minDate={
+                  formData.startDateTime
+                    ? new Date(formData.startDateTime)
+                    : new Date()
+                }
+                accentColor="blue"
               />
             </div>
-          </div>
+          </FormSection>
         )}
 
-        {/* Location */}
-        <div className="space-y-4">
-          <Typography
-            variant="h6"
-            className="text-gray-800 text-base sm:text-lg"
-          >
-            Location
-          </Typography>
-
+        {/* Location Section */}
+        <FormSection title="Location" color="purple">
           <AddressInput
-            label="Address *"
+            label="Address"
             value={formData.address}
             onChange={(value) => handleChange("address", value)}
             onCoordinatesChange={(lat, lon) => {
@@ -263,82 +390,66 @@ export function EventFormModal({
             error={errors.address}
             required
             placeholder="Enter event address..."
+            accentColor="purple"
           />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
+          <div className="grid grid-cols-2 gap-4">
+            <StyledInput
               label="Latitude"
-              type="number"
-              step="any"
               value={formData.latitude?.toString() || ""}
-              onChange={(e) =>
-                handleChange(
-                  "latitude",
-                  e.target.value ? parseFloat(e.target.value) : undefined
-                )
-              }
-              placeholder="Auto-filled from address"
+              placeholder="Auto-filled"
               disabled
             />
-
-            <Input
+            <StyledInput
               label="Longitude"
-              type="number"
-              step="any"
               value={formData.longitude?.toString() || ""}
-              onChange={(e) =>
-                handleChange(
-                  "longitude",
-                  e.target.value ? parseFloat(e.target.value) : undefined
-                )
-              }
-              placeholder="Auto-filled from address"
+              placeholder="Auto-filled"
               disabled
             />
           </div>
-        </div>
+        </FormSection>
 
-        {/* Categories */}
-        <div className="space-y-4">
-          <Typography
-            variant="h6"
-            className="text-gray-800 text-base sm:text-lg"
-          >
-            Categories
-          </Typography>
+        {/* Categories Section */}
+        <FormSection title="Categories" color="orange">
           <div className="flex flex-wrap gap-2">
-            {categories.map((category: CategoryDTO) => (
-              <div key={category.id} onClick={() => toggleCategory(category)}>
-                <Chip
-                  value={category.name}
-                  variant={
-                    formData.categoryIds?.includes(category.id)
-                      ? "filled"
-                      : "outlined"
-                  }
-                  color={
-                    formData.categoryIds?.includes(category.id)
-                      ? "green"
-                      : "gray"
-                  }
-                  className="cursor-pointer text-xs sm:text-sm"
-                />
-              </div>
-            ))}
+            {categories.map((category: CategoryDTO) => {
+              const isSelected = formData.categoryIds?.includes(category.id);
+              const style = categoryStyles[category.name] || defaultStyle;
+              const Icon = style.icon;
+
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => toggleCategory(category)}
+                  className={`
+                    flex items-center gap-2 px-3 py-2 rounded-full border text-sm font-medium
+                    transition-all duration-200 select-none
+                    ${
+                      isSelected
+                        ? `${style.bgColor} ${style.textColor} ${style.borderColor} shadow-sm`
+                        : "bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-white hover:shadow-sm"
+                    }
+                  `}
+                >
+                  <Icon
+                    className={`w-4 h-4 ${
+                      isSelected ? style.iconColor : "text-slate-400"
+                    }`}
+                  />
+                  <span>{category.name}</span>
+                  {isSelected && (
+                    <CheckIcon className="w-4 h-4 text-green-600" />
+                  )}
+                </button>
+              );
+            })}
           </div>
-        </div>
+        </FormSection>
 
-        {/* Optional Details - only shown when creating */}
+        {/* Capacity Section */}
         {!isEditMode && (
-          <div className="space-y-4">
-            <Typography
-              variant="h6"
-              className="text-gray-800 text-base sm:text-lg"
-            >
-              Optional Details
-            </Typography>
-
-            <Input
+          <FormSection title="Optional Details" color="teal">
+            <StyledInput
               label="Capacity"
               type="number"
               value={formData.capacity?.toString() || ""}
@@ -348,20 +459,20 @@ export function EventFormModal({
                   e.target.value ? parseInt(e.target.value) : undefined
                 )
               }
-              error={errors.capacity}
               placeholder="Maximum number of attendees"
+              error={errors.capacity}
             />
-          </div>
+          </FormSection>
         )}
       </DialogBody>
 
-      <DialogFooter className="gap-2 flex-col sm:flex-row px-4 sm:px-6">
+      <DialogFooter className="gap-3 border-t border-slate-100 px-6 py-4">
         <Button
           variant="text"
           color="gray"
           onClick={onClose}
           disabled={loading}
-          className="w-full sm:w-auto"
+          className="rounded-xl font-medium"
         >
           Cancel
         </Button>
@@ -371,7 +482,7 @@ export function EventFormModal({
           onClick={handleSubmit}
           disabled={loading}
           loading={loading}
-          className="w-full sm:w-auto"
+          className="rounded-xl font-semibold shadow-lg shadow-green-500/20"
         >
           {initialData ? "Update Event" : "Create Event"}
         </Button>

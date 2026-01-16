@@ -11,8 +11,16 @@ module.exports = withMT({
     },
     colors: {
       gray: {
+        50: "#F9FAFB",
+        100: "#F3F4F6",
+        200: "#E5E7EB",
         300: "#D0D5DD",
+        400: "#9CA3AF",
         500: "#667085",
+        600: "#4B5563",
+        700: "#374151",
+        800: "#1F2937",
+        900: "#111827",
       },
       // Neutral Palette
       neutral: {
@@ -245,5 +253,24 @@ module.exports = withMT({
     },
   },
 
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        ".scrollbar-hide": {
+          "-ms-overflow-style": "none",
+          "scrollbar-width": "none",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
+        ".scrollbar-thin": {
+          "scrollbar-width": "thin",
+          "&::-webkit-scrollbar": {
+            width: "6px",
+            height: "6px",
+          },
+        },
+      });
+    },
+  ],
 });

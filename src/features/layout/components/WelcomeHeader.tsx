@@ -18,7 +18,7 @@ export function WelcomeHeader({
   onBrowseEvents,
 }: WelcomeHeaderProps) {
   return (
-    <Card className="shadow-sm">
+    <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
       <CardBody className="p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -29,10 +29,10 @@ export function WelcomeHeader({
               className="text-xl"
             />
             <div>
-              <Typography variant="h4" className="text-gray-900 font-bold">
+              <Typography variant="h4" className="text-slate-800 font-bold">
                 Welcome back, {userName}!
               </Typography>
-              <Typography variant="small" className="text-gray-500 mt-1">
+              <Typography variant="small" className="text-slate-500 mt-1">
                 {userEmail}
               </Typography>
             </div>

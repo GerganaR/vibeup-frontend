@@ -2,10 +2,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute, ROUTES } from "@/routes";
 import { AuthErrorPage, LoginPage } from "@/features/auth";
 import UserLayout from "@/features/layout/pages/UserLayout";
-import HomePage from "@/pages/HomePage";
 import EventsPage from "@/features/event/pages/EventsPage";
 import EventDetailPage from "@/features/event/pages/EventDetailPage";
 import SettingsPage from "@/pages/SettingsPage";
+import DashboardPage from "@/features/event/pages/DashboardPage";
 
 export function Router() {
   return (
@@ -22,7 +22,7 @@ export function Router() {
           </ProtectedRoute>
         }
       >
-        <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path={ROUTES.HOME} element={<DashboardPage />} />
         <Route path={ROUTES.EVENTS} element={<EventsPage />} />
         <Route path="/events/:id" element={<EventDetailPage />} />
         <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />

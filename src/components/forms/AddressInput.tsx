@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { Button } from "@material-tailwind/react";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 
 type AccentColor = "green" | "blue" | "purple" | "orange" | "teal";
@@ -43,7 +42,6 @@ export function AddressInput({
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isEvaluating, setIsEvaluating] = useState(false);
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -86,6 +84,15 @@ export function AddressInput({
       const data = await response.json();
       setSuggestions(data);
       setShowSuggestions(true);
+
+      // Auto-geocode: if we have results, use the first one automatically
+      if (data && data.length > 0) {
+        const firstResult = data[0];
+        onCoordinatesChange(
+          parseFloat(firstResult.lat),
+          parseFloat(firstResult.lon)
+        );
+      }
     } catch (err) {
       console.error("Error fetching address suggestions:", err);
       setSuggestions([]);
@@ -113,40 +120,6 @@ export function AddressInput({
     setSuggestions([]);
   };
 
-  const handleEvaluateCoordinates = async () => {
-    if (!value) return;
-
-    setIsEvaluating(true);
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          value
-        )}&limit=1`,
-        {
-          headers: {
-            "User-Agent": "VibeUp Event App",
-          },
-        }
-      );
-      const data = await response.json();
-
-      if (data && data.length > 0) {
-        const location = data[0];
-        onCoordinatesChange(parseFloat(location.lat), parseFloat(location.lon));
-        alert(`Coordinates found: ${location.lat}, ${location.lon}`);
-      } else {
-        alert(
-          "No coordinates found for this address. Please try a different address."
-        );
-      }
-    } catch (err) {
-      console.error("Error evaluating coordinates:", err);
-      alert("Failed to evaluate coordinates. Please try again.");
-    } finally {
-      setIsEvaluating(false);
-    }
-  };
-
   return (
     <div ref={wrapperRef} className="relative w-full">
       {label && (
@@ -155,37 +128,30 @@ export function AddressInput({
         </label>
       )}
 
-      <div className="flex gap-2">
-        <div className="flex-1 relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-            <MapPinIcon className="w-5 h-5" />
-          </div>
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => handleInputChange(e.target.value)}
-            placeholder={placeholder}
-            className={`
-              w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm font-medium transition-all
-              ${
-                error
-                  ? "border-red-300 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500"
-                  : `border-slate-200 bg-slate-50 text-slate-800 ${focusClass} focus:bg-white`
-              }
-              focus:outline-none focus:ring-2 focus:ring-opacity-20
-            `}
-          />
+      <div className="relative">
+        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+          <MapPinIcon className="w-5 h-5" />
         </div>
-        <Button
-          size="sm"
-          color={accentColor === "purple" ? "purple" : "green"}
-          onClick={handleEvaluateCoordinates}
-          disabled={!value || isEvaluating}
-          loading={isEvaluating}
-          className="shrink-0 rounded-xl"
-        >
-          Get Coords
-        </Button>
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => handleInputChange(e.target.value)}
+          placeholder={placeholder}
+          className={`
+            w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm font-medium transition-all
+            ${
+              error
+                ? "border-red-300 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500"
+                : `border-slate-200 bg-slate-50 text-slate-800 ${focusClass} focus:bg-white`
+            }
+            focus:outline-none focus:ring-2 focus:ring-opacity-20
+          `}
+        />
+        {isLoading && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            <div className="w-4 h-4 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin"></div>
+          </div>
+        )}
       </div>
 
       {error && (
@@ -202,7 +168,7 @@ export function AddressInput({
       )}
 
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-auto">
+        <div className="absolute z-[9999] w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-auto custom-scrollbar">
           {suggestions.map((suggestion) => (
             <div
               key={suggestion.place_id}
@@ -217,9 +183,9 @@ export function AddressInput({
         </div>
       )}
 
-      {isLoading && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg p-3">
-          <p className="text-sm text-slate-500">Loading suggestions...</p>
+      {isLoading && !showSuggestions && (
+        <div className="absolute z-[9999] w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg p-3">
+          <p className="text-sm text-slate-500">Searching addresses...</p>
         </div>
       )}
     </div>

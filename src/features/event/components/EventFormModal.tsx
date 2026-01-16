@@ -90,8 +90,10 @@ function FormSection({ title, color, children }: FormSectionProps) {
   const styles = colorStyles[color];
   return (
     <SectionColorContext.Provider value={color}>
-      <div className={`rounded-2xl border ${styles.border} overflow-hidden`}>
-        <div className={`flex items-center gap-2 ${styles.bg} px-4 py-3`}>
+      <div className={`rounded-2xl border ${styles.border}`}>
+        <div
+          className={`flex items-center gap-2 ${styles.bg} px-4 py-3 rounded-t-2xl`}
+        >
           <div className={`w-1 h-5 ${styles.accent} rounded-full`}></div>
           <Typography
             variant="h6"
@@ -100,7 +102,7 @@ function FormSection({ title, color, children }: FormSectionProps) {
             {title}
           </Typography>
         </div>
-        <div className="p-4 bg-white space-y-4">{children}</div>
+        <div className="p-4 bg-white space-y-4 rounded-b-2xl">{children}</div>
       </div>
     </SectionColorContext.Provider>
   );

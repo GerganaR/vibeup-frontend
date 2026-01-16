@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 import type { EventModel } from "../types";
 import { EventCoverPlaceholder } from "./EventCover";
 import { isEventEnded } from "@/utils/dateFormat";
-import { EventCapacityBar } from "./EventCapacityBar";
 import { CategoryPill } from "./CategoryPill";
+import { EventCapacityBar } from "./EventCapacityBar";
 
 interface Props {
   event: EventModel;
@@ -46,7 +46,6 @@ export function EventCard({ event }: Props) {
   };
 
   const attendeesCount = event.attendees?.length ?? 0;
-  const hasCapacity = typeof event.capacity === "number" && event.capacity > 0;
 
   return (
     <Card
@@ -156,20 +155,17 @@ export function EventCard({ event }: Props) {
           </div>
         )}
 
-        {/* Capacity Bar */}
-        {hasCapacity && (
-          <div
-            className={isPast ? "pointer-events-none opacity-80" : ""}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <EventCapacityBar
-              attendeesCount={attendeesCount}
-              capacity={event.capacity!}
-              size="sm"
-              showNumbers={false}
-            />
-          </div>
-        )}
+        <div
+          className={isPast ? "pointer-events-none opacity-80" : ""}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <EventCapacityBar
+            attendeesCount={attendeesCount}
+            capacity={event.capacity}
+            size="sm"
+            showNumbers={false}
+          />
+        </div>
 
         {/* Categories */}
         {event.categories && event.categories.length > 0 && (

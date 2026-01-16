@@ -82,8 +82,8 @@ export function DateTimePicker({
       </label>
 
       <div className="grid grid-cols-2 gap-3">
-        {/* Date Picker */}
-        <div className="relative">
+        {/* Date Picker - z-index set high to appear above sections */}
+        <div className="relative" style={{ zIndex: 9999 }}>
           <Datepicker
             useRange={false}
             asSingle={true}
@@ -109,6 +109,7 @@ export function DateTimePicker({
             toggleClassName={`absolute right-3 top-1/2 -translate-y-1/2 ${
               error ? "text-red-400" : "text-slate-400"
             }`}
+            popoverDirection="down"
             primaryColor={primaryColors[accentColor]}
           />
         </div>

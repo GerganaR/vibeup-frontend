@@ -1,6 +1,7 @@
 import { CategoryPill } from "./CategoryPill";
 import { Chip } from "@material-tailwind/react";
 import { isEventEnded } from "@/utils/dateFormat";
+import { useTranslation } from "react-i18next";
 
 interface EventDetailHeroProps {
   title: string;
@@ -36,6 +37,7 @@ export function EventDetailHero({
   address,
   endDateTime,
 }: EventDetailHeroProps) {
+  const { t } = useTranslation();
   const gradient =
     categoryGradients[coverCategory || ""] || "from-gray-400 to-gray-600";
   const isPast = isEventEnded(new Date(endDateTime));
@@ -78,7 +80,7 @@ export function EventDetailHero({
           <div className="w-1/3 h-[15rem] relative">
             <img
               src={mapUrl}
-              alt={address || "Event Location"}
+              alt={address || t("Event Location")}
               className={`w-full h-full object-cover ${
                 isPast ? "grayscale" : ""
               }`}
@@ -106,7 +108,7 @@ export function EventDetailHero({
             {isPast && (
               <div className="absolute top-4 right-4">
                 <Chip
-                  value="Past Event"
+                  value={t("Past Event")}
                   size="lg"
                   className="bg-gray-700 text-white font-medium shadow-lg"
                 />
@@ -127,7 +129,7 @@ export function EventDetailHero({
             {isPast && (
               <div className="mt-4">
                 <Chip
-                  value="Past Event"
+                  value={t("Past Event")}
                   size="lg"
                   className="bg-gray-700 text-white font-medium"
                 />

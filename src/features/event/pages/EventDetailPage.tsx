@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Card, CardBody } from "@material-tailwind/react";
 import {
@@ -23,6 +24,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import type { CreateEventDTO, UpdateEventDTO } from "../types";
 
 export default function EventDetailPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user.user);
@@ -97,9 +99,9 @@ export default function EventDetailPage() {
   if (!event) {
     return (
       <div className="flex flex-col items-center justify-center h-full py-20">
-        <p className="text-gray-500 text-lg mb-4">Event not found</p>
+        <p className="text-gray-500 text-lg mb-4">{t("Event not found")}</p>
         <Button color="green" onClick={handleBack}>
-          Back to Events
+          {t("Back to Events")}
         </Button>
       </div>
     );
@@ -117,7 +119,7 @@ export default function EventDetailPage() {
         onClick={handleBack}
       >
         <ArrowLeftIcon className="w-4 h-4" />
-        Back to Events
+        {t("Back to Events")}
       </Button>
 
       {/* Hero Section */}
@@ -189,7 +191,7 @@ export default function EventDetailPage() {
                     onClick={() => setShowEditModal(true)}
                   >
                     <PencilIcon className="w-4 h-4" />
-                    Edit Event
+                    {t("Edit Event")}
                   </Button>
                   <Button
                     variant="outlined"
@@ -199,7 +201,7 @@ export default function EventDetailPage() {
                     onClick={() => setShowDeleteDialog(true)}
                   >
                     <TrashIcon className="w-4 h-4" />
-                    Delete Event
+                    {t("Delete Event")}
                   </Button>
                 </CardBody>
               </Card>
@@ -224,10 +226,12 @@ export default function EventDetailPage() {
         open={showDeleteDialog}
         onClose={() => setShowDeleteDialog(false)}
         onConfirm={handleDelete}
-        title="Delete Event"
-        message="Are you sure you want to delete this event? This action cannot be undone."
-        confirmText="Delete"
-        cancelText="Cancel"
+        title={t("Delete Event")}
+        message={t(
+          "Are you sure you want to delete this event? This action cannot be undone."
+        )}
+        confirmText={t("Delete")}
+        cancelText={t("Cancel")}
         danger
         loading={deleteLoading}
       />

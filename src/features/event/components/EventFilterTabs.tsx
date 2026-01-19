@@ -3,6 +3,7 @@ import {
   StarIcon,
   TicketIcon,
 } from "@heroicons/react/24/solid";
+import { useTranslation } from "react-i18next";
 
 type FilterTab = "all" | "my" | "attending";
 
@@ -21,6 +22,8 @@ export function EventFilterTabs({
   selectedTab,
   onSelectTab,
 }: EventFilterTabsProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex gap-2 overflow-x-auto scrollbar-hide bg-white shadow-sm p-4 rounded-xl">
       {tabs.map((tab) => {
@@ -46,7 +49,7 @@ export function EventFilterTabs({
                 isSelected ? "text-green-600" : "text-slate-400"
               }`}
             />
-            <span>{tab.label}</span>
+            <span>{t(tab.label)}</span>
           </button>
         );
       })}

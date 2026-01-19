@@ -1,6 +1,7 @@
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { HiOutlineArrowRight, HiOutlineCalendar } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 import { type EventModel } from "@/features/event/types";
 import { EventCardCompact } from "@/features/event/components/EventCardCompact";
 
@@ -23,6 +24,7 @@ export function EventSection({
   showHostBadge = false,
   icon,
 }: EventSectionProps) {
+  const { t } = useTranslation();
   return (
     <Card className="h-full flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/50">
       {/* Header */}
@@ -39,13 +41,13 @@ export function EventSection({
                 variant="h5"
                 className="text-slate-800 font-bold tracking-tight"
               >
-                {title}
+                {t(title)}
               </Typography>
               <Typography
                 variant="small"
                 className="text-slate-500 font-medium"
               >
-                {events.length} {events.length === 1 ? "event" : "events"}
+                {events.length} {events.length === 1 ? t("event") : t("events")}
               </Typography>
             </div>
           </div>
@@ -55,7 +57,7 @@ export function EventSection({
               size="sm"
               className="flex items-center gap-1.5 font-semibold rounded-lg text-green-600 hover:text-green-700 hover:bg-green-50 transition-all"
             >
-              View all
+              {t("View all")}
               <HiOutlineArrowRight className="w-4 h-4" />
             </Button>
           </Link>
@@ -73,10 +75,10 @@ export function EventSection({
               variant="h6"
               className="text-slate-700 font-semibold mb-1"
             >
-              {emptyMessage}
+              {t(emptyMessage)}
             </Typography>
             <Typography variant="small" className="text-slate-500 max-w-xs">
-              {emptyDescription}
+              {t(emptyDescription)}
             </Typography>
           </div>
         ) : (

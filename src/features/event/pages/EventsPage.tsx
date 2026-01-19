@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Typography, Card, CardBody, Button } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { EventsTabs } from "../components/EventTabs";
@@ -16,6 +17,7 @@ import type { CreateEventDTO, UpdateEventDTO } from "../types";
 import { useUpdateEvent } from "../hooks/useUpdateEvent";
 
 export default function EventsPage() {
+  const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const [filterTab, setFilterTab] = useState<FilterTab>("all");
   const [selectedCategoryId, setSelectedCategoryId] = useState("All");
@@ -101,7 +103,7 @@ export default function EventsPage() {
               onClick={() => setShowCreateModal(true)}
             >
               <PlusIcon className="w-5 h-5" />
-              <span className="hidden sm:inline">Create Event</span>
+              <span className="hidden sm:inline">{t("Create Event")}</span>
             </Button>
           </>
         }
@@ -137,17 +139,17 @@ export default function EventsPage() {
             <div className="text-center py-12">
               <Typography variant="h6" className="text-gray-500">
                 {filterTab === "my"
-                  ? "No hosted events found"
+                  ? t("No hosted events found")
                   : filterTab === "attending"
-                  ? "Not attending any events"
-                  : "No events found"}
+                  ? t("Not attending any events")
+                  : t("No events found")}
               </Typography>
               <Typography variant="small" className="text-gray-400 mt-2">
                 {filterTab === "my"
-                  ? "You haven't created any events yet."
+                  ? t("You haven't created any events yet.")
                   : filterTab === "attending"
-                  ? "You're not attending any events matching filter."
-                  : "Try adjusting filters."}
+                  ? t("You're not attending any events matching filter.")
+                  : t("Try adjusting filters.")}
               </Typography>
               {filterTab === "my" && (
                 <Button
@@ -155,7 +157,7 @@ export default function EventsPage() {
                   className="mt-6"
                   onClick={() => setShowCreateModal(true)}
                 >
-                  Create Your First Event
+                  {t("Create Your First Event")}
                 </Button>
               )}
             </div>

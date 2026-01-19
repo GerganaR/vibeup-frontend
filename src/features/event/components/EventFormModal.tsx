@@ -18,6 +18,7 @@ import type {
   EventModel,
   UpdateEventDTO,
 } from "../types";
+import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@/store/hooks";
 
 interface EventFormModalProps {
@@ -87,6 +88,7 @@ const colorStyles = {
 };
 
 function FormSection({ title, color, children }: FormSectionProps) {
+  const { t } = useTranslation();
   const styles = colorStyles[color];
   return (
     <SectionColorContext.Provider value={color}>
@@ -99,7 +101,7 @@ function FormSection({ title, color, children }: FormSectionProps) {
             variant="h6"
             className="text-slate-800 font-semibold text-sm"
           >
-            {title}
+            {t(title)}
           </Typography>
         </div>
         <div className="p-4 bg-white space-y-4 rounded-b-2xl">{children}</div>
@@ -216,6 +218,7 @@ export function EventFormModal({
   initialData,
   loading = false,
 }: EventFormModalProps) {
+  const { t } = useTranslation();
   const categories = useAppSelector((state) => state.category.items);
 
   const initialFormData = useMemo(
@@ -256,36 +259,37 @@ export function EventFormModal({
     const newErrors: Record<string, string> = {};
 
     if (!formData.title || formData.title.trim().length < 3) {
-      newErrors.title = "Title must be at least 3 characters";
+      newErrors.title = t("Title must be at least 3 characters");
     }
 
     if (!formData.address || formData.address.trim().length < 5) {
-      newErrors.address =
-        "Address is required and must be at least 5 characters";
+      newErrors.address = t(
+        "Address is required and must be at least 5 characters"
+      );
     }
 
     if (!isEditMode) {
       if (!formData.startDateTime) {
-        newErrors.startDateTime = "Start date/time is required";
+        newErrors.startDateTime = t("Start date/time is required");
       } else {
         const startDate = new Date(formData.startDateTime);
         if (startDate < new Date()) {
-          newErrors.startDateTime = "Start date must be in the future";
+          newErrors.startDateTime = t("Start date must be in the future");
         }
       }
 
       if (!formData.endDateTime) {
-        newErrors.endDateTime = "End date/time is required";
+        newErrors.endDateTime = t("End date/time is required");
       } else if (formData.startDateTime) {
         const startDate = new Date(formData.startDateTime);
         const endDate = new Date(formData.endDateTime);
         if (endDate <= startDate) {
-          newErrors.endDateTime = "End date must be after start date";
+          newErrors.endDateTime = t("End date must be after start date");
         }
       }
 
       if (formData.capacity !== undefined && formData.capacity <= 0) {
-        newErrors.capacity = "Capacity must be a positive number";
+        newErrors.capacity = t("Capacity must be a positive number");
       }
     }
 
@@ -322,96 +326,102 @@ export function EventFormModal({
       open={open}
       handler={onClose}
       size="lg"
-      className="max-h-[90vh] overflow-y-auto rounded-2xl"
+      className="max-h-[90vh] rounded-2xl"
       dismiss={{ outsidePress: false }}
     >
       <DialogHeader className="border-b border-slate-100 px-6 py-4">
         <Typography variant="h4" className="text-slate-800 font-bold">
-          {initialData ? "Edit Event" : "Create New Event"}
+          {initialData ? t("Edit Event") : t("Create New Event")}
         </Typography>
       </DialogHeader>
 
-      <DialogBody className="space-y-4 overflow-y-auto max-h-[60vh] px-6 py-5">
+      <DialogBody className="space-y-4 overflow-visible max-h-[60vh] overflow-y-auto px-6 py-5">
         {/* Basic Info Section */}
-        <FormSection title="Basic Information" color="green">
+        <FormSection title={"Basic Information"} color="green">
           <StyledInput
-            label="Event Title"
+            label={t("Event Title")}
             value={formData.title}
             onChange={(e) => handleChange("title", e.target.value)}
-            placeholder="e.g., Summer Music Festival"
+            placeholder={t("e.g., Summer Music Festival")}
             error={errors.title}
           />
           <StyledTextarea
-            label="Description"
+            label={t("Description")}
             value={formData.description}
             onChange={(e) => handleChange("description", e.target.value)}
-            placeholder="Tell us more about your event..."
+            placeholder={t("Tell us more about your event...")}
           />
         </FormSection>
 
         {/* Schedule Section */}
         {!isEditMode && (
-          <FormSection title="Schedule" color="blue">
+          <FormSection title={"Schedule"} color="blue">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <DateTimePicker
-                label="Start Date & Time"
-                value={formData.startDateTime}
-                onChange={(val) => handleChange("startDateTime", val)}
-                error={errors.startDateTime}
-                required
-                minDate={new Date()}
-                accentColor="blue"
-              />
-              <DateTimePicker
-                label="End Date & Time"
-                value={formData.endDateTime}
-                onChange={(val) => handleChange("endDateTime", val)}
-                error={errors.endDateTime}
-                required
-                minDate={
-                  formData.startDateTime
-                    ? new Date(formData.startDateTime)
-                    : new Date()
-                }
-                accentColor="blue"
-              />
+              <div className="relative z-[100]">
+                <DateTimePicker
+                  label={t("Start Date & Time")}
+                  value={formData.startDateTime}
+                  onChange={(val) => handleChange("startDateTime", val)}
+                  error={errors.startDateTime}
+                  required
+                  minDate={new Date()}
+                  accentColor="blue"
+                />
+              </div>
+              <div className="relative z-[100]">
+                <DateTimePicker
+                  label={t("End Date & Time")}
+                  value={formData.endDateTime}
+                  onChange={(val) => handleChange("endDateTime", val)}
+                  error={errors.endDateTime}
+                  required
+                  minDate={
+                    formData.startDateTime
+                      ? new Date(formData.startDateTime)
+                      : new Date()
+                  }
+                  accentColor="blue"
+                />
+              </div>
             </div>
           </FormSection>
         )}
 
         {/* Location Section */}
-        <FormSection title="Location" color="purple">
-          <AddressInput
-            label="Address"
-            value={formData.address}
-            onChange={(value) => handleChange("address", value)}
-            onCoordinatesChange={(lat, lon) => {
-              handleChange("latitude", lat);
-              handleChange("longitude", lon);
-            }}
-            error={errors.address}
-            required
-            placeholder="Enter event address..."
-            accentColor="purple"
-          />
+        <FormSection title={"Location"} color="purple">
+          <div className="relative z-[100]">
+            <AddressInput
+              label={t("Address")}
+              value={formData.address}
+              onChange={(value) => handleChange("address", value)}
+              onCoordinatesChange={(lat, lon) => {
+                handleChange("latitude", lat);
+                handleChange("longitude", lon);
+              }}
+              error={errors.address}
+              required
+              placeholder={t("Enter event address...")}
+              accentColor="purple"
+            />
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <StyledInput
-              label="Latitude"
+              label={t("Latitude")}
               value={formData.latitude?.toString() || ""}
-              placeholder="Auto-filled"
+              placeholder={t("Auto-filled")}
               disabled
             />
             <StyledInput
-              label="Longitude"
+              label={t("Longitude")}
               value={formData.longitude?.toString() || ""}
-              placeholder="Auto-filled"
+              placeholder={t("Auto-filled")}
               disabled
             />
           </div>
         </FormSection>
 
         {/* Categories Section */}
-        <FormSection title="Categories" color="orange">
+        <FormSection title={"Categories"} color="orange">
           <div className="flex flex-wrap gap-2">
             {categories.map((category: CategoryDTO) => {
               const isSelected = formData.categoryIds?.includes(category.id);
@@ -438,7 +448,7 @@ export function EventFormModal({
                       isSelected ? style.iconColor : "text-slate-400"
                     }`}
                   />
-                  <span>{category.name}</span>
+                  <span>{t(category.name)}</span>
                   {isSelected && (
                     <CheckIcon className="w-4 h-4 text-green-600" />
                   )}
@@ -450,9 +460,9 @@ export function EventFormModal({
 
         {/* Capacity Section */}
         {!isEditMode && (
-          <FormSection title="Optional Details" color="teal">
+          <FormSection title={"Optional Details"} color="teal">
             <StyledInput
-              label="Capacity"
+              label={t("Capacity (if not specified, it will be unlimited)")}
               type="number"
               value={formData.capacity?.toString() || ""}
               onChange={(e) =>
@@ -461,7 +471,7 @@ export function EventFormModal({
                   e.target.value ? parseInt(e.target.value) : undefined
                 )
               }
-              placeholder="Maximum number of attendees"
+              placeholder={t("Maximum number of attendees")}
               error={errors.capacity}
             />
           </FormSection>
@@ -476,7 +486,7 @@ export function EventFormModal({
           disabled={loading}
           className="rounded-xl font-medium"
         >
-          Cancel
+          {t("Cancel")}
         </Button>
         <Button
           variant="filled"
@@ -486,7 +496,7 @@ export function EventFormModal({
           loading={loading}
           className="rounded-xl font-semibold shadow-lg shadow-green-500/20"
         >
-          {initialData ? "Update Event" : "Create Event"}
+          {initialData ? t("Update Event") : t("Create Event")}
         </Button>
       </DialogFooter>
     </Dialog>

@@ -1,4 +1,5 @@
 import { Typography, Button } from "@material-tailwind/react";
+import { useTranslation } from "react-i18next";
 
 interface DashboardErrorProps {
   error: string;
@@ -6,6 +7,7 @@ interface DashboardErrorProps {
 }
 
 export function DashboardError({ error, onRetry }: DashboardErrorProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center h-[60vh]">
       <div className="text-red-500 mb-4">
@@ -24,7 +26,7 @@ export function DashboardError({ error, onRetry }: DashboardErrorProps) {
         </svg>
       </div>
       <Typography variant="h5" className="text-gray-700 mb-2">
-        Something went wrong
+        {t("Something went wrong")}
       </Typography>
       <Typography variant="paragraph" className="text-gray-500 mb-6">
         {error}

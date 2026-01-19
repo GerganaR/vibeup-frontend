@@ -9,6 +9,7 @@ import { store } from "./store/index.ts";
 import { AuthProvider } from "@/features";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import App from "./app/App.tsx";
+import "./i18n/i18n";
 import "./index.css";
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";

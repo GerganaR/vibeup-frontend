@@ -13,7 +13,6 @@ import {
 } from "@/utils/dateFormat";
 import type { EventModel } from "../types";
 import { CategoryPill } from "./CategoryPill";
-
 interface EventCardCompactProps {
   event: EventModel;
   showHostBadge?: boolean;

@@ -6,6 +6,7 @@ import {
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import { formatEventDate, formatEventTime } from "@/utils/dateFormat";
+import { useTranslation } from "react-i18next";
 import type { EventModel } from "../types";
 
 interface EventDetailInfoProps {
@@ -59,6 +60,7 @@ function InfoCard({
 }
 
 export function EventDetailInfo({ event }: EventDetailInfoProps) {
+  const { t } = useTranslation();
   const attendeesCount = event.attendees?.length ?? 0;
   const spotsLeft =
     typeof event.capacity === "number" ? event.capacity - attendeesCount : 0;
@@ -68,14 +70,14 @@ export function EventDetailInfo({ event }: EventDetailInfoProps) {
       {/* Row 1 */}
       <InfoCard
         icon={<CalendarIcon className="h-5 w-5" />}
-        label="Start"
+        label={t("Start")}
         title={formatEventDate(new Date(event.startDateTime))}
         subtitle={formatEventTime(new Date(event.startDateTime))}
       />
 
       <InfoCard
         icon={<ClockIcon className="h-5 w-5" />}
-        label="End"
+        label={t("End")}
         title={formatEventDate(new Date(event.endDateTime))}
         subtitle={formatEventTime(new Date(event.endDateTime))}
       />
@@ -83,10 +85,12 @@ export function EventDetailInfo({ event }: EventDetailInfoProps) {
       {typeof event.capacity === "number" && (
         <InfoCard
           icon={<UsersIcon className="h-5 w-5" />}
-          label="Capacity"
+          label={t("Capacity")}
           title={`${attendeesCount} / ${event.capacity}`}
           subtitle={
-            spotsLeft > 0 ? `${spotsLeft} spots left` : "No spots left"
+            spotsLeft > 0
+              ? t("{{count}} spots left", { count: spotsLeft })
+              : t("No spots left")
           }
         />
       )}
@@ -96,7 +100,7 @@ export function EventDetailInfo({ event }: EventDetailInfoProps) {
         <InfoCard
           fullWidth
           icon={<MapPinIcon className="h-5 w-5" />}
-          label="Location"
+          label={t("Location")}
           title={<span className="line-clamp-2">{event.address}</span>}
           subtitle={
             event.latitude != null && event.longitude != null

@@ -1,6 +1,7 @@
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import { PlusIcon, CalendarIcon } from "@heroicons/react/24/solid";
 import Avatar from "@/components/Avatar";
+import { useTranslation } from "react-i18next";
 
 interface WelcomeHeaderProps {
   userName: string;
@@ -17,6 +18,7 @@ export function WelcomeHeader({
   onCreateEvent,
   onBrowseEvents,
 }: WelcomeHeaderProps) {
+  const { t } = useTranslation();   
   return (
     <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
       <CardBody className="p-6">
@@ -30,7 +32,7 @@ export function WelcomeHeader({
             />
             <div>
               <Typography variant="h4" className="text-slate-800 font-bold">
-                Welcome back, {userName}!
+                {t("Welcome back")}, {userName}!
               </Typography>
               <Typography variant="small" className="text-slate-500 mt-1">
                 {userEmail}
@@ -45,7 +47,7 @@ export function WelcomeHeader({
               onClick={onCreateEvent}
             >
               <PlusIcon className="w-5 h-5" />
-              Create Event
+              {t("Create Event")}
             </Button>
             <Button
               variant="outlined"
@@ -54,7 +56,7 @@ export function WelcomeHeader({
               onClick={onBrowseEvents}
             >
               <CalendarIcon className="w-5 h-5" />
-              Browse Events
+                {t("Browse Events")}
             </Button>
           </div>
         </div>

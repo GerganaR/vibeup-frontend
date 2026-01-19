@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { NavLink, useMatch } from "react-router-dom";
 import React, { type ForwardRefExoticComponent } from "react";
 import { type ButtonProps } from "@material-tailwind/react/components/Button";
+import { useTranslation } from "react-i18next";
 
 export type MenuItem = {
   title: string;
@@ -26,6 +27,7 @@ const NavButtonContent = (
 ): JSX.Element => {
   const item = props.item;
   const isActive = props.isActive || false;
+  const { t } = useTranslation();
 
   return (
     <>
@@ -59,7 +61,7 @@ const NavButtonContent = (
           !props.open ? "hidden" : ""
         )}
       >
-        {item.title}
+        {t(item.title)}
       </Typography>
     </>
   );
@@ -94,13 +96,15 @@ const NavButton = React.forwardRef<
 });
 
 export const SideNavItem = (props: SideNavItemProps): JSX.Element => {
+  const { t } = useTranslation();
+
   const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
   return (
     <li className="w-[70%]">
       <NavLink to={props.item.to}>
         <Tooltip
-          content={props.item.title}
+          content={t(props.item.title)}
           placement={"right"}
           open={props.open ? false : tooltipOpen}
           handler={setTooltipOpen}

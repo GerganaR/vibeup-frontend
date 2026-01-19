@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@/store/hooks";
 import { Button, Typography } from "@material-tailwind/react";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { RiArrowLeftSLine, RiLogoutBoxLine } from "react-icons/ri";
 import Avatar from "@/components/Avatar";
+import { LanguageSwitch } from "@/components/LanguageSwitch";
 import { useSidebar } from "../hooks/useSidebar";
 import { SideNavItem, type MenuItem } from "./SidebarItem";
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -18,6 +20,7 @@ import { ROUTES } from "@/routes";
 const Sidenav: React.FC = () => {
   const { collapsed, toggleSidebar } = useSidebar();
   const open = !collapsed;
+  const { t } = useTranslation();
 
   const user = useAppSelector((state) => state.user.user);
   const { logout } = useAuth();
@@ -132,6 +135,11 @@ const Sidenav: React.FC = () => {
             </ul>
           </div>
 
+          {/* Language Switch */}
+          <div className="flex justify-center w-full mb-3">
+            <LanguageSwitch compact={!open} flagsOnly />
+          </div>
+
           {/* Logout */}
           <div className="flex justify-center w-[70%] mb-4">
             {open ? (
@@ -140,7 +148,7 @@ const Sidenav: React.FC = () => {
                 variant="outlined"
                 className="bg-transparent text-slate-800 border-slate-300 font-medium px-4 py-2 rounded-lg w-full normal-case text-sm hover:bg-green-50 hover:border-green-300 transition"
               >
-                Logout
+                {t("Logout")}
               </Button>
             ) : (
               <RiLogoutBoxLine

@@ -7,9 +7,10 @@ import {
 } from "@react-google-maps/api";
 import { Card, Typography, Button } from "@material-tailwind/react";
 import { MapPinIcon } from "@heroicons/react/24/solid";
+import { useTranslation } from "react-i18next";
 import type { EventModel } from "../types";
-import { formatEventDateTime } from "@/utils/dateFormat";
 import { CategoryPill } from "./CategoryPill";
+import { formatEventDateTime } from "@/utils/dateFormat";
 
 interface EventMapProps {
   events: EventModel[];
@@ -26,6 +27,7 @@ const defaultCenter = {
 };
 
 export function EventMap({ events }: EventMapProps) {
+  const { t } = useTranslation();
   const [selectedEvent, setSelectedEvent] = useState<EventModel | null>(null);
   const [activeMarker, setActiveMarker] = useState<string | null>(null);
 
@@ -69,10 +71,10 @@ export function EventMap({ events }: EventMapProps) {
       <div className="h-[600px] flex flex-col items-center justify-center bg-gray-100 rounded-xl">
         <MapPinIcon className="w-16 h-16 text-red-400 mb-4" />
         <Typography variant="h6" className="text-gray-600">
-          Error Loading Maps
+          {t("Error Loading Maps")}
         </Typography>
         <Typography variant="small" className="text-gray-400 mt-1">
-          Please check your Google Maps API key
+          {t("Please check your Google Maps API key")}
         </Typography>
       </div>
     );
@@ -83,7 +85,7 @@ export function EventMap({ events }: EventMapProps) {
       <div className="h-[600px] flex flex-col items-center justify-center bg-gray-100 rounded-xl">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-4"></div>
         <Typography variant="h6" className="text-gray-600">
-          Loading Maps...
+          {t("Loading Maps...")}
         </Typography>
       </div>
     );
@@ -94,10 +96,10 @@ export function EventMap({ events }: EventMapProps) {
       <div className="h-[600px] flex flex-col items-center justify-center bg-gray-100 rounded-xl">
         <MapPinIcon className="w-16 h-16 text-gray-400 mb-4" />
         <Typography variant="h6" className="text-gray-600">
-          No Events with Locations
+          {t("No Events with Locations")}
         </Typography>
         <Typography variant="small" className="text-gray-400 mt-1">
-          Events need coordinates to be displayed on the map
+          {t("Events need coordinates to be displayed on the map")}
         </Typography>
       </div>
     );
@@ -114,7 +116,7 @@ export function EventMap({ events }: EventMapProps) {
           variant="h6"
           className="text-gray-900 sticky top-0 bg-white pb-2 z-10"
         >
-          Events on Map ({eventsWithCoordinates.length})
+          {t("Events on Map")} ({eventsWithCoordinates.length})
         </Typography>
 
         <div className="space-y-3">
@@ -185,7 +187,7 @@ export function EventMap({ events }: EventMapProps) {
                       window.location.href = `/events/${event.id}`;
                     }}
                   >
-                    View Details
+                    {t("View Details")}
                   </Button>
                   <Button
                     size="sm"
@@ -200,7 +202,7 @@ export function EventMap({ events }: EventMapProps) {
                       );
                     }}
                   >
-                    Directions
+                    {t("Directions")}
                   </Button>
                 </div>
               </div>
@@ -280,7 +282,7 @@ export function EventMap({ events }: EventMapProps) {
                         fontSize: "12px",
                       }}
                     >
-                      View Details
+                      {t("View Details")}
                     </a>
                   </div>
                 </InfoWindow>
@@ -289,10 +291,10 @@ export function EventMap({ events }: EventMapProps) {
           ))}
         </GoogleMap>
 
-        <div className="absolute top-4 right-4 bg-white px-3 py-2 rounded-lg shadow-lg z-10 pointer-events-none">
+        <div className="absolute top-3 right-14 bg-white px-3 py-2 rounded-lg shadow-lg z-10 pointer-events-none">
           <Typography variant="small" className="font-semibold">
-            {eventsWithCoordinates.length} Event
-            {eventsWithCoordinates.length !== 1 ? "s" : ""}
+            {eventsWithCoordinates.length}{" "}
+            {eventsWithCoordinates.length === 1 ? t("Event") : t("Events")}
           </Typography>
         </div>
       </div>

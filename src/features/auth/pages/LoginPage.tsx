@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Typography } from "@material-tailwind/react";
+import { useTranslation } from "react-i18next";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -9,6 +10,7 @@ import { fetchCurrentUser } from "@/features/user/store/userThunk";
 import { FiLogIn } from "react-icons/fi";
 
 const LoginPage: React.FC = () => {
+  const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -34,20 +36,18 @@ const LoginPage: React.FC = () => {
   return (
     <div className="h-screen w-full p-10 flex items-center justify-center bg-[#f2f8fe]">
       <Card className="w-full h-full rounded-3xl shadow-2xl flex flex-row items-center overflow-hidden">
-        
         {/* Left Column */}
         <div className="w-1/2 h-full flex flex-col items-center justify-center px-10">
           <div className="flex flex-col items-center text-center">
-            
             {/* Icon */}
             <FiLogIn className="text-green-600 mb-4" size={48} />
 
             <Typography variant="h4" className="text-slate-800 font-bold">
-              Welcome to VIBE UP
+              {t("Welcome to VIBE UP")}
             </Typography>
 
             <Typography className="text-slate-600 mb-6 mt-1">
-              Sign in to your account with Google to continue
+              {t("Sign in to your account with Google to continue")}
             </Typography>
 
             <div className="w-[90%]">

@@ -1,4 +1,5 @@
 import { Card, CardBody, Typography, Chip } from "@material-tailwind/react";
+import { useTranslation } from "react-i18next";
 import {
   FaCalendarAlt,
   FaClock,
@@ -8,15 +9,16 @@ import {
 import { useNavigate } from "react-router-dom";
 import type { EventModel } from "../types";
 import { EventCoverPlaceholder } from "./EventCover";
-import { isEventEnded } from "@/utils/dateFormat";
 import { CategoryPill } from "./CategoryPill";
 import { EventCapacityBar } from "./EventCapacityBar";
+import { isEventEnded } from "@/utils/dateFormat";
 
 interface Props {
   event: EventModel;
 }
 
 export function EventCard({ event }: Props) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const date = new Date(event.startDateTime);
   const isPast = isEventEnded(new Date(event.endDateTime));
@@ -59,7 +61,7 @@ export function EventCard({ event }: Props) {
         <div className="w-full h-48 relative overflow-hidden">
           <img
             src={mapThumbnailUrl}
-            alt={event.address || "Event Location"}
+            alt={event.address || t("Event Location")}
             className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
               isPast ? "grayscale" : ""
             }`}
@@ -78,7 +80,7 @@ export function EventCard({ event }: Props) {
           {isPast && (
             <div className="absolute top-3 right-3">
               <Chip
-                value="Past Event"
+                value={t("Past Event")}
                 size="sm"
                 className="bg-slate-800/90 backdrop-blur-sm text-white font-medium"
               />
@@ -97,7 +99,7 @@ export function EventCard({ event }: Props) {
           {isPast && (
             <div className="absolute top-3 right-3">
               <Chip
-                value="Past Event"
+                value={t("Past Event")}
                 size="sm"
                 className="bg-slate-800/90 backdrop-blur-sm text-white font-medium"
               />

@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ROUTES } from "@/routes";
 
 function AuthErrorPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const error = "Authentication failed. Please try again.";
 
@@ -25,15 +27,15 @@ function AuthErrorPage() {
         </div>
 
         <h1 className="text-2xl font-bold text-gray-900 mb-4">
-          Authentication Failed
+          {t("Authentication Failed")}
         </h1>
-        <p className="text-gray-600 mb-8">{error}</p>
+        <p className="text-gray-600 mb-8">{t(error)}</p>
 
         <button
           onClick={() => navigate(ROUTES.LOGIN)}
           className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition font-medium"
         >
-          Try Again
+          {t("Try Again")}
         </button>
       </div>
     </div>

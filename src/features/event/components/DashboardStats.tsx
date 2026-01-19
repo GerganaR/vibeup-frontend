@@ -1,4 +1,5 @@
 import { Card, CardBody, Typography } from "@material-tailwind/react";
+import { useTranslation } from "react-i18next";
 import {
   CalendarIcon,
   UserGroupIcon,
@@ -15,6 +16,7 @@ interface DashboardStatsProps {
 }
 
 export function DashboardStats({ stats, loading }: DashboardStatsProps) {
+  const { t } = useTranslation();
   const cards = [
     {
       title: "Upcoming Events",
@@ -76,7 +78,7 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
                   variant="small"
                   className="font-medium text-slate-500 mb-1"
                 >
-                  {card.title}
+                  {t(card.title)}
                 </Typography>
                 <Typography variant="h3" className="font-bold text-slate-800">
                   {card.value}

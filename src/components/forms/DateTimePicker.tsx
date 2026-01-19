@@ -1,5 +1,6 @@
 import Datepicker from "react-tailwindcss-datepicker";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 type AccentColor = "green" | "blue" | "purple" | "orange" | "teal";
 
@@ -54,6 +55,7 @@ export function DateTimePicker({
     };
   };
 
+  const { t } = useTranslation();
   const { date: initialDate, time: initialTime } = parseValue(value);
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
   const [selectedTime, setSelectedTime] = useState(initialTime);
@@ -95,7 +97,7 @@ export function DateTimePicker({
             }}
             minDate={minDate}
             displayFormat="MMM DD, YYYY"
-            placeholder="Select date"
+            placeholder={t("Select date")}
             inputClassName={`
               w-full px-4 py-2.5 rounded-xl border text-sm font-medium transition-all
               ${

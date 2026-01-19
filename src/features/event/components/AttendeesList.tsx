@@ -1,4 +1,5 @@
 import { Typography } from "@material-tailwind/react";
+import { useTranslation } from "react-i18next";
 import Avatar from "@/components/Avatar";
 
 import type { EventAttendee } from "../types";
@@ -12,12 +13,13 @@ export function AttendeesList({
   attendees,
   cohostIds = [],
 }: AttendeesListProps) {
+  const { t } = useTranslation();
   const totalAttendees = attendees.length;
 
   if (totalAttendees === 0 && cohostIds.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        <Typography variant="paragraph">No attendees yet</Typography>
+        <Typography variant="paragraph">{t("No attendees yet")}</Typography>
       </div>
     );
   }
@@ -25,7 +27,7 @@ export function AttendeesList({
   return (
     <div className="space-y-4">
       <Typography variant="h6" className="text-gray-900">
-        Attendees ({totalAttendees})
+        {t("Attendees")} ({totalAttendees})
       </Typography>
 
       <div className="flex flex-wrap gap-3">
@@ -43,7 +45,7 @@ export function AttendeesList({
                 variant="small"
                 className="text-xs text-primary font-medium"
               >
-                Co-host
+                {t("Co-host")}
               </Typography>
             )}
           </div>

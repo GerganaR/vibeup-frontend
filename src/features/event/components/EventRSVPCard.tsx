@@ -5,6 +5,7 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/solid";
 import { isEventEnded } from "@/utils/dateFormat";
+import { useTranslation } from "react-i18next";
 import type { EventModel } from "../types";
 import { EventCapacityBar } from "./EventCapacityBar";
 
@@ -25,6 +26,7 @@ export function EventRSVPCard({
   onCancelRSVP,
   loading = false,
 }: EventRSVPCardProps) {
+  const { t } = useTranslation();
   const isAttending = currentUserId
     ? event.attendees?.some((a) => a.id === currentUserId)
     : false;
@@ -43,7 +45,7 @@ export function EventRSVPCard({
             <UserGroupIcon className="w-5 h-5" />
           </div>
           <Typography variant="h5" className="text-slate-800 font-bold">
-            RSVP Status
+            {t("RSVP Status")}
           </Typography>
         </div>
       </div>
@@ -55,10 +57,10 @@ export function EventRSVPCard({
               <CheckCircleIcon className="w-6 h-6" />
             </div>
             <Typography variant="paragraph" className="text-blue-700 font-bold">
-              You're hosting this event
+              {t("You're hosting this event")}
             </Typography>
             <Typography variant="small" className="text-slate-500 mt-1">
-              Hosts cannot RSVP to their own events
+              {t("Hosts cannot RSVP to their own events")}
             </Typography>
           </div>
         ) : isPast ? (
@@ -70,10 +72,10 @@ export function EventRSVPCard({
               variant="paragraph"
               className="text-slate-600 font-bold"
             >
-              This event has ended
+              {t("This event has ended")}
             </Typography>
             <Typography variant="small" className="text-slate-400 mt-1">
-              RSVP is no longer available
+              {t("RSVP is no longer available")}
             </Typography>
           </div>
         ) : isAttending ? (
@@ -86,10 +88,10 @@ export function EventRSVPCard({
                 variant="paragraph"
                 className="text-green-700 font-bold"
               >
-                You're attending!
+                {t("You're attending!")}
               </Typography>
               <Typography variant="small" className="text-slate-500 mt-1">
-                We'll see you there
+                {t("We'll see you there")}
               </Typography>
             </div>
             <Button
@@ -101,7 +103,7 @@ export function EventRSVPCard({
               loading={loading}
               className="rounded-xl font-semibold"
             >
-              Cancel RSVP
+              {t("Cancel RSVP")}
             </Button>
           </div>
         ) : (
@@ -115,10 +117,10 @@ export function EventRSVPCard({
                   variant="paragraph"
                   className="text-red-600 font-bold"
                 >
-                  Event is full
+                  {t("Event is full")}
                 </Typography>
                 <Typography variant="small" className="text-slate-500 mt-1">
-                  No more spots available
+                  {t("No more spots available")}
                 </Typography>
               </div>
             ) : (
@@ -132,7 +134,7 @@ export function EventRSVPCard({
                 loading={loading}
                 className="rounded-xl font-bold shadow-lg shadow-slate-300/30 hover:shadow-xl transition-all"
               >
-                RSVP Now
+                {t("RSVP Now")}
               </Button>
             )}
           </div>
@@ -147,7 +149,9 @@ export function EventRSVPCard({
             />
           ) : (
             <div className="flex justify-between text-sm">
-              <Typography className="text-slate-500">Attendees</Typography>
+              <Typography className="text-slate-500">
+                {t("Attendees")}
+              </Typography>
               <Typography className="font-bold text-slate-800">
                 {event.attendees?.length ?? 0}
               </Typography>

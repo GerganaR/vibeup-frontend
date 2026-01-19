@@ -1,5 +1,6 @@
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import { MapPinIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 
 interface EventLocationMapProps {
   latitude?: number;
@@ -14,6 +15,8 @@ export function EventLocationMap({
   address,
   height = 400,
 }: EventLocationMapProps) {
+  const { t } = useTranslation();
+  
   if (!latitude || !longitude) {
     return null;
   }
@@ -49,7 +52,7 @@ export function EventLocationMap({
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
               src={googleMapsEmbedUrl || osmEmbedUrl}
-              title={address || "Event Location"}
+              title={address || t("Event Location")}
               className="border-0"
             />
           </div>
@@ -64,7 +67,7 @@ export function EventLocationMap({
                     variant="small"
                     className="text-gray-500 uppercase mb-1"
                   >
-                    Location
+                    {t("Location")}
                   </Typography>
                   {address && (
                     <Typography
@@ -86,7 +89,7 @@ export function EventLocationMap({
                 onClick={() => window.open(googleMapsUrl, "_blank")}
                 className="shrink-0 w-full sm:w-auto"
               >
-                Open in Maps
+                {t("Open in Maps")}
               </Button>
             </div>
           </div>

@@ -16,6 +16,7 @@ import {
   FaChalkboardTeacher,
   FaTag,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import type { IconType } from "react-icons";
 
 interface CategoryPillProps {
@@ -155,6 +156,7 @@ export function CategoryPill({
   size = "sm",
   showIcon = true,
 }: CategoryPillProps) {
+  const { t } = useTranslation();
   const style = categoryStyles[category] || defaultStyle;
   const Icon = style.icon;
 
@@ -180,7 +182,7 @@ export function CategoryPill({
       `}
     >
       {showIcon && <Icon className={`${iconSizes[size]} ${style.iconColor}`} />}
-      <span className="whitespace-nowrap">{category}</span>
+      <span className="whitespace-nowrap">{t(category)}</span>
     </span>
   );
 }

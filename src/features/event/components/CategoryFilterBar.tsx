@@ -1,6 +1,7 @@
 import type { CategoryDTO } from "../types";
 import { categoryStyles, defaultStyle } from "./CategoryPill";
 import { FaGlobe } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 interface CategoryFilterBarProps {
   categories: CategoryDTO[];
@@ -13,6 +14,7 @@ export function CategoryFilterBar({
   selectedCategoryId,
   onSelectCategory,
 }: CategoryFilterBarProps) {
+  const { t } = useTranslation();
   const allCategories = [{ id: "All", name: "All" }, ...categories];
 
   if (allCategories.length <= 1) {
@@ -60,7 +62,7 @@ export function CategoryFilterBar({
                   : "text-slate-400"
               }`}
             />
-            <span>{isAll ? "All Categories" : category.name}</span>
+            <span>{isAll ? t("All Categories") : t(category.name)}</span>
           </button>
         );
       })}

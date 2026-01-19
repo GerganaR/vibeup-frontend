@@ -1,4 +1,5 @@
 import { Typography } from "@material-tailwind/react";
+import { useTranslation } from "react-i18next";
 
 // Custom Infinity Icon component
 function InfinityIcon({ className }: { className?: string }) {
@@ -30,6 +31,7 @@ export function EventCapacityBar({
   showNumbers = true,
   size = "md",
 }: EventCapacityBarProps) {
+  const { t } = useTranslation();
   const safeAttendees = Math.max(0, attendeesCount);
 
   // Handle unlimited capacity
@@ -42,14 +44,14 @@ export function EventCapacityBar({
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1 px-2.5 py-1 mb-4 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
             <InfinityIcon className="w-3.5 h-3.5" />
-            Unlimited
+            {t("Unlimited")}
           </span>
           {showNumbers && (
             <Typography
               variant="small"
               className="font-semibold text-slate-800"
             >
-              {safeAttendees} attending
+              {safeAttendees} {t("attending")}
             </Typography>
           )}
         </div>
@@ -91,7 +93,7 @@ export function EventCapacityBar({
           <span
             className={`px-2.5 py-1 rounded-full text-xs font-medium ${badgeColor}`}
           >
-            {spotsLeft === 0 ? "Full" : `${spotsLeft} left`}
+            {spotsLeft === 0 ? t("Full") : `${spotsLeft} ${t("left")}`}
           </span>
 
           {showNumbers && (
@@ -111,7 +113,7 @@ export function EventCapacityBar({
         aria-valuenow={percent}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label="Event capacity"
+        aria-label={t("Event capacity")}
       >
         <div
           className={`h-full ${barColor} transition-all duration-300`}

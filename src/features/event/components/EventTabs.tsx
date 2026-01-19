@@ -1,5 +1,6 @@
 import { Tabs, TabsHeader, Tab } from "@material-tailwind/react";
 import { FaMap, FaThLarge } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   mode: "grid" | "map";
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export function EventsTabs({ mode, onChange }: Props) {
+  const { t } = useTranslation();
   return (
     <Tabs value={mode} className="w-auto">
       <TabsHeader className="bg-white shadow-sm rounded-xl">
@@ -16,7 +18,7 @@ export function EventsTabs({ mode, onChange }: Props) {
           className="flex items-center gap-2 w-36"
         >
           <FaThLarge className="w-4 h-4" />
-          Grid
+          {t("Grid")}
         </Tab>
 
         <Tab
@@ -25,7 +27,7 @@ export function EventsTabs({ mode, onChange }: Props) {
           className="flex items-center gap-2 w-36"
         >
           <FaMap className="w-4 h-4" />
-          Map
+          {t("Map")}
         </Tab>
       </TabsHeader>
     </Tabs>

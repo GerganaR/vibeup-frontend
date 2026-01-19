@@ -257,14 +257,14 @@ export function EventMap({ events }: EventMapProps) {
                   url: isPastEvent
                     ? "data:image/svg+xml;charset=UTF-8," +
                       encodeURIComponent(
-                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path fill="#6B7280" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="3"/></svg>'
+                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48"><path fill="#6B7280" stroke="#374151" stroke-width="1" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="3"/></svg>'
                       )
                     : "data:image/svg+xml;charset=UTF-8," +
                       encodeURIComponent(
-                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path fill="#14b8a6" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="3"/></svg>'
+                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48"><path fill="#14b8a6" stroke="#0f766e" stroke-width="1" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="3"/></svg>'
                       ),
-                  scaledSize: new google.maps.Size(36, 36),
-                  anchor: new google.maps.Point(18, 36),
+                  scaledSize: new google.maps.Size(48, 48),
+                  anchor: new google.maps.Point(24, 48),
                 }}
               >
                 {activeMarker === event.id && (

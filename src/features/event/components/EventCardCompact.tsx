@@ -37,9 +37,9 @@ export function EventCardCompact({
       }`}
       onClick={handleClick}
     >
-      <CardBody className="p-4">
+      <CardBody className="p-3">
         {/* Header Row */}
-        <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex items-start justify-between gap-2 mb-2">
           <Typography
             variant="h6"
             className={`font-bold line-clamp-1 flex-1 group-hover:text-teal-600 transition-colors ${
@@ -70,14 +70,14 @@ export function EventCardCompact({
         {event.description && (
           <Typography
             variant="small"
-            className="text-slate-500 line-clamp-2 mb-4 leading-relaxed"
+            className="text-slate-500 line-clamp-2 mb-2 leading-relaxed text-xs"
           >
             {event.description}
           </Typography>
         )}
 
         {/* Meta Info Row */}
-        <div className="flex items-center gap-2 flex-wrap mb-3">
+        <div className="flex items-center gap-2 flex-wrap mb-2">
           <div className="flex items-center gap-1.5 text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">
             <FaCalendarAlt className="w-3 h-3 text-teal-500" />
             <span className="text-xs font-medium">

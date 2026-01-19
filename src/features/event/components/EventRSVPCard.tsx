@@ -38,6 +38,36 @@ export function EventRSVPCard({
 
   return (
     <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
+      {/* Host Info */}
+      {event.host && (
+        <div className="p-5 bg-gradient-to-r from-slate-50 to-white border-b border-slate-100">
+          <div className="flex items-center gap-4">
+            {event.host.avatarUrl ? (
+              <img
+                src={event.host.avatarUrl}
+                alt={event.host.name}
+                className="w-14 h-14 rounded-full object-cover shadow-md"
+              />
+            ) : (
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center text-white text-xl font-bold shadow-md">
+                {event.host.name.charAt(0).toUpperCase()}
+              </div>
+            )}
+            <div>
+              <Typography
+                variant="small"
+                className="text-slate-500 font-medium"
+              >
+                {t("Hosted by")}
+              </Typography>
+              <Typography variant="h6" className="text-slate-800 font-bold">
+                {event.host.name}
+              </Typography>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="p-5 bg-gradient-to-r from-teal-50/50 to-white border-b border-slate-100">
         <div className="flex items-center gap-3">

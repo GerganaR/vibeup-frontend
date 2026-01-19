@@ -1,84 +1,82 @@
 # VibeUp - Event Discovery & Management Platform
 
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.x-38B2AC?logo=tailwindcss)
+
 ## 🚀 Overview
 
 **VibeUp** is a modern, responsive web application designed to help users discover, host, and manage local events. Built with a "Mobile-First" philosophy, it offers a seamless experience across desktop and mobile devices, featuring interactive maps, real-time filtering, and social engagement tools.
 
 This project demonstrates a full-stack implementation with a focus on **Clean Architecture**, **Responsive UX**, and **Modern React Patterns**.
 
-## ✨ Key Features (MVP)
+## 🌐 Live Demo
 
-The Minimum Viable Product (MVP) includes the following core functionalities:
-
-- **📱 Hybrid Responsive Design**:
-  - **Desktop**: Full split-screen view with interactive map and side-by-side event list.
-  - **Mobile**: Native-app-like experience with bottom navigation, touch-optimized swipeable filters, and a vertical scrolling grid.
-- **🌍 Interactive Map Integration**:
-  - Visual discovery of events using Google Maps API.
-  - Dynamic clustering and location-based filtering.
-- **🎉 Event Management**:
-  - **Create/Host**: intuitive multi-step forms for creating public events.
-  - **RSVP System**: Users can attend events and manage their schedule.
-  - **My Events Dashboard**: A personalized hub for tracking hosted and attended events.
-- **🔐 Authentication**: Secure Google OAuth 2.0 integration for one-tap sign-in.
-- **🌐 Internationalization (i18n)**: Full multi-language support (English & Bulgarian) with auto-detection and mobile-specific language switchers.
-
-## 🛠️ Tech Stack
-
-### Frontend
-
-- **Framework**: [React 19](https://react.dev/) + [Vite](https://vitejs.dev/) - Utilizing the latest React features for optimal performance.
-- **Language**: [TypeScript](https://www.typescriptlang.org/) - For type safety and scalable code quality.
-- **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/) - Centralized state for user sessions and global app data.
-- **Styling**:
-  - [Tailwind CSS](https://tailwindcss.com/) - Utility-first styling for rapid UI development.
-  - [Material Tailwind](https://www.material-tailwind.com/) - Accessible, modern UI components.
-  - [Framer Motion](https://www.framer.com/motion/) - Smooth layout transitions and micro-interactions.
-- **Routing**: [React Router v7](https://reactrouter.com/) - enabling robust client-side navigation.
-- **Maps**: `@react-google-maps/api` - Deep integration with Google Maps Platform.
-- **Localization**: `i18next` - Enterprise-grade internationalization framework.
-
-### Backend (Overview)
-
-- **API**: RESTful API built with Node.js/TypeScript.
-- **Database**: PostgreSQL for robust relational data management.
-- **Architecture**: Domain-Driven Design (DDD) principles to ensure scalability and maintainability.
-
-## 📦 Getting Started
-
-1.  **Clone the repository**
-
-    ```bash
-    git clone https://github.com/yourusername/vibeup-frontend.git
-    cd vibeup-frontend
-    ```
-
-2.  **Install dependencies**
-
-    ```bash
-    npm install
-    ```
-
-3.  **Environment Setup**
-    Create a `.env` file in the root directory and add your keys:
-
-    ```env
-    VITE_GOOGLE_MAPS_API_KEY=your_key_here
-    VITE_GOOGLE_CLIENT_ID=your_oauth_client_id
-    VITE_API_URL=http://localhost:3000
-    ```
-
-4.  **Run Development Server**
-    ```bash
-    npm run dev
-    ```
-
-## 🔮 Future Enhancements
-
-- **Social & Chat**: Real-time chat for event attendees.
-- **Ticketing**: Payment integration for paid events (Stripe).
-- **Advanced Recommendations**: AI-driven event suggestions based on user interests.
+- **Frontend**: [vibeup-frontend.vercel.app](https://vibeup-frontend.vercel.app)
+- **Backend API**: [vibeup-backend.onrender.com](https://vibeup-backend.onrender.com)
 
 ---
 
-_Built with ❤️ for the community._
+## 📸 Screenshots
+
+| Dashboard                                 | All Events                                  | Map View                                |
+| ----------------------------------------- | ------------------------------------------- | --------------------------------------- |
+| ![Dashboard](./screenshots/dashboard.png) | ![All Events](./screenshots/all-events.png) | ![Map View](./screenshots/map-view.png) |
+
+| Event Details                                          | Create Event                                    | Login                                  |
+| ------------------------------------------------------ | ----------------------------------------------- | -------------------------------------- |
+| ![Event Details](./screenshots/event-details-host.png) | ![Create Event](./screenshots/create-event.png) | ![Login](./screenshots/login-page.png) |
+
+---
+
+## ✨ Key Features
+
+- **📱 Hybrid Responsive Design**: Desktop split-screen + mobile-optimized experience
+- **🗺️ Google Street View**: Immersive venue preview for every location
+- **📍 Smart Address Autocomplete**: Google Places API for accurate address search
+- **🌍 Interactive Map**: Custom markers and dynamic clustering
+- **🎉 Event Management**: Create, RSVP, and manage events
+- **🔐 Google OAuth 2.0**: Secure one-tap sign-in
+- **🌐 i18n Support**: English & Bulgarian with auto-detection
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: React 19 + Vite
+- **Language**: TypeScript (strict mode)
+- **State**: Redux Toolkit
+- **Styling**: Tailwind CSS + Material Tailwind + Framer Motion
+- **Maps**: @react-google-maps/api
+- **Routing**: React Router v7
+- **i18n**: i18next
+
+---
+
+## 🎨 Design Patterns
+
+- **Feature-Based Architecture**: Organized by feature modules (`/features/event`, `/features/auth`)
+- **Custom Hooks**: Reusable logic (`useGetEvent`, `useRsvp`, `useDateFormatter`)
+- **Component Composition**: Compound components for complex UI
+- **Container/Presentational**: Separation of logic and UI
+- **Redux Ducks Pattern**: Modular state slices
+
+---
+
+## 🔮 Future Enhancements
+
+- **👥 Co-hosts**: Shared event management
+- **📍 Saved Places**: Favorite venues for quick creation
+- **✅ Verified Hosts**: Trust badges for organizers
+- **💬 Event Chat**: Real-time messaging
+- **🎟️ Ticketing**: Stripe payment integration
+- **🤖 Smart Recommendations**: AI-driven suggestions
+
+---
+
+## 👤 Author
+
+Built by **[Gergana Roshleva](https://github.com/GerganaR)**
+
+---

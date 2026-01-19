@@ -82,13 +82,20 @@ export function EventSection({
             </Typography>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {events.map((event) => (
-              <EventCardCompact
-                key={event.id}
-                event={event}
-                showHostBadge={showHostBadge}
-              />
+              <div key={event.id} className="flex items-stretch gap-3">
+                {/* <div
+                  className="w-1 bg-teal-400/50 rounded-full self-center"
+                  style={{ height: "60%", minHeight: "100px" }}
+                ></div> */}
+                <div className="flex-1">
+                  <EventCardCompact
+                    event={event}
+                    showHostBadge={showHostBadge}
+                  />
+                </div>
+              </div>
             ))}
           </div>
         )}

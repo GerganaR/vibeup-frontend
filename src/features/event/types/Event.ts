@@ -18,6 +18,7 @@ export interface EventModel {
   longitude?: number;
   capacity?: number;
   hostId: string;
+  host?: { id: string; name: string; avatarUrl?: string };
   attendees: EventAttendee[];
   cohosts: string[];
   createdAt: Date;

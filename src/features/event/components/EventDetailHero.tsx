@@ -59,7 +59,7 @@ export function EventDetailHero({
         <div className="w-full sm:flex-col md:flex-row flex gap-4 relative ">
           {/* Title Below Street View */}
           <div className="sm:w-full md:w-2/3 px-4 sm:px-6 py-6 sm:py-8 bg-white border-b border-gray-200">
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">
+            <h1 className="text-[25px] sm:text-[25px] md:text-[25px] font-bold text-gray-900">
               {title}
             </h1>
             {categories && categories.length > 0 && (
@@ -71,7 +71,7 @@ export function EventDetailHero({
             )}
 
             {description && (
-              <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
+              <p className="text-gray-700 text-base leading-relaxed">
                 {description}
               </p>
             )}

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 
@@ -51,26 +51,29 @@ export function AddressInput({
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const focusClass = focusColorClasses[accentColor];
 
   // Update dropdown position when showing suggestions
-  useEffect(() => {
-    if (showSuggestions && inputRef.current) {
+  useLayoutEffect(() => {
+    if ((showSuggestions || isLoading) && inputRef.current) {
       const rect = inputRef.current.getBoundingClientRect();
       setDropdownPosition({
-        top: rect.bottom + window.scrollY + 4,
-        left: rect.left + window.scrollX,
+        top: rect.bottom + 4,
+        left: rect.left,
         width: rect.width,
       });
     }
-  }, [showSuggestions, suggestions]);
+  }, [showSuggestions, suggestions, isLoading]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
         wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
+        !wrapperRef.current.contains(event.target as Node) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
       ) {
         setShowSuggestions(false);
       }
@@ -191,6 +194,7 @@ export function AddressInput({
         suggestions.length > 0 &&
         createPortal(
           <div
+            ref={dropdownRef}
             style={{
               position: "fixed",
               top: dropdownPosition.top,

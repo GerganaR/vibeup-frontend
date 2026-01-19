@@ -71,14 +71,14 @@ export function EventCapacityBar({
       ? "bg-red-500"
       : percent >= 70
       ? "bg-amber-500"
-      : "bg-green-500";
+      : "bg-teal-500";
 
   const badgeColor =
     spotsLeft === 0
       ? "bg-red-50 text-red-700"
       : spotsLeft <= 5
       ? "bg-amber-50 text-amber-700"
-      : "bg-green-50 text-green-700";
+      : "bg-teal-50 text-teal-700";
 
   const heightClass = size === "sm" ? "h-1.5" : "h-2";
 

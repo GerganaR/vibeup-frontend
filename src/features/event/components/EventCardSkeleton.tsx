@@ -20,7 +20,7 @@ export function EventCardSkeleton() {
         <div className="flex items-center gap-2">
           <div className="h-7 bg-slate-100 rounded-lg w-20" />
           <div className="h-7 bg-slate-100 rounded-lg w-16" />
-          <div className="h-7 bg-green-100/50 rounded-lg w-14" />
+          <div className="h-7 bg-teal-50/50 rounded-lg w-14" />
         </div>
 
         {/* Categories */}

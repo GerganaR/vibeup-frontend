@@ -36,7 +36,7 @@ const NavButtonContent = (
           <item.icon
             className={twMerge(
               "w-[22px] h-[22px] truncate",
-              isActive ? "text-green-700" : "text-green-600"
+              isActive ? "text-teal-600" : "text-teal-500"
             )}
           />
         )}
@@ -47,7 +47,7 @@ const NavButtonContent = (
               alt={item.title}
               className={twMerge(
                 "w-[22px] h-[22px] absolute truncate",
-                isActive ? "text-green-700" : "text-green-600"
+                isActive ? "text-teal-600" : "text-teal-500"
               )}
             />
           </span>

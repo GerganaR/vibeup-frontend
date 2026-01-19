@@ -33,7 +33,7 @@ function InfoCard({
         fullWidth ? "col-span-full" : "",
       ].join(" ")}
     >
-      <div className="shrink-0 rounded-lg bg-green-50 p-2 text-green-700">
+      <div className="shrink-0 rounded-lg bg-teal-50 p-2 text-teal-700">
         {icon}
       </div>
 

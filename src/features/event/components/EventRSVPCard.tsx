@@ -39,9 +39,9 @@ export function EventRSVPCard({
   return (
     <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
       {/* Header */}
-      <div className="p-5 bg-gradient-to-r from-green-50/50 to-white border-b border-slate-100">
+      <div className="p-5 bg-gradient-to-r from-teal-50/50 to-white border-b border-slate-100">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg shadow-slate-300/30">
+          <div className="p-2.5 rounded-xl bg-gradient-to-br from-teal-400 to-blue-500 text-white shadow-lg shadow-slate-300/30">
             <UserGroupIcon className="w-5 h-5" />
           </div>
           <Typography variant="h5" className="text-slate-800 font-bold">
@@ -80,13 +80,13 @@ export function EventRSVPCard({
           </div>
         ) : isAttending ? (
           <div className="space-y-4">
-            <div className="text-center py-6 px-4 rounded-xl bg-green-50 border border-green-200/50">
-              <div className="p-3 rounded-full bg-green-100 text-green-600 w-fit mx-auto mb-3">
+            <div className="text-center py-6 px-4 rounded-xl bg-teal-50 border border-teal-200/50">
+              <div className="p-3 rounded-full bg-teal-100 text-teal-600 w-fit mx-auto mb-3">
                 <CheckCircleIcon className="w-6 h-6" />
               </div>
               <Typography
                 variant="paragraph"
-                className="text-green-700 font-bold"
+                className="text-teal-700 font-bold"
               >
                 {t("You're attending!")}
               </Typography>
@@ -126,7 +126,7 @@ export function EventRSVPCard({
             ) : (
               <Button
                 variant="filled"
-                color="green"
+                color="blue"
                 fullWidth
                 size="lg"
                 onClick={onRSVP}

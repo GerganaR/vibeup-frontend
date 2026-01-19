@@ -36,7 +36,7 @@ export function CategoryFilterBar({
 
         // All Categories uses green, others use their category color
         const selectedClass = isAll
-          ? "bg-green-50 text-green-700 border-green-200 shadow-md"
+          ? "bg-teal-50 text-teal-700 border-teal-200 shadow-md"
           : `${style.bgColor} ${style.textColor} ${style.borderColor} shadow-md`;
 
         return (
@@ -57,7 +57,7 @@ export function CategoryFilterBar({
               className={`w-4 h-4 ${
                 isSelected
                   ? isAll
-                    ? "text-green-600"
+                    ? "text-teal-600"
                     : style.iconColor
                   : "text-slate-400"
               }`}

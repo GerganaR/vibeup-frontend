@@ -3,7 +3,7 @@ import React, { useState } from "react";
 interface AvatarProps {
   name: string;
   src?: string;
-  size?: number; 
+  size?: number;
   className?: string;
 }
 
@@ -33,7 +33,7 @@ const Avatar: React.FC<AvatarProps> = ({ name, src, size = 40, className }) => {
     />
   ) : (
     <div
-      className={`rounded-full bg-green-700 text-white font-semibold flex items-center justify-center text-2xl ${className}`}
+      className={`rounded-full bg-teal-600 text-white font-semibold flex items-center justify-center text-2xl ${className}`}
       style={{ width: size, height: size }}
     >
       {getInitials(name)}

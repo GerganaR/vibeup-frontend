@@ -337,7 +337,7 @@ export function EventFormModal({
 
       <DialogBody className="space-y-4 overflow-visible max-h-[60vh] overflow-y-auto px-6 py-5">
         {/* Basic Info Section */}
-        <FormSection title={"Basic Information"} color="green">
+        <FormSection title={"Basic Information"} color="teal">
           <StyledInput
             label={t("Event Title")}
             value={formData.title}
@@ -450,7 +450,7 @@ export function EventFormModal({
                   />
                   <span>{t(category.name)}</span>
                   {isSelected && (
-                    <CheckIcon className="w-4 h-4 text-green-600" />
+                    <CheckIcon className="w-4 h-4 text-teal-600" />
                   )}
                 </button>
               );
@@ -490,11 +490,11 @@ export function EventFormModal({
         </Button>
         <Button
           variant="filled"
-          color="green"
+          color="blue"
           onClick={handleSubmit}
           disabled={loading}
           loading={loading}
-          className="rounded-xl font-semibold shadow-lg shadow-green-500/20"
+          className="rounded-xl font-semibold shadow-lg shadow-blue-500/20"
         >
           {initialData ? t("Update Event") : t("Create Event")}
         </Button>

@@ -39,14 +39,14 @@ export function EventFilterTabs({
               transition-all duration-200 whitespace-nowrap flex-shrink-0 select-none cursor-pointer
               ${
                 isSelected
-                  ? "bg-green-50 text-green-700 border-green-200 shadow-md"
+                  ? "bg-teal-50 text-teal-700 border-teal-200 shadow-md"
                   : "bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:shadow-sm"
               }
             `}
           >
             <Icon
               className={`w-4 h-4 ${
-                isSelected ? "text-green-600" : "text-slate-400"
+                isSelected ? "text-teal-600" : "text-slate-400"
               }`}
             />
             <span>{t(tab.label)}</span>

@@ -98,8 +98,7 @@ export default function EventsPage() {
           <>
             <EventsTabs mode={viewMode} onChange={setViewMode} />
             <Button
-              color="green"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white border-none shadow-md hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300"
               onClick={() => setShowCreateModal(true)}
             >
               <PlusIcon className="w-5 h-5" />
@@ -157,8 +156,7 @@ export default function EventsPage() {
               </Typography>
               {filterTab === "my" && (
                 <Button
-                  color="green"
-                  className="mt-6"
+                  className="mt-6 bg-teal-500 hover:bg-teal-600 text-white border-none shadow-md hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300"
                   onClick={() => setShowCreateModal(true)}
                 >
                   {t("Create Your First Event")}

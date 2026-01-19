@@ -97,7 +97,7 @@ export function EventMap({ events }: EventMapProps) {
   if (!isLoaded) {
     return (
       <div className="h-[600px] flex flex-col items-center justify-center bg-gray-100 rounded-xl">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-4"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mb-4"></div>
         <Typography variant="h6" className="text-gray-600">
           {t("Loading Maps...")}
         </Typography>
@@ -138,7 +138,7 @@ export function EventMap({ events }: EventMapProps) {
                 key={event.id}
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedEvent?.id === event.id
-                    ? "ring-2 ring-green-500 shadow-md"
+                    ? "ring-2 ring-teal-500 shadow-md"
                     : ""
                 } ${isPast ? "opacity-60 grayscale-[30%]" : ""}`}
                 onClick={() => {
@@ -149,7 +149,7 @@ export function EventMap({ events }: EventMapProps) {
               >
                 <div className="p-4">
                   <div className="flex items-start gap-2 mb-2">
-                    <MapPinIcon className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+                    <MapPinIcon className="w-5 h-5 text-teal-600 mt-0.5 shrink-0" />
                     <div className="flex-1 min-w-0">
                       <Typography
                         variant="h6"
@@ -194,7 +194,7 @@ export function EventMap({ events }: EventMapProps) {
                     <Button
                       size="sm"
                       variant="outlined"
-                      color="green"
+                      color="blue"
                       className="flex-1 text-xs py-1"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -259,7 +259,7 @@ export function EventMap({ events }: EventMapProps) {
                       )
                     : "data:image/svg+xml;charset=UTF-8," +
                       encodeURIComponent(
-                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path fill="#10B981" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="3"/></svg>'
+                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path fill="#14b8a6" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle fill="#fff" cx="12" cy="9" r="3"/></svg>'
                       ),
                   scaledSize: new google.maps.Size(36, 36),
                   anchor: new google.maps.Point(18, 36),
@@ -307,7 +307,7 @@ export function EventMap({ events }: EventMapProps) {
                         style={{
                           display: "inline-block",
                           padding: "4px 12px",
-                          background: "#10b981",
+                          background: "#14b8a6",
                           color: "white",
                           textDecoration: "none",
                           borderRadius: "4px",

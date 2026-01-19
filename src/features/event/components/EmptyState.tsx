@@ -31,7 +31,11 @@ export function EmptyState({
         </Typography>
       )}
       {actionLabel && onAction && (
-        <Button color="green" size="lg" onClick={onAction} className="mt-4">
+        <Button
+          className="mt-4 bg-teal-500 hover:bg-teal-600 text-white border-none shadow-md hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300"
+          size="lg"
+          onClick={onAction}
+        >
           {actionLabel}
         </Button>
       )}

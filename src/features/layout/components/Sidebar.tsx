@@ -7,6 +7,7 @@ import {
   HomeIcon,
   CalendarIcon,
   Cog6ToothIcon,
+  RocketLaunchIcon,
 } from "@heroicons/react/24/solid";
 import { RiArrowLeftSLine, RiLogoutBoxLine } from "react-icons/ri";
 import Avatar from "@/components/Avatar";
@@ -57,11 +58,21 @@ const Sidenav: React.FC = () => {
           {/* Header */}
           <div>
             <div className="flex justify-between items-center">
-              {open && (
-                <Typography variant="h6" className="text-green-700">
-                  VIBE UP
-                </Typography>
-              )}
+              <div className="flex items-center gap-2">
+                <div
+                  className={twMerge(
+                    "w-8 h-8 rounded-lg bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center shadow-md",
+                    !open && "w-8 h-8 mt-10"
+                  )}
+                >
+                  <RocketLaunchIcon className="w-4 h-4 text-white" />
+                </div>
+                {open && (
+                  <Typography variant="h6" className="text-slate-800 font-bold">
+                    VIBE UP
+                  </Typography>
+                )}
+              </div>
 
               {/* Toggle Button */}
               <motion.div
@@ -75,8 +86,8 @@ const Sidenav: React.FC = () => {
                 }}
                 className="
                   absolute cursor-pointer w-8 h-8 flex items-center justify-center
-                  rounded-full bg-slate-50 hover:bg-green-50
-                  border border-slate-200 hover:border-green-300
+                  rounded-full bg-slate-50 hover:bg-teal-50
+                  border border-slate-200 hover:border-teal-300
                   shadow-sm hover:shadow-md
                 "
                 style={{
@@ -86,7 +97,7 @@ const Sidenav: React.FC = () => {
                 }}
                 onClick={toggleSidebar}
               >
-                <RiArrowLeftSLine className="w-5 h-5 text-slate-600 hover:text-green-700 transition-colors" />
+                <RiArrowLeftSLine className="w-5 h-5 text-slate-600 hover:text-teal-700 transition-colors" />
               </motion.div>
             </div>
 
@@ -146,7 +157,7 @@ const Sidenav: React.FC = () => {
               <Button
                 onClick={logout}
                 variant="outlined"
-                className="bg-transparent text-slate-800 border-slate-300 font-medium px-4 py-2 rounded-lg w-full normal-case text-sm hover:bg-green-50 hover:border-green-300 transition"
+                className="bg-transparent text-slate-800 border-slate-300 font-medium px-4 py-2 rounded-lg w-full normal-case text-sm hover:bg-teal-50 hover:border-teal-300 transition"
               >
                 {t("Logout")}
               </Button>

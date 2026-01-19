@@ -22,22 +22,22 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
       title: "Upcoming Events",
       value: stats?.upcomingCount ?? 0,
       icon: CalendarIcon,
-      iconBg: "bg-green-100",
-      iconColor: "text-green-600",
+      iconBg: "bg-teal-50",
+      iconColor: "text-teal-600",
     },
     {
       title: "Events Joined",
       value: stats?.attendingCount ?? 0,
       icon: UserGroupIcon,
-      iconBg: "bg-green-100",
-      iconColor: "text-green-600",
+      iconBg: "bg-teal-50",
+      iconColor: "text-teal-600",
     },
     {
       title: "Events Hosted",
       value: stats?.hostedCount ?? 0,
       icon: StarIcon,
-      iconBg: "bg-green-100",
-      iconColor: "text-green-600",
+      iconBg: "bg-teal-50",
+      iconColor: "text-teal-600",
     },
   ];
 

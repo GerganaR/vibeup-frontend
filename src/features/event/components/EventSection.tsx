@@ -28,11 +28,11 @@ export function EventSection({
   return (
     <Card className="h-full flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/50">
       {/* Header */}
-      <div className="p-5 bg-gradient-to-r from-green-50/50 to-white border-b border-slate-100">
+      <div className="p-5 bg-gradient-to-r from-teal-50/50 to-white border-b border-slate-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {icon && (
-              <div className="p-2.5 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg shadow-slate-300/30">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-teal-400 to-blue-500 text-white shadow-lg shadow-slate-300/30">
                 {icon}
               </div>
             )}
@@ -55,7 +55,7 @@ export function EventSection({
             <Button
               variant="text"
               size="sm"
-              className="flex items-center gap-1.5 font-semibold rounded-lg text-green-600 hover:text-green-700 hover:bg-green-50 transition-all"
+              className="flex items-center gap-1.5 font-semibold rounded-lg text-teal-600 hover:text-teal-700 hover:bg-teal-50 transition-all"
             >
               {t("View all")}
               <HiOutlineArrowRight className="w-4 h-4" />
@@ -68,7 +68,7 @@ export function EventSection({
       <CardBody className="p-4 flex-1 overflow-y-auto custom-scrollbar">
         {events.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full py-12 text-center">
-            <div className="p-4 rounded-full bg-green-100 text-green-600 mb-4">
+            <div className="p-4 rounded-full bg-teal-50 text-teal-600 mb-4">
               <HiOutlineCalendar className="w-8 h-8" />
             </div>
             <Typography

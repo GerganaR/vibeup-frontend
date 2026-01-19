@@ -18,7 +18,7 @@ export function WelcomeHeader({
   onCreateEvent,
   onBrowseEvents,
 }: WelcomeHeaderProps) {
-  const { t } = useTranslation();   
+  const { t } = useTranslation();
   return (
     <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
       <CardBody className="p-6">
@@ -42,8 +42,7 @@ export function WelcomeHeader({
 
           <div className="flex flex-col sm:flex-row gap-3">
             <Button
-              color="green"
-              className="flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white border-none shadow-md hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300"
               onClick={onCreateEvent}
             >
               <PlusIcon className="w-5 h-5" />
@@ -51,12 +50,11 @@ export function WelcomeHeader({
             </Button>
             <Button
               variant="outlined"
-              color="green"
-              className="flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 border-slate-200 text-slate-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 focus:ring-blue-200"
               onClick={onBrowseEvents}
             >
               <CalendarIcon className="w-5 h-5" />
-                {t("Browse Events")}
+              {t("Browse Events")}
             </Button>
           </div>
         </div>

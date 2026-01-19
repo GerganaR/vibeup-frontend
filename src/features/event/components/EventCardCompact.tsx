@@ -39,7 +39,7 @@ export function EventCardCompact({
         <div className="flex items-start justify-between gap-3 mb-3">
           <Typography
             variant="h6"
-            className={`font-bold line-clamp-1 flex-1 group-hover:text-green-600 transition-colors ${
+            className={`font-bold line-clamp-1 flex-1 group-hover:text-teal-600 transition-colors ${
               isPast ? "text-slate-500" : "text-slate-800"
             }`}
           >
@@ -57,7 +57,7 @@ export function EventCardCompact({
               <Chip
                 value="Host"
                 size="sm"
-                className="bg-gradient-to-r from-green-500 to-green-600 text-white font-medium text-xs px-2 py-0.5"
+                className="bg-gradient-to-r from-teal-400 to-blue-500 text-white font-medium text-xs px-2 py-0.5"
               />
             )}
           </div>
@@ -76,21 +76,21 @@ export function EventCardCompact({
         {/* Meta Info Row */}
         <div className="flex items-center gap-2 flex-wrap mb-3">
           <div className="flex items-center gap-1.5 text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">
-            <FaCalendarAlt className="w-3 h-3 text-green-500" />
+            <FaCalendarAlt className="w-3 h-3 text-teal-500" />
             <span className="text-xs font-medium">
               {formatDate(new Date(event.startDateTime))}
             </span>
           </div>
 
           <div className="flex items-center gap-1.5 text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">
-            <FaClock className="w-3 h-3 text-green-500" />
+            <FaClock className="w-3 h-3 text-teal-500" />
             <span className="text-xs font-medium">
               {formatTime(new Date(event.startDateTime))}
             </span>
           </div>
 
           {event.capacity && (
-            <div className="flex items-center gap-1.5 text-green-700 bg-green-50 px-2.5 py-1 rounded-lg">
+            <div className="flex items-center gap-1.5 text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg">
               <FaUsers className="w-3 h-3" />
               <span className="text-xs font-semibold">
                 {event.attendees?.length || 0}/{event.capacity}

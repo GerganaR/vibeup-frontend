@@ -44,8 +44,8 @@ export default function SettingsPage() {
           <div className="lg:col-span-4 xl:col-span-3 space-y-4 overflow-y-auto custom-scrollbar h-full flex flex-col gap-2">
             {/* Profile Section */}
             <div className="rounded-2xl border border-slate-100 overflow-hidden bg-white shadow-sm flex-1">
-              <div className="flex items-center gap-2 bg-green-50 px-4 py-3">
-                <div className="w-1 h-5 bg-green-500 rounded-full"></div>
+              <div className="flex items-center gap-2 bg-teal-50 px-4 py-3">
+                <div className="w-1 h-5 bg-teal-500 rounded-full"></div>
                 <Typography
                   variant="h6"
                   className="text-slate-800 font-semibold text-sm"
@@ -67,7 +67,7 @@ export default function SettingsPage() {
                       className="w-16 h-16 rounded-xl ring-2 ring-slate-100 shadow"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow">
+                    <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center shadow">
                       <UserCircleIcon className="w-8 h-8 text-white" />
                     </div>
                   )}
@@ -106,7 +106,10 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Add here description for the profile and how it cant be changed */}
-                <Typography variant="small" className="text-slate-400 text-[13px] max-w-[95%] mx-auto">
+                <Typography
+                  variant="small"
+                  className="text-slate-400 text-[13px] max-w-[95%] mx-auto"
+                >
                   {t(
                     "You can change your profile picture and name in your Google Account. Here you can only see your name and email address."
                   )}

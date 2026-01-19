@@ -16,7 +16,7 @@ export function EventLocationMap({
   height = 400,
 }: EventLocationMapProps) {
   const { t } = useTranslation();
-  
+
   if (!latitude || !longitude) {
     return null;
   }
@@ -61,7 +61,7 @@ export function EventLocationMap({
           <div className="px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-200">
             <div className="flex items-start justify-between gap-4 flex-col sm:flex-row">
               <div className="flex items-start gap-2 flex-1">
-                <MapPinIcon className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+                <MapPinIcon className="w-5 h-5 text-teal-600 mt-0.5 shrink-0" />
                 <div className="flex-1">
                   <Typography
                     variant="small"
@@ -84,7 +84,7 @@ export function EventLocationMap({
               </div>
               <Button
                 size="sm"
-                color="green"
+                color="blue"
                 variant="outlined"
                 onClick={() => window.open(googleMapsUrl, "_blank")}
                 className="shrink-0 w-full sm:w-auto"

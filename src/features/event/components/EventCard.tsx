@@ -107,7 +107,7 @@ export function EventCard({ event }: Props) {
         {/* Title */}
         <Typography
           variant="h5"
-          className="text-slate-800 font-bold line-clamp-1 group-hover:text-green-600 transition-colors"
+          className="text-slate-800 font-bold line-clamp-1 group-hover:text-teal-600 transition-colors"
         >
           {event.title}
         </Typography>
@@ -125,17 +125,17 @@ export function EventCard({ event }: Props) {
         {/* Meta Info */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-600">
-            <FaCalendarAlt className="w-3 h-3 text-green-500" />
+            <FaCalendarAlt className="w-3 h-3 text-teal-500" />
             <span className="text-xs font-medium">{formattedDate}</span>
           </div>
 
           <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-600">
-            <FaClock className="w-3 h-3 text-green-500" />
+            <FaClock className="w-3 h-3 text-teal-500" />
             <span className="text-xs font-medium">{formattedTime}</span>
           </div>
 
           {event.capacity && (
-            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-green-50 text-green-700">
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-teal-50 text-teal-700">
               <FaUsers className="w-3 h-3" />
               <span className="text-xs font-semibold">
                 {attendeesCount}/{event.capacity}

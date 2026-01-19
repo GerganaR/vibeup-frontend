@@ -1,3 +1,7 @@
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Popover,
   PopoverHandler,
@@ -5,10 +9,9 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import Datepicker from "react-tailwindcss-datepicker";
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { ChevronDownIcon, CalendarIcon } from "@heroicons/react/24/outline";
+import { bg } from "date-fns/locale";
+registerLocale("bg", bg);
 
 type AccentColor = "green" | "blue" | "purple" | "orange" | "teal";
 
@@ -28,17 +31,6 @@ const focusColorClasses: Record<AccentColor, string> = {
   purple: "focus:border-purple-500 focus:ring-purple-500",
   orange: "focus:border-orange-500 focus:ring-orange-500",
   teal: "focus:border-teal-500 focus:ring-teal-500",
-};
-
-const primaryColors: Record<
-  AccentColor,
-  "green" | "blue" | "purple" | "orange" | "teal"
-> = {
-  green: "green",
-  blue: "blue",
-  purple: "purple",
-  orange: "orange",
-  teal: "teal",
 };
 
 export function DateTimePicker({
@@ -85,6 +77,15 @@ export function DateTimePicker({
 
   const focusClass = focusColorClasses[accentColor];
 
+  const formatDisplayDate = (date: Date | null) => {
+    if (!date) return t("Select date");
+    return new Intl.DateTimeFormat(i18n.language, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }).format(date);
+  };
+
   return (
     <div className="w-full space-y-2">
       <label className="block text-sm font-medium text-slate-700">
@@ -92,42 +93,40 @@ export function DateTimePicker({
       </label>
 
       <div className="grid grid-cols-2 gap-3">
-        {/* Date Picker - z-index set high to appear above sections */}
-        <div className="relative" style={{ zIndex: 9999 }}>
-          <Datepicker
-            useRange={false}
-            asSingle={true}
-            value={{ startDate: selectedDate, endDate: selectedDate }}
-            onChange={(val) => {
-              if (val?.startDate) {
-                setSelectedDate(new Date(val.startDate));
-              }
-            }}
+        {/* Date Picker */}
+        <div className="relative">
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date: Date | null) => setSelectedDate(date)}
             minDate={minDate}
-            placeholder={t("Select date")}
-            inputClassName={`
-              w-full px-4 py-2.5 rounded-xl border text-sm font-medium transition-all
-              ${
-                error
-                  ? "border-red-300 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500"
-                  : `border-slate-200 bg-slate-50 text-slate-800 ${focusClass} focus:bg-white`
-              }
-              focus:outline-none focus:ring-2 focus:ring-opacity-20
-            `}
-            containerClassName="relative z-[99999]"
-            toggleClassName={`absolute right-3 top-1/2 -translate-y-1/2 ${
-              error ? "text-red-400" : "text-slate-400"
-            }`}
-            popoverDirection="down"
-            primaryColor={primaryColors[accentColor]}
-            i18n={i18n.language}
-            displayFormat={
-              i18n.language === "bg" ? "D MMM YYYY" : "MMM DD, YYYY"
+            locale={i18n.language}
+            portalId="datepicker-portal"
+            dateFormat={i18n.language === "bg" ? "d MMM yyyy" : "MMM d, yyyy"}
+            placeholderText={t("Select date")}
+            wrapperClassName="w-full"
+            customInput={
+              <button
+                type="button"
+                className={`
+                  w-full px-4 py-2.5 rounded-xl border text-sm font-medium transition-all
+                  flex items-center justify-between text-left
+                  ${
+                    error
+                      ? "border-red-300 bg-red-50 text-red-900"
+                      : `border-slate-200 bg-slate-50 text-slate-800 ${focusClass} focus:bg-white`
+                  }
+                  focus:outline-none focus:ring-2 focus:ring-opacity-20
+                `}
+              >
+                <span className={!selectedDate ? "text-slate-400" : ""}>
+                  {formatDisplayDate(selectedDate)}
+                </span>
+                <CalendarIcon className="h-4 w-4 text-slate-400" />
+              </button>
             }
           />
         </div>
 
-        {/* Time Picker */}
         {/* Time Picker Popover */}
         <div className="relative">
           <Popover placement="bottom-start">
@@ -165,13 +164,14 @@ export function DateTimePicker({
                   >
                     {t("Hour")}
                   </Typography>
-                  <div className="space-y-1">
+                  <div className="space-y-1 px-2 pb-2">
                     {Array.from({ length: 24 }).map((_, i) => {
                       const hour = i.toString().padStart(2, "0");
                       const isSelected = selectedTime.split(":")[0] === hour;
                       return (
                         <button
                           key={hour}
+                          type="button"
                           onClick={() => {
                             const minutes = selectedTime.split(":")[1] || "00";
                             setSelectedTime(`${hour}:${minutes}`);
@@ -180,7 +180,7 @@ export function DateTimePicker({
                             w-full py-1.5 rounded-lg text-sm font-medium transition-colors
                             ${
                               isSelected
-                                ? `bg-${accentColor}-50 text-${accentColor}-600`
+                                ? "bg-blue-50 text-blue-600"
                                 : "text-slate-600 hover:bg-slate-50"
                             }
                           `}
@@ -196,17 +196,18 @@ export function DateTimePicker({
                 <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200">
                   <Typography
                     variant="small"
-                    className="text-center text-xs font-bold text-slate-400 mb-2 sticky top-0 bg-white py-1"
+                    className="text-center text-xs font-bold text-slate-400 mb-2 sticky top-0 bg-white py-2"
                   >
                     {t("Minute")}
                   </Typography>
-                  <div className="space-y-1">
+                  <div className="space-y-1 px-2 pb-2">
                     {Array.from({ length: 12 }).map((_, i) => {
                       const minute = (i * 5).toString().padStart(2, "0");
                       const isSelected = selectedTime.split(":")[1] === minute;
                       return (
                         <button
                           key={minute}
+                          type="button"
                           onClick={() => {
                             const hour = selectedTime.split(":")[0] || "12";
                             setSelectedTime(`${hour}:${minute}`);
@@ -215,7 +216,7 @@ export function DateTimePicker({
                             w-full py-1.5 rounded-lg text-sm font-medium transition-colors
                             ${
                               isSelected
-                                ? `bg-${accentColor}-50 text-${accentColor}-600`
+                                ? "bg-blue-50 text-blue-600"
                                 : "text-slate-600 hover:bg-slate-50"
                             }
                           `}

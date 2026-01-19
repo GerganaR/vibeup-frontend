@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 
 type AccentColor = "green" | "blue" | "purple" | "orange" | "teal";
@@ -42,10 +43,28 @@ export function AddressInput({
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+  });
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const focusClass = focusColorClasses[accentColor];
+
+  // Update dropdown position when showing suggestions
+  useEffect(() => {
+    if (showSuggestions && inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY + 4,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+      });
+    }
+  }, [showSuggestions, suggestions]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -133,6 +152,7 @@ export function AddressInput({
           <MapPinIcon className="w-5 h-5" />
         </div>
         <input
+          ref={inputRef}
           type="text"
           value={value}
           onChange={(e) => handleInputChange(e.target.value)}
@@ -167,27 +187,51 @@ export function AddressInput({
         </p>
       )}
 
-      {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-[9999] w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-auto custom-scrollbar">
-          {suggestions.map((suggestion) => (
-            <div
-              key={suggestion.place_id}
-              onClick={() => handleSuggestionClick(suggestion)}
-              className="px-4 py-3 cursor-pointer hover:bg-slate-50 border-b border-slate-100 last:border-b-0 transition-colors"
-            >
-              <p className="text-sm text-slate-800">
-                {suggestion.display_name}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
+      {showSuggestions &&
+        suggestions.length > 0 &&
+        createPortal(
+          <div
+            style={{
+              position: "fixed",
+              top: dropdownPosition.top,
+              left: dropdownPosition.left,
+              width: dropdownPosition.width,
+              zIndex: 99999,
+            }}
+            className="bg-white border border-slate-200 rounded-xl shadow-xl max-h-60 overflow-auto custom-scrollbar"
+          >
+            {suggestions.map((suggestion) => (
+              <div
+                key={suggestion.place_id}
+                onClick={() => handleSuggestionClick(suggestion)}
+                className="px-4 py-3 cursor-pointer hover:bg-slate-50 border-b border-slate-100 last:border-b-0 transition-colors"
+              >
+                <p className="text-sm text-slate-800">
+                  {suggestion.display_name}
+                </p>
+              </div>
+            ))}
+          </div>,
+          document.body
+        )}
 
-      {isLoading && !showSuggestions && (
-        <div className="absolute z-[9999] w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg p-3">
-          <p className="text-sm text-slate-500">Searching addresses...</p>
-        </div>
-      )}
+      {isLoading &&
+        !showSuggestions &&
+        createPortal(
+          <div
+            style={{
+              position: "fixed",
+              top: dropdownPosition.top,
+              left: dropdownPosition.left,
+              width: dropdownPosition.width,
+              zIndex: 99999,
+            }}
+            className="bg-white border border-slate-200 rounded-xl shadow-xl p-3"
+          >
+            <p className="text-sm text-slate-500">Searching addresses...</p>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

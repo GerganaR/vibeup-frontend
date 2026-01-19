@@ -114,7 +114,7 @@ export function DateTimePicker({
               }
               focus:outline-none focus:ring-2 focus:ring-opacity-20
             `}
-            containerClassName="relative"
+            containerClassName="relative z-[99999]"
             toggleClassName={`absolute right-3 top-1/2 -translate-y-1/2 ${
               error ? "text-red-400" : "text-slate-400"
             }`}

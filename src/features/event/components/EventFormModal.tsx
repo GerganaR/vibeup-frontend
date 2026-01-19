@@ -357,7 +357,7 @@ export function EventFormModal({
         {!isEditMode && (
           <FormSection title={"Schedule"} color="blue">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="relative z-[100]">
+              <div className="relative z-[200]">
                 <DateTimePicker
                   label={t("Start Date & Time")}
                   value={formData.startDateTime}
@@ -368,7 +368,7 @@ export function EventFormModal({
                   accentColor="blue"
                 />
               </div>
-              <div className="relative z-[100]">
+              <div className="relative z-[200]">
                 <DateTimePicker
                   label={t("End Date & Time")}
                   value={formData.endDateTime}
@@ -389,7 +389,7 @@ export function EventFormModal({
 
         {/* Location Section */}
         <FormSection title={"Location"} color="purple">
-          <div className="relative z-[100]">
+          <div className="relative z-[50]">
             <AddressInput
               label={t("Address")}
               value={formData.address}

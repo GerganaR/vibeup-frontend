@@ -39,7 +39,7 @@ export function EventCapacityBar({
     return (
       <div className="flex items-center justify-between">
         <Typography variant="small" className="text-slate-600">
-          Capacity
+          {t("Capacity")}
         </Typography>
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1 px-2.5 py-1 mb-4 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
@@ -86,7 +86,7 @@ export function EventCapacityBar({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <Typography variant="small" className="text-slate-600">
-          Capacity
+          {t("Capacity")}
         </Typography>
 
         <div className="flex items-center gap-2">

@@ -1,14 +1,13 @@
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
 import { MapPinIcon } from "@heroicons/react/24/outline";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 type AccentColor = "green" | "blue" | "purple" | "orange" | "teal";
 
-interface AddressSuggestion {
-  display_name: string;
-  lat: string;
-  lon: string;
-  place_id: number;
+interface PlacePrediction {
+  place_id: string;
+  description: string;
 }
 
 interface AddressInputProps {
@@ -30,6 +29,8 @@ const focusColorClasses: Record<AccentColor, string> = {
   teal: "focus:border-teal-500 focus:ring-teal-500",
 };
 
+const libraries: "places"[] = ["places"];
+
 export function AddressInput({
   label = "Address",
   value,
@@ -40,7 +41,7 @@ export function AddressInput({
   placeholder = "Enter an address...",
   accentColor = "green",
 }: AddressInputProps) {
-  const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
+  const [suggestions, setSuggestions] = useState<PlacePrediction[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({
@@ -52,8 +53,29 @@ export function AddressInput({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const autocompleteServiceRef =
+    useRef<google.maps.places.AutocompleteService | null>(null);
+  const placesServiceRef = useRef<google.maps.places.PlacesService | null>(
+    null
+  );
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
+    libraries,
+  });
 
   const focusClass = focusColorClasses[accentColor];
+
+  // Initialize Google Places services
+  useEffect(() => {
+    if (isLoaded && !autocompleteServiceRef.current) {
+      autocompleteServiceRef.current =
+        new google.maps.places.AutocompleteService();
+      // Create a dummy div for PlacesService (required by API)
+      const dummyDiv = document.createElement("div");
+      placesServiceRef.current = new google.maps.places.PlacesService(dummyDiv);
+    }
+  }, [isLoaded]);
 
   // Update dropdown position when showing suggestions
   useLayoutEffect(() => {
@@ -86,39 +108,39 @@ export function AddressInput({
   }, []);
 
   const fetchSuggestions = async (query: string) => {
-    if (!query || query.length < 3) {
+    if (!query || query.length < 3 || !autocompleteServiceRef.current) {
       setSuggestions([]);
       return;
     }
 
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          query
-        )}&limit=5&addressdetails=1`,
+      autocompleteServiceRef.current.getPlacePredictions(
         {
-          headers: {
-            "User-Agent": "VibeUp Event App",
-          },
+          input: query,
+          types: ["establishment", "geocode"],
+        },
+        (predictions, status) => {
+          if (
+            status === google.maps.places.PlacesServiceStatus.OK &&
+            predictions
+          ) {
+            setSuggestions(
+              predictions.map((p) => ({
+                place_id: p.place_id,
+                description: p.description,
+              }))
+            );
+            setShowSuggestions(true);
+          } else {
+            setSuggestions([]);
+          }
+          setIsLoading(false);
         }
       );
-      const data = await response.json();
-      setSuggestions(data);
-      setShowSuggestions(true);
-
-      // Auto-geocode: if we have results, use the first one automatically
-      if (data && data.length > 0) {
-        const firstResult = data[0];
-        onCoordinatesChange(
-          parseFloat(firstResult.lat),
-          parseFloat(firstResult.lon)
-        );
-      }
     } catch (err) {
       console.error("Error fetching address suggestions:", err);
       setSuggestions([]);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -132,14 +154,34 @@ export function AddressInput({
 
     debounceTimeout.current = setTimeout(() => {
       fetchSuggestions(newValue);
-    }, 500);
+    }, 300);
   };
 
-  const handleSuggestionClick = (suggestion: AddressSuggestion) => {
-    onChange(suggestion.display_name);
-    onCoordinatesChange(parseFloat(suggestion.lat), parseFloat(suggestion.lon));
+  const handleSuggestionClick = (suggestion: PlacePrediction) => {
+    onChange(suggestion.description);
     setShowSuggestions(false);
     setSuggestions([]);
+
+    // Get place details to get coordinates
+    if (placesServiceRef.current) {
+      placesServiceRef.current.getDetails(
+        {
+          placeId: suggestion.place_id,
+          fields: ["geometry"],
+        },
+        (place, status) => {
+          if (
+            status === google.maps.places.PlacesServiceStatus.OK &&
+            place?.geometry?.location
+          ) {
+            onCoordinatesChange(
+              place.geometry.location.lat(),
+              place.geometry.location.lng()
+            );
+          }
+        }
+      );
+    }
   };
 
   return (
@@ -211,7 +253,7 @@ export function AddressInput({
                 className="px-4 py-3 cursor-pointer hover:bg-slate-50 border-b border-slate-100 last:border-b-0 transition-colors"
               >
                 <p className="text-sm text-slate-800">
-                  {suggestion.display_name}
+                  {suggestion.description}
                 </p>
               </div>
             ))}

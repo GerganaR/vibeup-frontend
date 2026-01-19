@@ -1,5 +1,5 @@
 import { Tabs, TabsHeader, Tab } from "@material-tailwind/react";
-import { FaMap, FaThLarge } from "react-icons/fa";
+import { MapIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
 import { useTranslation } from "react-i18next";
 
 interface Props {
@@ -9,25 +9,39 @@ interface Props {
 
 export function EventsTabs({ mode, onChange }: Props) {
   const { t } = useTranslation();
+
   return (
     <Tabs value={mode} className="w-auto">
-      <TabsHeader className="bg-white shadow-sm rounded-xl">
+      <TabsHeader
+        className="bg-slate-100 p-1 rounded-xl"
+        indicatorProps={{
+          className: "bg-white shadow-md rounded-lg",
+        }}
+      >
         <Tab
           value="grid"
           onClick={() => onChange("grid")}
-          className="flex items-center gap-2 w-36"
+          className={`px-4 py-3 text-sm font-medium transition-colors w-[140px] ${
+            mode === "grid" ? "text-slate-800" : "text-slate-500"
+          }`}
         >
-          <FaThLarge className="w-4 h-4" />
-          {t("Grid")}
+          <span className="flex items-center justify-center gap-2 h-full">
+            <Squares2X2Icon className="w-4 h-4" />
+            {t("Grid")}
+          </span>
         </Tab>
 
         <Tab
           value="map"
           onClick={() => onChange("map")}
-          className="flex items-center gap-2 w-36"
+          className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors w-[140px] ${
+            mode === "map" ? "text-slate-800" : "text-slate-500"
+          }`}
         >
-          <FaMap className="w-4 h-4" />
-          {t("Map")}
+          <span className="flex items-center justify-center gap-2 h-full">
+            <MapIcon className="w-4 h-4" />
+            {t("Map")}
+          </span>
         </Tab>
       </TabsHeader>
     </Tabs>

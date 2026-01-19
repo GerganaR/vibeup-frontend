@@ -7,6 +7,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { PageHeader } from "@/features/layout/components/PageHeader";
 import { Input } from "@/components/forms/Input";
 import { TranslationEditor } from "@/components/TranslationEditor";
+import { LanguageSwitch } from "@/components/LanguageSwitch";
 import {
   UserCircleIcon,
   ArrowRightOnRectangleIcon,
@@ -37,11 +38,11 @@ export default function SettingsPage() {
     <div className="flex flex-col gap-4 h-full">
       <PageHeader title="Settings" />
 
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 lg:overflow-hidden">
         {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 h-auto lg:h-full">
           {/* Left Column - User Profile & Actions (Narrower) */}
-          <div className="lg:col-span-4 xl:col-span-3 space-y-4 overflow-y-auto custom-scrollbar h-full flex flex-col gap-2">
+          <div className="lg:col-span-4 xl:col-span-3 space-y-4 lg:overflow-y-auto custom-scrollbar h-auto lg:h-full flex flex-col gap-2">
             {/* Profile Section */}
             <div className="rounded-2xl border border-slate-100 overflow-hidden bg-white shadow-sm flex-1">
               <div className="flex items-center gap-2 bg-teal-50 px-4 py-3">
@@ -140,10 +141,26 @@ export default function SettingsPage() {
                 </Button>
               </div>
             </div>
+
+            {/* Language Settings (Mobile Only) */}
+            <div className="lg:hidden rounded-2xl border border-slate-100 overflow-hidden bg-white shadow-sm">
+              <div className="flex items-center gap-2 bg-indigo-50 px-4 py-3">
+                <div className="w-1 h-5 bg-indigo-500 rounded-full"></div>
+                <Typography
+                  variant="h6"
+                  className="text-slate-800 font-semibold text-sm"
+                >
+                  {t("Language")}
+                </Typography>
+              </div>
+              <div className="p-5 flex justify-center">
+                <LanguageSwitch />
+              </div>
+            </div>
           </div>
 
           {/* Right Column - Translation Editor (Wider) */}
-          <div className="lg:col-span-8 xl:col-span-9 h-full overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm flex flex-col">
+          <div className="lg:col-span-8 xl:col-span-9 h-[800px] lg:h-full overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm flex flex-col">
             <div className="flex-1 overflow-hidden">
               <TranslationEditor />
             </div>

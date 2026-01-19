@@ -23,7 +23,7 @@ export function CategoryFilterBar({
 
   return (
     <div
-      className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide bg-white shadow-sm p-4 rounded-xl"
+      className="flex gap-2 overflow-x-auto pb-3 scrollbar-thin bg-white shadow-sm p-4 rounded-xl w-full max-w-[calc(100vw-2rem)] md:max-w-full"
       style={{ WebkitOverflowScrolling: "touch" }}
     >
       {allCategories.map((category) => {

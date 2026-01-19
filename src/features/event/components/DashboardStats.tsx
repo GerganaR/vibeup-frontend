@@ -43,7 +43,7 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
         {[1, 2, 3].map((i) => (
           <Card
             key={i}
@@ -65,7 +65,7 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
       {cards.map((card) => (
         <Card
           key={card.title}

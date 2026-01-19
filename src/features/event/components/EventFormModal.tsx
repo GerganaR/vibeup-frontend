@@ -334,7 +334,7 @@ export function EventFormModal({
       open={open}
       handler={onClose}
       size="lg"
-      className="max-h-[90vh] rounded-2xl"
+      className="max-h-[100dvh] h-full sm:h-auto sm:max-h-[90vh] w-full m-0 sm:m-4 rounded-none sm:rounded-2xl"
       dismiss={{ outsidePress: false }}
     >
       <DialogHeader className="border-b border-slate-100 px-6 py-4">
@@ -343,7 +343,7 @@ export function EventFormModal({
         </Typography>
       </DialogHeader>
 
-      <DialogBody className="space-y-4 overflow-visible max-h-[60vh] overflow-y-auto px-6 py-5">
+      <DialogBody className="space-y-4 overflow-visible h-[calc(100vh-140px)] sm:h-auto sm:max-h-[60vh] overflow-y-auto px-4 sm:px-6 py-5">
         {/* Basic Info Section */}
         <FormSection title={"Basic Information"} color="teal">
           <StyledInput

@@ -90,26 +90,30 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div
+      className={`flex flex-col gap-4 ${
+        viewMode === "map" ? "h-full" : "h-auto md:h-full"
+      }`}
+    >
       {/* Header with Tabs */}
       <PageHeader
         title="Events"
         actions={
           <>
             <EventsTabs mode={viewMode} onChange={setViewMode} />
-            <Button
-              className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white border-none shadow-md hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300"
-              onClick={() => setShowCreateModal(true)}
-            >
-              <PlusIcon className="w-5 h-5" />
-              <span className="hidden sm:inline">{t("Create Event")}</span>
-            </Button>
+          <Button
+            className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white border-none shadow-md hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300"
+            onClick={() => setShowCreateModal(true)}
+          >
+            <PlusIcon className="w-5 h-5" />
+            <span className="hidden sm:inline">{t("Create Event")}</span>
+          </Button>
           </>
         }
       />
 
       {/* Filter Tabs & Category Filter */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 w-full max-w-full min-w-0">
         <EventFilterTabs selectedTab={filterTab} onSelectTab={setFilterTab} />
 
         <CategoryFilterBar
@@ -122,7 +126,9 @@ export default function EventsPage() {
       {/* Main Content */}
       <Card
         className={`shadow-sm flex-1 ${
-          viewMode === "grid" ? "overflow-y-auto" : "overflow-hidden"
+          viewMode === "grid"
+            ? "overflow-visible md:overflow-y-auto"
+            : "overflow-hidden"
         }`}
       >
         <CardBody className={`${viewMode === "map" ? "p-4 h-full" : "p-6"}`}>
@@ -134,8 +140,8 @@ export default function EventsPage() {
             </div>
           ) : displayedEvents && displayedEvents.length > 0 ? (
             viewMode === "grid" ? (
-              <EventsGrid events={displayedEvents} />
-            ) : (
+            <EventsGrid events={displayedEvents} />
+          ) : (
               <EventMap events={displayedEvents} />
             )
           ) : (

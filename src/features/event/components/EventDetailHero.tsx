@@ -56,9 +56,9 @@ export function EventDetailHero({
     <div className="w-full h-full bg-white">
       {/* Cover with Google Street View or gradient */}
       {hasCoordinates && mapUrl ? (
-        <div className="w-full flex gap-4 relative ">
+        <div className="w-full sm:flex-col md:flex-row flex gap-4 relative ">
           {/* Title Below Street View */}
-          <div className="w-2/3 px-4 sm:px-6 py-6 sm:py-8 bg-white border-b border-gray-200">
+          <div className="sm:w-full md:w-2/3 px-4 sm:px-6 py-6 sm:py-8 bg-white border-b border-gray-200">
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">
               {title}
             </h1>
@@ -77,7 +77,7 @@ export function EventDetailHero({
             )}
           </div>
           {/* Street View Image */}
-          <div className="w-1/3 h-[15rem] relative">
+          <div className="sm:w-full md:w-1/3 h-[15rem] relative">
             <img
               src={mapUrl}
               alt={address || t("Event Location")}

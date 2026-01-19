@@ -11,7 +11,7 @@ export function EventsTabs({ mode, onChange }: Props) {
   const { t } = useTranslation();
 
   return (
-    <Tabs value={mode} className="w-auto">
+    <Tabs value={mode} className="w-auto sm:hidden md:block">
       <TabsHeader
         className="bg-slate-100 p-1 rounded-xl"
         indicatorProps={{

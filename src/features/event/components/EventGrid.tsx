@@ -21,7 +21,7 @@ export function EventsGrid({ events }: Props) {
       className="
         grid gap-6
         grid-cols-1
-        sm:grid-cols-2
+        sm:grid-cols-1
         lg:grid-cols-3
       "
     >

@@ -122,7 +122,9 @@ export function EventMap({ events }: EventMapProps) {
   return (
     <div className="flex flex-col lg:flex-row gap-4 h-full overflow-hidden">
       {/* Events List Sidebar - LEFT */}
-      <div className="lg:w-80 min-h-0 overflow-y-auto scrollbar-thin flex-shrink-0 pr-2">
+      <div className="flex flex-col-reverse lg:flex-row gap-4 h-full overflow-hidden"></div>
+      {/* Events List Sidebar - LEFT (Bottom on mobile) */}
+      <div className="h-[35%] lg:h-auto lg:w-80 min-h-0 overflow-y-auto scrollbar-thin flex-shrink-0 pr-2 border-t lg:border-t-0 border-slate-200 pt-2 lg:pt-0">
         <Typography
           variant="h6"
           className="text-gray-900 sticky top-0 bg-white pb-2 z-10"

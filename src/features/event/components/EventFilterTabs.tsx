@@ -25,7 +25,10 @@ export function EventFilterTabs({
   const { t } = useTranslation();
 
   return (
-    <div className="flex gap-2 overflow-x-auto scrollbar-hide bg-white shadow-sm p-4 rounded-xl">
+    <div
+      className="flex gap-2 overflow-x-auto scrollbar-thin bg-white shadow-sm p-4 rounded-xl w-full max-w-[calc(100vw-2rem)] md:max-w-full"
+      style={{ WebkitOverflowScrolling: "touch" }}
+    >
       {tabs.map((tab) => {
         const isSelected = selectedTab === tab.id;
         const Icon = tab.icon;

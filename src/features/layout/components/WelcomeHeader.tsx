@@ -22,7 +22,7 @@ export function WelcomeHeader({
   return (
     <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
       <CardBody className="p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-col md:flex-row sm:items-center md:justify-between gap-4">
           <div className="flex items-center gap-4">
             <Avatar
               name={userName}

@@ -10,6 +10,8 @@ import { isEventEnded } from "@/utils/dateFormat";
 import { useDateFormatter } from "@/hooks/useDateFormatter";
 import type { EventModel } from "../types";
 import { CategoryPill } from "./CategoryPill";
+import { useTranslation } from "react-i18next";
+
 interface EventCardCompactProps {
   event: EventModel;
   showHostBadge?: boolean;
@@ -19,6 +21,7 @@ export function EventCardCompact({
   event,
   showHostBadge = false,
 }: EventCardCompactProps) {
+  const { t } = useTranslation();
   const { formatDate, formatTime } = useDateFormatter();
   const navigate = useNavigate();
   const isPast = isEventEnded(new Date(event.endDateTime));
@@ -48,14 +51,14 @@ export function EventCardCompact({
           <div className="flex gap-1.5 flex-shrink-0">
             {isPast && (
               <Chip
-                value="Past"
+                value={t("Past Event")}
                 size="sm"
                 className="bg-slate-200 text-slate-600 font-medium text-xs px-2 py-0.5"
               />
             )}
             {showHostBadge && (
               <Chip
-                value="Host"
+                value={t("Host")}
                 size="sm"
                 className="bg-gradient-to-r from-teal-400 to-blue-500 text-white font-medium text-xs px-2 py-0.5"
               />

@@ -1,4 +1,4 @@
-import { useState, useMemo, createContext, useContext } from "react";
+import { useState, useMemo, createContext, useContext, useEffect } from "react";
 import {
   Dialog,
   DialogHeader,
@@ -227,6 +227,14 @@ export function EventFormModal({
   );
   const [formData, setFormData] = useState<CreateEventDTO>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Reset form when modal opens/closes or initialData changes
+  useEffect(() => {
+    if (open) {
+      setFormData(getInitialFormData(initialData));
+      setErrors({});
+    }
+  }, [open, initialData]);
 
   const isEditMode = !!initialData;
 

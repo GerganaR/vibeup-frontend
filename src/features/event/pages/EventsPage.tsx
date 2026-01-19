@@ -121,8 +121,12 @@ export default function EventsPage() {
       </div>
 
       {/* Main Content */}
-      <Card className="shadow-sm flex-1 overflow-y-auto">
-        <CardBody className="p-6">
+      <Card
+        className={`shadow-sm flex-1 ${
+          viewMode === "grid" ? "overflow-y-auto" : "overflow-hidden"
+        }`}
+      >
+        <CardBody className={`${viewMode === "map" ? "p-4 h-full" : "p-6"}`}>
           {loading ? (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {[...Array(6)].map((_, i) => (

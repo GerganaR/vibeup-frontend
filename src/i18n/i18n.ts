@@ -1,7 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import moment from "moment";
 
 import en from "./locales/en.json";
 import bg from "./locales/bg.json";
@@ -32,14 +31,6 @@ i18n
     },
     debug: import.meta.env.DEV,
   });
-
-// Synchronize moment locale with i18n language changes
-i18n.on("languageChanged", (lng) => {
-  moment.locale(lng === "bg" ? "bg" : "en");
-});
-
-// Set initial moment locale
-moment.locale(i18n.language === "bg" ? "bg" : "en");
 
 export { STORAGE_KEY };
 export default i18n;

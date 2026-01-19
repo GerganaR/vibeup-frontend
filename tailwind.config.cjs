@@ -265,9 +265,22 @@ module.exports = withMT({
         },
         ".scrollbar-thin": {
           "scrollbar-width": "thin",
+          "scrollbar-color": "#E4E6E6 transparent", // neutral-grey100
           "&::-webkit-scrollbar": {
-            width: "6px",
-            height: "6px",
+            width: "4px",
+            height: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "transparent",
+            "border-radius": "4px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            "background-color": "#E4E6E6", // neutral-grey100
+            "border-radius": "4px",
+            border: "transparent",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            "background-color": "#CBCCCC", // neutral-grey200
           },
         },
       });

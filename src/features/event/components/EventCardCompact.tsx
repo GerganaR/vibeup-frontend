@@ -6,11 +6,8 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import {
-  formatEventDate,
-  formatEventTime,
-  isEventEnded,
-} from "@/utils/dateFormat";
+import { isEventEnded } from "@/utils/dateFormat";
+import { useDateFormatter } from "@/hooks/useDateFormatter";
 import type { EventModel } from "../types";
 import { CategoryPill } from "./CategoryPill";
 interface EventCardCompactProps {
@@ -22,6 +19,7 @@ export function EventCardCompact({
   event,
   showHostBadge = false,
 }: EventCardCompactProps) {
+  const { formatDate, formatTime } = useDateFormatter();
   const navigate = useNavigate();
   const isPast = isEventEnded(new Date(event.endDateTime));
 
@@ -80,14 +78,14 @@ export function EventCardCompact({
           <div className="flex items-center gap-1.5 text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">
             <FaCalendarAlt className="w-3 h-3 text-green-500" />
             <span className="text-xs font-medium">
-              {formatEventDate(new Date(event.startDateTime))}
+              {formatDate(new Date(event.startDateTime))}
             </span>
           </div>
 
           <div className="flex items-center gap-1.5 text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">
             <FaClock className="w-3 h-3 text-green-500" />
             <span className="text-xs font-medium">
-              {formatEventTime(new Date(event.startDateTime))}
+              {formatTime(new Date(event.startDateTime))}
             </span>
           </div>
 

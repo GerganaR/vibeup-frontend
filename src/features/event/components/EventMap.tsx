@@ -10,7 +10,7 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "react-i18next";
 import type { EventModel } from "../types";
 import { CategoryPill } from "./CategoryPill";
-import { formatEventDateTime } from "@/utils/dateFormat";
+import { useDateFormatter } from "@/hooks/useDateFormatter";
 
 interface EventMapProps {
   events: EventModel[];
@@ -28,6 +28,7 @@ const defaultCenter = {
 
 export function EventMap({ events }: EventMapProps) {
   const { t } = useTranslation();
+  const { formatDateTime } = useDateFormatter();
   const [selectedEvent, setSelectedEvent] = useState<EventModel | null>(null);
   const [activeMarker, setActiveMarker] = useState<string | null>(null);
 
@@ -147,7 +148,7 @@ export function EventMap({ events }: EventMapProps) {
                       variant="small"
                       className="text-gray-600 text-xs mb-1"
                     >
-                      {formatEventDateTime(new Date(event.startDateTime))}
+                      {formatDateTime(new Date(event.startDateTime))}
                     </Typography>
                     <Typography
                       variant="small"
@@ -259,7 +260,7 @@ export function EventMap({ events }: EventMapProps) {
                         color: "#6b7280",
                       }}
                     >
-                      {formatEventDateTime(new Date(event.startDateTime))}
+                      {formatDateTime(new Date(event.startDateTime))}
                     </p>
                     <p
                       style={{

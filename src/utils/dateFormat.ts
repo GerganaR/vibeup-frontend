@@ -1,32 +1,37 @@
-import moment from "moment";
-
 export function isEventEnded(endDate: Date): boolean {
-  return moment(endDate).isBefore(moment());
+  return new Date(endDate) < new Date();
 }
 
 export function formatDateForInput(date: Date): string {
-  return moment(date).format("YYYY-MM-DDTHH:mm");
+  const d = new Date(date);
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 16);
 }
 
-export function formatEventDate(date: Date): string {
-  return date.toLocaleDateString("en-US", {
+const getLocale = (locale?: string) => {
+  return locale === "bg" ? "bg-BG" : "en-US";
+};
+
+export function formatEventDate(date: Date, locale?: string): string {
+  return new Intl.DateTimeFormat(getLocale(locale), {
     month: "short",
     day: "numeric",
-  });
+  }).format(date);
 }
 
-export function formatEventTime(date: Date): string {
-  return date.toLocaleTimeString("en-US", {
+export function formatEventTime(date: Date, locale?: string): string {
+  return new Intl.DateTimeFormat(getLocale(locale), {
     hour: "numeric",
     minute: "2-digit",
-  });
+  }).format(date);
 }
 
-export function formatEventDateTime(date: Date): string {
-  return date.toLocaleDateString("en-US", {
+export function formatEventDateTime(date: Date, locale?: string): string {
+  return new Intl.DateTimeFormat(getLocale(locale), {
     month: "short",
     day: "numeric",
     hour: "numeric",
     minute: "2-digit",
-  });
+  }).format(date);
 }

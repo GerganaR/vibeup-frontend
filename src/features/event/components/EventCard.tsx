@@ -12,6 +12,7 @@ import { EventCoverPlaceholder } from "./EventCover";
 import { CategoryPill } from "./CategoryPill";
 import { EventCapacityBar } from "./EventCapacityBar";
 import { isEventEnded } from "@/utils/dateFormat";
+import { useDateFormatter } from "@/hooks/useDateFormatter";
 
 interface Props {
   event: EventModel;
@@ -20,18 +21,12 @@ interface Props {
 export function EventCard({ event }: Props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { formatDate, formatTime } = useDateFormatter();
   const date = new Date(event.startDateTime);
   const isPast = isEventEnded(new Date(event.endDateTime));
 
-  const formattedDate = date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
-
-  const formattedTime = date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  const formattedDate = formatDate(date);
+  const formattedTime = formatTime(date);
 
   const mainCategory = event.categories?.[0]?.name || undefined;
   const hasCoordinates =

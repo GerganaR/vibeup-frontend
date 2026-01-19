@@ -5,9 +5,9 @@ import {
   MapPinIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-import { formatEventDate, formatEventTime } from "@/utils/dateFormat";
 import { useTranslation } from "react-i18next";
 import type { EventModel } from "../types";
+import { useDateFormatter } from "@/hooks/useDateFormatter";
 
 interface EventDetailInfoProps {
   event: EventModel;
@@ -61,6 +61,8 @@ function InfoCard({
 
 export function EventDetailInfo({ event }: EventDetailInfoProps) {
   const { t } = useTranslation();
+  const { formatDate, formatTime } = useDateFormatter();
+  if (!event) return null;
   const attendeesCount = event.attendees?.length ?? 0;
   const spotsLeft =
     typeof event.capacity === "number" ? event.capacity - attendeesCount : 0;
@@ -71,15 +73,15 @@ export function EventDetailInfo({ event }: EventDetailInfoProps) {
       <InfoCard
         icon={<CalendarIcon className="h-5 w-5" />}
         label={t("Start")}
-        title={formatEventDate(new Date(event.startDateTime))}
-        subtitle={formatEventTime(new Date(event.startDateTime))}
+        title={formatDate(new Date(event.startDateTime))}
+        subtitle={formatTime(new Date(event.startDateTime))}
       />
 
       <InfoCard
         icon={<ClockIcon className="h-5 w-5" />}
         label={t("End")}
-        title={formatEventDate(new Date(event.endDateTime))}
-        subtitle={formatEventTime(new Date(event.endDateTime))}
+        title={formatDate(new Date(event.endDateTime))}
+        subtitle={formatTime(new Date(event.endDateTime))}
       />
 
       {typeof event.capacity === "number" && (

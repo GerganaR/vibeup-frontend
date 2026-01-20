@@ -14,6 +14,7 @@ import {
   LockClosedIcon,
 } from "@heroicons/react/24/outline";
 import { FaGoogle } from "react-icons/fa";
+import MobileBottomBlock from "@/components/MobileBottomBlock";
 
 export default function SettingsPage() {
   const { t } = useTranslation();
@@ -167,6 +168,8 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+
+      <MobileBottomBlock />
 
       {/* Logout Confirmation */}
       <ConfirmDialog

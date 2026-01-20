@@ -11,7 +11,7 @@ type GooglePayload = {
 export type AuthContextType = {
   user: GooglePayload | null;
   token: string | null;
-  login: (token: string) => void;
+  login: (token: string) => Promise<void>;
   logout: () => void;
 };
 

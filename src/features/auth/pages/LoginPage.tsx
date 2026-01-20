@@ -22,16 +22,20 @@ const LoginPage: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleSuccess = async (credentialResponse: any) => {
     if (credentialResponse.credential) {
-      login(credentialResponse.credential);
+      setIsLoading(true);
       try {
+        await login(credentialResponse.credential);
         const result = await dispatch(fetchCurrentUser()).unwrap();
         if (result) navigate(ROUTES.HOME);
       } catch (err) {
         console.error("Failed to fetch user", err);
         navigate(ROUTES.AUTH_ERROR);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -74,16 +78,25 @@ const LoginPage: React.FC = () => {
             </Typography>
 
             <div className="w-full max-w-xs flex justify-center">
-              <GoogleLogin
-                onSuccess={handleSuccess}
-                onError={handleError}
-                useOneTap={false}
-                shape="pill"
-                theme="outline"
-                size="large"
-                text="continue_with"
-                locale="en"
-              />
+              {isLoading ? (
+                <div className="flex flex-col items-center gap-3 py-4">
+                  <div className="w-8 h-8 border-4 border-teal-400 border-t-transparent rounded-full animate-spin" />
+                  <Typography className="text-slate-500 text-sm">
+                    {t("Loading...")}
+                  </Typography>
+                </div>
+              ) : (
+                <GoogleLogin
+                  onSuccess={handleSuccess}
+                  onError={handleError}
+                  useOneTap={false}
+                  shape="pill"
+                  theme="outline"
+                  size="large"
+                  text="continue_with"
+                  locale="en"
+                />
+              )}
             </div>
 
             {/* Trust badges */}

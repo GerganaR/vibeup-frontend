@@ -23,10 +23,16 @@ api.interceptors.response.use(
     const err = normalizeHttpError(error);
 
     // 401 → auto logout
-    if (err.status === 401) {
+    const status = error.response?.status || err.status;
+
+    // 401 (Unauthorized) or 403 (Forbidden) → auto logout
+    if (
+      (status === 401 || status === 403) &&
+      !window.location.pathname.includes("/login")
+    ) {
       clearToken();
       toast.error("Session expired. Please log in again.");
-      window.location.href = "/login";
+      window.location.replace("/login");
       return Promise.reject(err);
     }
 
@@ -45,7 +51,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(err);
-  }
+  },
 );
 
 export default api;

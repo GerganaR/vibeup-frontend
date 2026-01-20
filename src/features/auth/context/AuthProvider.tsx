@@ -22,16 +22,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     token ? jwtDecode<GooglePayload>(token) : null
   );
 
-  const handleCredentialResponse = (googleIdToken: string) => {
-    setToken(googleIdToken);
-    localStorage.setItem("googleToken", googleIdToken);
-
-    const payload = jwtDecode<GooglePayload>(googleIdToken);
-    setUser(payload);
+  const login = async (googleIdToken: string): Promise<void> => {
+    return new Promise((resolve) => {
+      setToken(googleIdToken);
+      localStorage.setItem("googleToken", googleIdToken);
+      const payload = jwtDecode<GooglePayload>(googleIdToken);
+      setUser(payload);
   };
-
-  const login = (googleIdToken: string) => {
-    handleCredentialResponse(googleIdToken);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => resolve());
+      });
+    });
   };
 
   const logout = () => {

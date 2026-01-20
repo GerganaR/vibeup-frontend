@@ -24,7 +24,10 @@ const Sidenav: React.FC = () => {
   const { t } = useTranslation();
 
   const user = useAppSelector((state) => state.user.user);
-  const { logout } = useAuth();
+  const { logout, token } = useAuth();
+
+  // Check if user is loading (token exists but user not yet fetched)
+  const isUserLoading = !!token && !user;
 
   const menus: MenuItem[] = [
     { title: "Home", icon: HomeIcon, to: ROUTES.HOME },
@@ -101,30 +104,58 @@ const Sidenav: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* USER SECTION — moved higher */}
-            <div className="flex flex-col items-center mt-[100px] mb-8">
-              <Avatar
-                name={user?.profile?.name || "User"}
-                src={user?.profile?.avatarUrl}
-                size={open ? 90 : 32}
-                className="mb-2"
-              />
-
-              {!open ? (
-                <Typography variant="h6" className="text-slate-800">
-                  {initials}
-                </Typography>
+            {/* USER SECTION */}
+            <div
+              className={twMerge(
+                "flex flex-col items-center mt-[100px] mb-8",
+                open ? "min-h-[140px]" : "min-h-[60px]"
+              )}
+            >
+              {isUserLoading ? (
+                // Loading skeleton for avatar
+                <div className="animate-pulse flex flex-col items-center">
+                  <div
+                    className={twMerge(
+                      "rounded-full bg-gray-200 mb-2",
+                      open ? "w-[90px] h-[90px]" : "w-8 h-8"
+                    )}
+                  />
+                  {open && (
+                    <>
+                      <div className="h-6 w-28 bg-gray-200 rounded mb-1" />
+                      <div className="h-4 w-36 bg-gray-200 rounded" />
+                    </>
+                  )}
+                </div>
               ) : (
                 <>
-                  <Typography variant="h6" className="text-slate-800 truncate">
-                    {user?.profile?.name || "User"}
-                  </Typography>
-                  <Typography
-                    variant="small"
-                    className="text-slate-600 truncate"
-                  >
-                    {user?.profile?.email || "user@example.com"}
-                  </Typography>
+                  <Avatar
+                    name={user?.profile?.name || "User"}
+                    src={user?.profile?.avatarUrl}
+                    size={open ? 90 : 32}
+                    className="mb-2"
+                  />
+
+                  {!open ? (
+                    <Typography variant="h6" className="text-slate-800">
+                      {initials}
+                    </Typography>
+                  ) : (
+                    <>
+                      <Typography
+                        variant="h6"
+                        className="text-slate-800 truncate"
+                      >
+                        {user?.profile?.name || "User"}
+                      </Typography>
+                      <Typography
+                        variant="small"
+                        className="text-slate-600 truncate"
+                      >
+                        {user?.profile?.email || "user@example.com"}
+                      </Typography>
+                    </>
+                  )}
                 </>
               )}
             </div>

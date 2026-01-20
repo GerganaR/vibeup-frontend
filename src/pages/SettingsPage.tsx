@@ -8,6 +8,7 @@ import { PageHeader } from "@/features/layout/components/PageHeader";
 import { Input } from "@/components/forms/Input";
 import { TranslationEditor } from "@/components/TranslationEditor";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
+import { SettingsSkeleton } from "@/components/SettingsSkeleton";
 import {
   UserCircleIcon,
   ArrowRightOnRectangleIcon,
@@ -19,8 +20,13 @@ import MobileBottomBlock from "@/components/MobileBottomBlock";
 export default function SettingsPage() {
   const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.user);
-  const { logout } = useAuth();
+  const { logout, token } = useAuth();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
+  // Show skeleton while user is loading from backend
+  if (token && !user) {
+    return <SettingsSkeleton />;
+  }
 
   if (!user) {
     return (

@@ -16,7 +16,6 @@ function isTokenExpired(token: string): boolean {
   try {
     const payload = jwtDecode<GooglePayload>(token);
     if (!payload.exp) return false;
-    // exp is in seconds, Date.now() is in milliseconds
     return payload.exp * 1000 < Date.now();
   } catch {
     return true;
@@ -68,10 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    // Check on window focus (user returns to tab)
     window.addEventListener("focus", checkExpiry);
-
-    // Check every minute
     const interval = setInterval(checkExpiry, 60000);
 
     return () => {

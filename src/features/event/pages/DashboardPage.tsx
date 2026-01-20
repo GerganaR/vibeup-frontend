@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ROUTES } from "@/routes";
 import { WelcomeHeader } from "@/features/layout/components/WelcomeHeader";
 import { EventFormModal } from "@/features/event/components/EventFormModal";
@@ -18,7 +19,9 @@ import { HiOutlineTicket, HiOutlineStar } from "react-icons/hi2";
 import MobileBottomBlock from "@/components/MobileBottomBlock";
 
 export default function DashboardPage() {
+  const { token } = useAuth();
   const user = useAppSelector((state) => state.user.user);
+
   const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -52,6 +55,7 @@ export default function DashboardPage() {
     }
   };
 
+  if (token && !user) return <DashboardSkeleton />;
   if (!user) return <LoggedOutState />;
   if (dashboardLoading && !stats) return <DashboardSkeleton />;
   if (dashboardError)

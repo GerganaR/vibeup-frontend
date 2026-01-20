@@ -19,8 +19,8 @@ import { EventRSVPCard } from "../components/EventRSVPCard";
 import { AttendeesList } from "../components/AttendeesList";
 import { EventFormModal } from "../components/EventFormModal";
 import { EventLocationMap } from "../components/EventLocationMap";
+import { EventDetailSkeleton } from "../components/EventDetailSkeleton";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import type { CreateEventDTO, UpdateEventDTO } from "../types";
 import MobileBottomBlock from "@/components/MobileBottomBlock";
 
@@ -94,7 +94,7 @@ export default function EventDetailPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner fullScreen />;
+    return <EventDetailSkeleton />;
   }
 
   if (!event) {

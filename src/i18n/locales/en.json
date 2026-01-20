@@ -58,6 +58,7 @@
 
   "Title must be at least 3 characters": "Title must be at least 3 characters",
   "Address is required and must be at least 5 characters": "Address is required and must be at least 5 characters",
+  "Please select a valid address from the suggestions to get coordinates": "Please select a valid address from the suggestions to get coordinates",
   "Start date/time is required": "Start date/time is required",
   "Start date must be in the future": "Start date must be in the future",
   "End date/time is required": "End date/time is required",

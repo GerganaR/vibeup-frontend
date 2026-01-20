@@ -234,7 +234,7 @@ export function DateTimePicker({
       </div>
 
       {error && (
-        <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
           <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"

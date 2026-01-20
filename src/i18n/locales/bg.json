@@ -58,6 +58,7 @@
 
   "Title must be at least 3 characters": "Заглавието трябва да бъде поне 3 символа",
   "Address is required and must be at least 5 characters": "Адресът е задължителен и трябва да бъде поне 5 символа",
+  "Please select a valid address from the suggestions to get coordinates": "Моля, изберете валиден адрес от предложенията, за да получите координати",
   "Start date/time is required": "Началната дата/час е задължителна",
   "Start date must be in the future": "Началната дата трябва да бъде в бъдещето",
   "End date/time is required": "Крайната дата/час е задължителна",

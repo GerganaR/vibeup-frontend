@@ -159,7 +159,7 @@ function StyledInput({
         `}
         {...props}
       />
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   );
 }
@@ -206,7 +206,7 @@ function StyledTextarea({
         `}
         {...props}
       />
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   );
 }
@@ -223,7 +223,7 @@ export function EventFormModal({
 
   const initialFormData = useMemo(
     () => getInitialFormData(initialData),
-    [initialData]
+    [initialData],
   );
   const [formData, setFormData] = useState<CreateEventDTO>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -272,7 +272,14 @@ export function EventFormModal({
 
     if (!formData.address || formData.address.trim().length < 5) {
       newErrors.address = t(
-        "Address is required and must be at least 5 characters"
+        "Address is required and must be at least 5 characters",
+      );
+    } else if (
+      formData.latitude === undefined ||
+      formData.longitude === undefined
+    ) {
+      newErrors.address = t(
+        "Please select a valid address from the suggestions to get coordinates",
       );
     }
 

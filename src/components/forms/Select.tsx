@@ -78,7 +78,7 @@ export function Select({
         {selectOptions}
       </MTSelect>
 
-      {error && <p className="text-red-500 text-xs mt-1 ml-1">{error}</p>}
+      {error && <p className="text-red-500 text-sm mt-1 ml-1">{error}</p>}
       {!error && helper && (
         <p className="text-gray-500 text-xs mt-1 ml-1">{helper}</p>
       )}

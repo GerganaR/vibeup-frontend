@@ -15,6 +15,7 @@ import { EventFilterTabs, type FilterTab } from "../components/EventFilterTabs";
 import { PageHeader } from "@/features/layout/components/PageHeader";
 import type { CreateEventDTO, UpdateEventDTO } from "../types";
 import { useUpdateEvent } from "../hooks/useUpdateEvent";
+import MobileBottomBlock from "@/components/MobileBottomBlock";
 
 export default function EventsPage() {
   const { t } = useTranslation();
@@ -133,7 +134,7 @@ export default function EventsPage() {
       >
         <CardBody className={`${viewMode === "map" ? "p-4 h-full" : "p-6"}`}>
           {loading ? (
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-1 lg:grid-cols-3">
               {[...Array(6)].map((_, i) => (
                 <EventCardSkeleton key={i} />
               ))}
@@ -172,6 +173,8 @@ export default function EventsPage() {
           )}
         </CardBody>
       </Card>
+
+      <MobileBottomBlock />
 
       {/* Create Event Modal */}
       <EventFormModal

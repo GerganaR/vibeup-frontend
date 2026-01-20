@@ -15,6 +15,7 @@ import { LoggedOutState } from "../components/dashboard/LoggedOutState";
 import { DashboardSkeleton } from "../components/dashboard/DashboardSkeleton";
 import { DashboardError } from "../components/dashboard/DashboardError";
 import { HiOutlineTicket, HiOutlineStar } from "react-icons/hi2";
+import MobileBottomBlock from "@/components/MobileBottomBlock";
 
 export default function DashboardPage() {
   const user = useAppSelector((state) => state.user.user);
@@ -95,6 +96,7 @@ export default function DashboardPage() {
           icon={<HiOutlineStar className="w-5 h-5" />}
         />
       </div>
+      <MobileBottomBlock />
 
       <EventFormModal
         open={showCreateModal}

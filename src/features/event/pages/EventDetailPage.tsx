@@ -22,6 +22,7 @@ import { EventLocationMap } from "../components/EventLocationMap";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import type { CreateEventDTO, UpdateEventDTO } from "../types";
+import MobileBottomBlock from "@/components/MobileBottomBlock";
 
 export default function EventDetailPage() {
   const { t } = useTranslation();
@@ -209,6 +210,8 @@ export default function EventDetailPage() {
           </div>
         </div>
       </div>
+
+      <MobileBottomBlock />
 
       {/* Edit Modal */}
       {showEditModal && (

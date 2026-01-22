@@ -68,7 +68,13 @@ export function AddressInput({
 
   // Initialize Google Places services
   useEffect(() => {
-    if (isLoaded && !autocompleteServiceRef.current) {
+    if (
+      isLoaded &&
+      window.google &&
+      window.google.maps &&
+      window.google.maps.places &&
+      !autocompleteServiceRef.current
+    ) {
       autocompleteServiceRef.current =
         new google.maps.places.AutocompleteService();
       // Create a dummy div for PlacesService (required by API)

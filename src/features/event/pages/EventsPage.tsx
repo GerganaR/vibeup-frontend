@@ -9,13 +9,13 @@ import { EventCardSkeleton } from "../components/EventCardSkeleton";
 import { EventFormModal } from "../components/EventFormModal";
 import { useGetEvents } from "../hooks/useGetEvents";
 import { useCreateEvent } from "../hooks/useCreateEvent";
-import { useDashboard } from "../hooks/useDashboard";
 import { CategoryFilterBar } from "../components/CategoryFilterBar";
 import { EventFilterTabs, type FilterTab } from "../components/EventFilterTabs";
 import { PageHeader } from "@/features/layout/components/PageHeader";
 import type { CreateEventDTO, UpdateEventDTO } from "../types";
 import { useUpdateEvent } from "../hooks/useUpdateEvent";
 import MobileBottomBlock from "@/components/MobileBottomBlock";
+import { useAppSelector } from "@/store/hooks";
 
 export default function EventsPage() {
   const { t } = useTranslation();
@@ -27,14 +27,7 @@ export default function EventsPage() {
   const { getEvents, events, loading: allEventsLoading } = useGetEvents();
   const { createEvent, loading: createLoading } = useCreateEvent();
   const { updateEvent } = useUpdateEvent();
-
-  // Dashboard Data
-  const {
-    attendingEvents,
-    hostedEvents,
-    loading: dashboardLoading,
-    refetch: refetchDashboard,
-  } = useDashboard(selectedCategoryId);
+  const user = useAppSelector((state) => state.user.user);
 
   useEffect(() => {
     getEvents();
@@ -54,26 +47,38 @@ export default function EventsPage() {
 
   // Determine displayed events based on tab
   const displayedEvents = useMemo(() => {
+    let filtered = [];
+
+    // 1. Filter by Tab
     switch (filterTab) {
       case "my":
-        return hostedEvents;
+        filtered = events?.filter((e) => e?.host?.id === user?.id) || [];
+        break;
       case "attending":
-        return attendingEvents;
+        filtered =
+          events?.filter((e) => e?.attendees?.some((a) => a.id === user?.id)) ||
+          [];
+        break;
       case "all":
       default:
-        // Local filtering for "All" tab (since we fetch all)
-        if (!events) return [];
-        if (selectedCategoryId === "All") return events;
-        return events.filter((e) =>
-          e.categories?.some((cat) => cat.id === selectedCategoryId)
-        );
+        filtered = events || [];
+        break;
     }
-  }, [filterTab, events, hostedEvents, attendingEvents, selectedCategoryId]);
 
-  const loading = filterTab === "all" ? allEventsLoading : dashboardLoading;
+    // 2. Filter by Category (Apply to ALL tabs)
+    if (selectedCategoryId !== "All") {
+      filtered = filtered.filter((e) =>
+        e.categories?.some((cat) => cat.id === selectedCategoryId),
+      );
+    }
+
+    return filtered;
+  }, [filterTab, events, selectedCategoryId, user]);
+
+  const loading = filterTab === "all" ? allEventsLoading : false;
 
   const handleCreateOrUpdateEvent = async (
-    data: CreateEventDTO | UpdateEventDTO
+    data: CreateEventDTO | UpdateEventDTO,
   ) => {
     try {
       if ("id" in data) {
@@ -84,7 +89,6 @@ export default function EventsPage() {
       setShowCreateModal(false);
       // Refresh both lists
       getEvents();
-      refetchDashboard();
     } catch (error) {
       console.error("Create event failed:", error);
     }

@@ -313,7 +313,13 @@ export function EventFormModal({
   };
 
   const handleSubmit = async () => {
-    if (!validate()) return;
+    if (!validate()) {
+      const dialogBody = document.getElementById("event-form-body");
+      if (dialogBody) {
+        dialogBody.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      return;
+    }
 
     if (isEditMode) {
       const submitData: UpdateEventDTO = {
@@ -350,7 +356,10 @@ export function EventFormModal({
         </Typography>
       </DialogHeader>
 
-      <DialogBody className="space-y-4 overflow-visible h-[calc(100vh-140px)] sm:h-auto sm:max-h-[60vh] overflow-y-auto px-4 sm:px-6 py-5">
+      <DialogBody
+        id="event-form-body"
+        className="space-y-4 overflow-visible h-[calc(100vh-140px)] sm:h-auto sm:max-h-[60vh] overflow-y-auto px-4 sm:px-6 py-5"
+      >
         {/* Basic Info Section */}
         <FormSection title={"Basic Information"} color="teal">
           <StyledInput
@@ -505,11 +514,13 @@ export function EventFormModal({
         </Button>
         <Button
           variant="filled"
-          color="blue"
+          color={Object.keys(errors).length > 0 ? "red" : "blue"}
           onClick={handleSubmit}
           disabled={loading}
           loading={loading}
-          className="rounded-xl font-semibold shadow-lg shadow-blue-500/20"
+          className={`rounded-xl font-semibold shadow-lg ${
+            Object.keys(errors).length > 0 ? "shadow-red-500/20" : "shadow-blue-500/20"
+          }`}
         >
           {initialData ? t("Update Event") : t("Create Event")}
         </Button>

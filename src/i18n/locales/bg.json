@@ -97,17 +97,17 @@
   "Please log in to access your personalized dashboard": "Моля, влезте, за да получите достъп до вашия персонализиран панел",
 
   "All Events": "Всички събития",
-  "My Events": "Моите събития",
+  "My Events": "Създадени събития",
   "Attending": "Посещавам",
   "All Categories": "Всички категории",
   "Browse Events": "Разгледай събития",
-  "Incoming Events": "Предстоящи събития",
+  "Incoming Events": "Записани събития",
 
   "No hosted events found": "Няма създадени събития",
   "Not attending any events": "Не посещавате събития",
   "No events found": "Няма намерени събития",
   "No hosted events": "Няма създадени събития",
-  "No upcoming events": "Няма предстоящи събития",
+  "No upcoming events": "Няма събития, в които сте записани",
   "You haven't created any events yet.": "Все още не сте създали събития.",
   "You haven't created any events yet. Start hosting to build your community!": "Все още не сте създали събития. Започнете да организирате, за да изградите вашата общност!",
   "You're not attending any events yet. Browse events to find something interesting!": "Все още не посещавате събития. Разгледайте събития, за да намерите нещо интересно!",
@@ -121,7 +121,7 @@
   "events": "събития",
   "View all": "Виж всички",
 
-  "Upcoming Events": "Предстоящи събития",
+  "Upcoming Events": "Предстоящи събития (всички)",
   "Events Joined": "Записани събития",
   "Events Hosted": "Създадени събития",
 
@@ -166,10 +166,10 @@
   "No Events with Locations": "Няма събития с локации",
   "Events need coordinates to be displayed on the map": "Събитията се нуждаят от координати, за да бъдат показани на картата",
 
-  "Translation Editor": "Персонализиране на преводи",
+  "Translation Editor": "Редактиране на преводи",
   "Edit translations directly": "Редактирайте преводите директно",
   "Manage and override translations directly.": "Управлявайте и променяйте преводите директно.",
-  "Choose a language to edit its translations from the switcher besides.": "Изберете език за персонализиране на преводите му от превключвателя отстрани.",
+  "Choose a language to edit its translations from the switcher besides.": "Изберете език от менюто вдясно, за да персонализирате преводите.",
   "Search translations...": "Търсене на преводи...",
   "Search keys...": "Търсене на ключове...",
   "Enter translation...": "Въведете превод...",
